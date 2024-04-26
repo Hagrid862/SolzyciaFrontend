@@ -4,6 +4,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import {Navbar, NavbarBrand, Link, NavbarContent, NavbarItem, NextUIProvider, Button} from "@nextui-org/react";
 import {usePathname} from "next/navigation";
+import {Provider} from "react-redux";
+import store from "@/store/store";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -13,10 +15,12 @@ export default function RootLayout({children}: Readonly<{children: React.ReactNo
   return (
     <html lang="en" className='dark'>
         <body className={inter.className}>
-          <NextUIProvider>
-            {pathName.startsWith('/admin-area') ? null : <LayoutNavbar/>}
-            {children}
-          </NextUIProvider>
+          <Provider store={store}>
+            <NextUIProvider>
+              {pathName.startsWith('/admin-area') ? null : <LayoutNavbar/>}
+              {children}
+            </NextUIProvider>
+          </Provider>
         </body>
     </html>
   );

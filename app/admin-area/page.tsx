@@ -18,10 +18,12 @@ export default function AdminAreaPage() {
 
   async function handleLogin() {
     try {
-      await dispatch(login({ username, password })).then(() => {
+      const resultAction = await dispatch(login({ username, password }));
+      if (login.fulfilled.match(resultAction)) {
         router.push('/admin-area/verify');
-      })
+      }
     } catch (error: any) {
+      console.log(error);
     }
   }
 

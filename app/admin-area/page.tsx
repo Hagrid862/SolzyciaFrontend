@@ -4,36 +4,23 @@ import {Button, Card, CardBody, CardHeader, Divider, Input, Link, user} from "@n
 import axios from "axios";
 import {useState} from "react";
 import { redirect } from 'next/navigation'
+import {login} from "@/store/slices/authSlice";
+import {useDispatch} from "react-redux";
+import { AppDispatch } from '@/store/store'; // adjust the import path to your actual store file
 
 export default function AdminAreaPage() {
   const [username, setUsername] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string>("");
 
+  const dispatch: AppDispatch = useDispatch();
+
   async function handleLogin() {
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`, {
-        username: username,
-        password: password
-      });
-
-      if (response.status == 200) {
-        redirect('/admin-area/verify')
-      } else {
-        setError("An error occurred. Please try again later.");
-        return;
-      }
-
-    }  catch (error: any) {
-      const data = error.response.data;
-
-      if (data.message == "Invalid username or password") {
-        setError("Invalid username or password");
-        return;
-      } else {
-        setError("An error occurred. Please try again later.");
-        return;
-      }
+      console.log("login")
+      await dispatch(login({username: username, password: password}));
+    } catch (error: any) {
+      setError(error.message);
     }
   }
 
@@ -47,7 +34,7 @@ export default function AdminAreaPage() {
         <CardBody className='flex flex-col gap-2'>
           <Input value={username} onChange={(e) => setUsername(e.target.value)} label='Nazwa użytkownika' />
           <Input value={password} onChange={(e) => setPassword(e.target.value)} label='Hasło' type='password'/>
-          <Button onClick={async () => await handleLogin} color='primary'>Zaloguj</Button>
+          <Button onClick={async () => await handleLogin()} color='primary'>Zaloguj</Button>
         </CardBody>
         <Divider/>
         <CardBody>

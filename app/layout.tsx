@@ -5,7 +5,7 @@ import "./globals.css";
 import {Navbar, NavbarBrand, Link, NavbarContent, NavbarItem, NextUIProvider, Button} from "@nextui-org/react";
 import {usePathname} from "next/navigation";
 import {Provider} from "react-redux";
-import store from "@/store/store";
+import { store } from '../store/store'; // adjust the import path to your actual store file
 
 const inter = Inter({ subsets: ["latin"] });
 

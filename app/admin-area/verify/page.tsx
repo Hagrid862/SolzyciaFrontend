@@ -3,8 +3,17 @@
 import {Button, Card, CardBody, CardHeader, Divider, Input} from "@nextui-org/react";
 import { useState, createRef } from "react";
 import axios from "axios";
+import {useRouter} from "next/navigation";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "@/store/store";
+import {verify} from "@/store/slices/authSlice";
 
 export default function VerifyPage() {
+  const router = useRouter();
+
+  const dispatch = useDispatch<AppDispatch>();
+  const error = useSelector((state: RootState) => state.auth.error);
+
   const [otp, setOtp] = useState(Array(8).fill("")); // Create an array of 8 state variables
   const inputRefs = Array(8).fill(0).map((_, i) => createRef<HTMLInputElement>());
 
@@ -31,10 +40,14 @@ export default function VerifyPage() {
 
   const handleVerify = async () => {
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/verify`, {
+      const otpValue = otp.join("");
+      await dispatch(verify({ otp: otpValue })).then((res: any) => {
+        if (res.error) {
 
-      });
+        }
+      })
     } catch (error: any) {
+      console.error(error);
     }
   }
 
@@ -61,11 +74,11 @@ export default function VerifyPage() {
               />
             ))}
           </div>
-          <div className='mt-4 text-xs text-opacity-50'>Wpisz kod wysłany na twojego maila.</div>
+          <div className={`mt-4 text-xs ${error ? 'text-red-600' : ' text-opacity-50'}`}>{error ? error : 'Wpisz kod wysłany na twojego maila.'}</div>
         </CardBody>
         <Divider/>
         <CardBody>
-          <Button color='primary'>Zweryfikuj</Button>
+          <Button onClick={async () => handleVerify()} color='primary'>Zweryfikuj</Button>
         </CardBody>
       </Card>
     </div>

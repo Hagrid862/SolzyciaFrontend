@@ -25,8 +25,6 @@ export default function AdminAreaPage() {
     }
   }
 
-
-
   return (
     <div className='w-[100vw - 2rem] h-screen flex items-center justify-center m-4 md:m-0'>
       <Card className='w-full md:w-[350px]'>

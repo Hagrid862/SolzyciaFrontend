@@ -41,11 +41,10 @@ export default function VerifyPage() {
   const handleVerify = async () => {
     try {
       const otpValue = otp.join("");
-      await dispatch(verify({ otp: otpValue })).then((res: any) => {
-        if (res.error) {
-
-        }
-      })
+      const resultAction = await dispatch(verify({ otp: otpValue }))
+      if (verify.fulfilled.match(resultAction)) {
+        router.push('/admin-area/dashboard');
+      }
     } catch (error: any) {
       console.error(error);
     }

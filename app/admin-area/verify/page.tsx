@@ -35,7 +35,6 @@ export default function VerifyPage() {
 
       });
     } catch (error: any) {
-      console.error(error);
     }
   }
 

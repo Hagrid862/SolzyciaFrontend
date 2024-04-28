@@ -27,7 +27,6 @@ export const login = createAsyncThunk(
   'auth/login',
   async ({username, password}: {username: string, password: string}, thunkAPI) => {
     try {
-      console.log("login");
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`, {
         username: username,
         password: password

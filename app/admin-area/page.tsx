@@ -1,28 +1,31 @@
 'use client'
 
-import {Button, Card, CardBody, CardHeader, Divider, Input, Link, user} from "@nextui-org/react";
-import axios from "axios";
-import {useState} from "react";
-import { redirect } from 'next/navigation'
-import {login} from "@/store/slices/authSlice";
-import {useDispatch} from "react-redux";
-import { AppDispatch } from '@/store/store'; // adjust the import path to your actual store file
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Card, CardBody, CardHeader, Divider, Input, Link } from "@nextui-org/react";
+import { login } from "@/store/slices/authSlice";
+import { RootState, AppDispatch } from '@/store/store';
+import { useRouter } from 'next/navigation'
 
 export default function AdminAreaPage() {
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string>("");
+  const router = useRouter()
 
-  const dispatch: AppDispatch = useDispatch();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const dispatch = useDispatch<AppDispatch>();
+  const error = useSelector((state: RootState) => state.auth.error); // Selecting the error directly from the auth state
 
   async function handleLogin() {
     try {
-      console.log("login")
-      await dispatch(login({username: username, password: password}));
+      await dispatch(login({ username, password })).then(() => {
+        router.push('/admin-area/verify');
+      })
     } catch (error: any) {
-      setError(error.message);
     }
   }
+
+
 
   return (
     <div className='w-[100vw - 2rem] h-screen flex items-center justify-center m-4 md:m-0'>
@@ -32,9 +35,9 @@ export default function AdminAreaPage() {
         </CardHeader>
         <Divider/>
         <CardBody className='flex flex-col gap-2'>
-          <Input value={username} onChange={(e) => setUsername(e.target.value)} label='Nazwa użytkownika' />
-          <Input value={password} onChange={(e) => setPassword(e.target.value)} label='Hasło' type='password'/>
-          <Button onClick={async () => await handleLogin()} color='primary'>Zaloguj</Button>
+          <Input isInvalid={error != null} value={username} onChange={(e) => setUsername(e.target.value)} label='Nazwa użytkownika' />
+          <Input errorMessage={error} isInvalid={error != null} value={password} onChange={(e) => setPassword(e.target.value)} label='Hasło' type='password'/>
+          <Button onClick={handleLogin} color='primary'>Zaloguj</Button>
         </CardBody>
         <Divider/>
         <CardBody>
@@ -42,5 +45,5 @@ export default function AdminAreaPage() {
         </CardBody>
       </Card>
     </div>
-  )
+  );
 }

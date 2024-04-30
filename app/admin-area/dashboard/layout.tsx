@@ -19,8 +19,6 @@ export default function DashboardPage({children}: Readonly<{children: React.Reac
   function onSelectionChange(s: Key) {
     router.push(s as string);
     setSelectedKey(s == '/admin-area/dashboard' ? '/admin-area/dashboard' : tabKeys.find(key => pathname.startsWith(key))??'/admin-area/dashboard');
-    console.log(pathname)
-    console.log(tabKeys.find(key => pathname.startsWith(key)))
   }
 
   const tabKeys = [

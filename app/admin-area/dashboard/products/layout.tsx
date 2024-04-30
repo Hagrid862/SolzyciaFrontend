@@ -11,8 +11,6 @@ export default function ProductsLayout({children}: Readonly<{children: React.Rea
   const [selected, setSelected] = useState<string>(pathname);
 
   function onSelectionChange(s: Key) {
-      console.log(s as string)
-
       if (s as string == '/admin-area/dashboard/products' || tabKeys.includes(s as string)) {
         setSelected(s as string);
         router.push(s as string);

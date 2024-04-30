@@ -26,7 +26,7 @@ export default function DashboardPage({children}: Readonly<{children: React.Reac
   const tabKeys = [
     '/admin-area/dashboard/calendar',
     '/admin-area/dashboard/reservations',
-    '/admin-area/dashboard/products'
+    '/admin-area/dashboard/products',
   ];
 
   const [selectedKey, setSelectedKey] = useState<string>(tabKeys[0]);

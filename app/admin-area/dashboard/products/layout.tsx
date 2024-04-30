@@ -2,26 +2,40 @@
 
 import {Card, CardBody, Divider, Tab, Tabs} from "@nextui-org/react";
 import {usePathname, useRouter} from "next/navigation";
-import {Key} from "react";
+import {Key, useEffect, useState} from "react";
 
 export default function ProductsLayout({children}: Readonly<{children: React.ReactNode}>) {
   const router = useRouter();
   const pathname = usePathname();
 
+  const [selected, setSelected] = useState<string>(pathname);
+
   function onSelectionChange(s: Key) {
-    router.push(s as string);
+      console.log(s as string)
+
+      if (s as string == '/admin-area/dashboard/products' || tabKeys.includes(s as string)) {
+        setSelected(s as string);
+        router.push(s as string);
+      } else {
+        console.error('Invalid tab key');
+      }
   }
+
+  //listen to pathname change
+  //   useEffect(() => {
+  //       setSelected(pathname == '/admin-area/dashboard/products' ? '/admin-area/dashboard/products' : tabKeys.find(key => pathname.startsWith(key))??'/admin-area/dashboard');
+  //   });
+
+    const tabKeys = [
+        '/admin-area/dashboard/products/categories',
+    ];
 
   return (
     <div>
       <CardBody>
         <div className='flex flex-row justify-between items-center'>
           <div className='text-xl font-semibold'>Zarządzaj produktami</div>
-          {/*<Button color='primary'>*/}
-          {/*  <span>Dodaj produkt</span>*/}
-          {/*  <MaterialSymbol icon="add_circle" size={24}/>*/}
-          {/*</Button>*/}
-          <Tabs onSelectionChange={(s) => onSelectionChange(s)} selectedKey={pathname} variant='light'>
+          <Tabs onSelectionChange={(s) => onSelectionChange(s)} selectedKey={selected} variant='light'>
             <Tab key='/admin-area/dashboard/products' title="Wszystkie produkty"/>
             <Tab key='/admin-area/dashboard/products/categories' title="Kategorie"/>
             <Tab title="Archiwum"/>

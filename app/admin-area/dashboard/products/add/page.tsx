@@ -1,8 +1,8 @@
 
-export default function AddProductPage() {
-  return (
-    <div>
-      Add product page
-    </div>
-  )
+export default function AddProduct() {
+    return (
+        <div>
+            kutas123
+        </div>
+    )
 }

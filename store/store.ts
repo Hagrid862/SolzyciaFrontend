@@ -1,10 +1,12 @@
 // In your store file
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import authReducer from '@/store/slices/authSlice';
+import adminReducer from '@/store/slices/adminSlice';
 
 export const store = configureStore({
   reducer: {
     auth: authReducer,
+    admin: adminReducer,
   },
 });
 

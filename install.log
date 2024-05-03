@@ -1,0 +1,9 @@
+[18:20:44 2024-05-01] FETCHING Version 2.36.9
+[18:20:44 2024-05-01] CREATING /Users/hagrid/.spicetify
+[18:20:44 2024-05-01] DOWNLOADING https://github.com/spicetify/spicetify-cli/releases/download/v2.36.9/spicetify-2.36.9-darwin-arm64.tar.gz
+[18:20:48 2024-05-01] EXTRACTING /Users/hagrid/.spicetify/spicetify.tar.gz
+[18:20:48 2024-05-01] SETTING EXECUTABLE PERMISSIONS TO /Users/hagrid/.spicetify/spicetify
+[18:20:48 2024-05-01] REMOVING /Users/hagrid/.spicetify/spicetify.tar.gz
+[18:20:48 2024-05-01] APPENDING /Users/hagrid/.spicetify to PATH in /Users/hagrid/.zshrc
+[18:20:48 2024-05-01] spicetify v2.36.9 was installed successfully to /Users/hagrid/.spicetify
+[18:20:48 2024-05-01] Run 'spicetify --help' to get started

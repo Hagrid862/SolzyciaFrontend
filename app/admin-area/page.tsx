@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Card, CardBody, CardHeader, Divider, Input, Link } from "@nextui-org/react";
+import {Button, Card, CardBody, CardHeader, Checkbox, Divider, Input, Link} from "@nextui-org/react";
 import { login } from "@/store/slices/authSlice";
 import { RootState, AppDispatch } from '@/store/store';
 import { useRouter } from 'next/navigation'
@@ -12,13 +12,14 @@ export default function AdminAreaPage() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
   const error = useSelector((state: RootState) => state.auth.error); // Selecting the error directly from the auth state
 
   async function handleLogin() {
     try {
-      const resultAction = await dispatch(login({ username, password }));
+      const resultAction = await dispatch(login({ username, password, remember }));
       if (login.fulfilled.match(resultAction)) {
         router.push('/admin-area/verify');
       }
@@ -37,6 +38,7 @@ export default function AdminAreaPage() {
         <CardBody className='flex flex-col gap-2'>
           <Input isInvalid={error != null} value={username} onChange={(e) => setUsername(e.target.value)} label='Nazwa użytkownika' />
           <Input errorMessage={error} isInvalid={error != null} value={password} onChange={(e) => setPassword(e.target.value)} label='Hasło' type='password'/>
+          <Checkbox isSelected={remember} onValueChange={(v) => setRemember(v)}>Zapamiętaj mnie</Checkbox>
           <Button onClick={handleLogin} color='primary'>Zaloguj</Button>
         </CardBody>
         <Divider/>

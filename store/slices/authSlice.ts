@@ -1,6 +1,8 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import axios from "axios";
 import {RootState} from "@/store/store";
+import {state} from "sucrase/dist/types/parser/traverser/base";
+import {act} from "react-dom/test-utils";
 
 interface AuthState {
   token: string | null;
@@ -26,7 +28,7 @@ const initialState: AuthState = {
 
 export const login = createAsyncThunk(
   'auth/login',
-  async ({username, password}: {username: string, password: string}, thunkAPI) => {
+  async ({username, password, remember}: {username: string, password: string, remember: boolean}, thunkAPI) => {
     try {
       if (username == "" || password == "") {
         return thunkAPI.rejectWithValue("Prosze wypełnić wszystkie pola.");
@@ -34,8 +36,11 @@ export const login = createAsyncThunk(
 
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`, {
         username: username,
-        password: password
+        password: password,
+        remember: remember
       });
+
+      console.log(response);
 
       if (response.status == 200) {
         return thunkAPI.fulfillWithValue({email: username, password: password});
@@ -69,9 +74,9 @@ export const verify = createAsyncThunk(
         code: otp
       });
 
-
       if (response.status == 200) {
         const data = response.data;
+        console.log(data)
         return thunkAPI.fulfillWithValue(data);
       } else {
         return thunkAPI.rejectWithValue("Wystąpił błąd. Spróbuj ponownie później.");
@@ -104,14 +109,15 @@ const authReducer = createSlice({
       // handle the state when verify is pending
     })
     .addCase(verify.fulfilled, (state, action: PayloadAction<any>) => {
-      // state.token = action.payload.token;
-      state.token = action.payload.token;
-      state.tokenValid = 1;
-      localStorage.setItem('token', action.payload.token);
-      // state.user = action.payload.user;
+      if (action.payload.refresh) {
+        state.token = action.payload.access;
+        state.tokenValid = 1;
 
-      state.loginEmail = "";
-      state.loginPassword = "";
+        localStorage.setItem('refresh', action.payload.refresh);
+      } else {
+        state.token = action.payload.access;
+        state.tokenValid = 1;
+      }
     })
     .addCase(verify.rejected, (state, action: PayloadAction<any>) => {
       // handle the state when verify is rejected

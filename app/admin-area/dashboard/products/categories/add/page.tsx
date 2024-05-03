@@ -51,12 +51,11 @@ export default function AddCategoriesPage() {
     <>
       <div>
         <div className='text-xl'>Dodaj kategorie</div>
-        {status}
+        <div className='text-sm text-red-600'>{status}</div>
         <Card className='w-full mt-4 bg-white bg-opacity-5'>
           <CardBody className='flex flex-col gap-4'>
             <Input value={name} onChange={(e) => setName(e.target.value)} label='Nazwa kategorii' variant='underlined'/>
-            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} label='Opis'
-                      variant='underlined'/>
+            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} label='Opis' variant='underlined'/>
             <Input value={icon} onChange={(e) => setIcon(e.target.value)} label='Ikonka' variant='underlined'/>
             <div className='flex flex-row'>
               <span>zobacz dostępne ikony na&nbsp; </span><Link target='_blank' href='https://fonts.google.com/icons'>Ikonach

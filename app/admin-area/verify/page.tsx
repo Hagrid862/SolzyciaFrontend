@@ -1,15 +1,19 @@
 'use client'
 
 import {Button, Card, CardBody, CardHeader, Divider, Input} from "@nextui-org/react";
-import { useState, createRef } from "react";
-import axios from "axios";
+import React, {useState, createRef, useEffect} from "react";
 import {useRouter} from "next/navigation";
 import {useDispatch, useSelector} from "react-redux";
 import {AppDispatch, RootState} from "@/store/store";
 import {verify} from "@/store/slices/authSlice";
+import {useFormState} from "react-dom";
+import {verifyOtp} from "@/app/actions/auth";
 
 export default function VerifyPage() {
   const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+  const [state, action] = useFormState(verifyOtp, undefined)
 
   const dispatch = useDispatch<AppDispatch>();
   const error = useSelector((state: RootState) => state.auth.error);
@@ -38,17 +42,29 @@ export default function VerifyPage() {
     }
   };
 
-  const handleVerify = async () => {
-    try {
-      const otpValue = otp.join("");
-      const resultAction = await dispatch(verify({ otp: otpValue }))
-      if (verify.fulfilled.match(resultAction)) {
-        router.push('/admin-area/dashboard');
-      }
-    } catch (error: any) {
-      console.error(error);
-    }
+  const handleVerify = async (event: React.FormEvent) => {
+    setLoading(true);
+
+    event.preventDefault()
+
+    const otpValue = otp.join("");
+
+    const formData = new FormData();
+
+    formData.append('otp', otpValue);
+
+    console.log(formData)
+
+    action(formData);
   }
+
+  useEffect(() => {
+    setLoading(false);
+    console.log(state)
+    if (state?.message === 'SUCCESS') {
+      router.push('/admin-area/dashboard');
+    }
+  }, [state]);
 
   return (
     <div className='flex items-center justify-center w-screen h-screen'>
@@ -68,16 +84,18 @@ export default function VerifyPage() {
                 onChange={handleInputChange(index)}
                 onKeyDown={handleKeyDown(index)}
                 maxLength={1}
+                isInvalid={state?.errors?.otp !== undefined || state?.message == 'ERROR' || state?.message == 'INVALID_CODE'}
                 style={{width: "30px", marginRight: "5px"}}
                 ref={inputRefs[index]}
               />
             ))}
           </div>
-          <div className={`mt-4 text-xs ${error ? 'text-red-600' : ' text-opacity-50'}`}>{error ? error : 'Wpisz kod wysłany na twojego maila.'}</div>
+          <div className='mt-2 text-[#f31260] text-sm'>{state?.errors?.otp !== undefined ? state.errors.otp : state?.message == 'ERROR' ? 'Wystąpił błąd, spróbuj odświeżyć stronę.' : state?.message == 'INVALID_CODE' ? 'Wprowadzony kod jest niepoprawny.' : state?.message === undefined || state.message === "SUCCESS" ? null : 'Wystąpił błąd, spróbuj odświeżyć stronę.'}</div>
+          <div className={`mt-4 text-xs text-opacity-50'}`}>{error ? error : 'Wpisz kod wysłany na twojego maila.'}</div>
         </CardBody>
         <Divider/>
         <CardBody>
-          <Button onClick={async () => handleVerify()} color='primary'>Zweryfikuj</Button>
+          <Button isLoading={loading} onClick={handleVerify} color='primary'>Zweryfikuj</Button>
         </CardBody>
       </Card>
     </div>

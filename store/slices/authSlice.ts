@@ -26,6 +26,13 @@ const initialState: AuthState = {
   loginPassword: "",
 };
 
+export const setToken = createAsyncThunk(
+  'auth/setToken',
+  async ({newToken}: {newToken: string}, thunkAPI) => {
+    return newToken;
+  }
+);
+
 export const login = createAsyncThunk(
   'auth/login',
   async ({username, password, remember}: {username: string, password: string, remember: boolean}, thunkAPI) => {
@@ -39,8 +46,6 @@ export const login = createAsyncThunk(
         password: password,
         remember: remember
       });
-
-      console.log(response);
 
       if (response.status == 200) {
         return thunkAPI.fulfillWithValue({email: username, password: password});
@@ -123,6 +128,10 @@ const authReducer = createSlice({
       // handle the state when verify is rejected
       state.error = action.payload;
     });
+
+    builder.addCase(setToken.fulfilled, (state, action: PayloadAction<any>) => {
+      state.token = action.payload;
+    })
   }
 });
 

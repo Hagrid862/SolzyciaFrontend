@@ -2,50 +2,45 @@
 
 import {Button, Card, CardBody, Input, Link, Modal} from "@nextui-org/react";
 import {Textarea} from "@nextui-org/input";
-import {useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "@/store/store";
-import {createCategory} from "@/store/slices/adminSlice";
+import {useEffect, useState} from "react";
+import {useAdminStore} from "@/store/adminStore";
+import {useFormState} from "react-dom";
+import {CreateCategoryFormSchema} from "@/app/lib/definitions";
+import {createCategory} from "@/app/actions/category";
+import {useRouter} from "next/navigation";
 
 export default function AddCategoriesPage() {
+  const [state, action] = useFormState(createCategory, undefined)
+  const [loading, setLoading] = useState(false);
+
+  const router = useRouter();
+
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [icon, setIcon] = useState<string>('');
 
   const [status, setStatus] = useState<string>('');
 
-  const dispatch = useDispatch<AppDispatch>();
-  const actionError = useSelector((state: RootState) => state.admin.error);
-
   async function handleAddCategory() {
     try {
-      console.log('start')
-      setStatus('loading');
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('description', description);
+      formData.append('icon', icon);
 
-      if (name == '' || description == '' || icon == '') {
-        setStatus('Wypełnij wszystkie pola');
-        return;
-      }
-
-      const response = await dispatch(createCategory({name, icon, description}));
-
-      if (createCategory.fulfilled.match(response)) {
-        if (actionError != null) {
-          setStatus(actionError.message);
-          return;
-        }
-        setStatus('success');
-        return;
-      } else {
-        setStatus(actionError?.message ?? 'Nieznany błąd, spróbuj ponownie później.');
-        return;
-      }
-
-      setStatus("success");
+      action(formData);
     } catch (e: any) {
       setStatus(e.message);
     }
   }
+
+  useEffect(() => {
+    setLoading(false);
+    console.log(state)
+    if (state?.message === 'SUCCESS') {
+      router.push('/admin-area/dashboard/products/categories');
+    }
+  }, [state]);
 
   return (
     <>
@@ -54,9 +49,10 @@ export default function AddCategoriesPage() {
         <div className='text-sm text-red-600'>{status}</div>
         <Card className='w-full mt-4 bg-white bg-opacity-5'>
           <CardBody className='flex flex-col gap-4'>
-            <Input value={name} onChange={(e) => setName(e.target.value)} label='Nazwa kategorii' variant='underlined'/>
-            <Textarea value={description} onChange={(e) => setDescription(e.target.value)} label='Opis' variant='underlined'/>
-            <Input value={icon} onChange={(e) => setIcon(e.target.value)} label='Ikonka' variant='underlined'/>
+            <Input variant='faded' isInvalid={state?.errors?.name !== undefined || state?.message !== undefined && state.message !== 'SUCCESS'} errorMessage={state?.errors?.name} value={name} onChange={(e) => setName(e.target.value)} label='Nazwa kategorii'/>
+            <Textarea variant='faded' isInvalid={state?.errors?.description !== undefined || state?.message !== undefined && state.message !== 'SUCCESS'} errorMessage={state?.errors?.description} value={description} onChange={(e) => setDescription(e.target.value)} label='Opis'/>
+            <Input variant='faded' isInvalid={state?.errors?.icon !== undefined || state?.message !== undefined && state.message !== 'SUCCESS'} errorMessage={state?.errors?.icon} value={icon} onChange={(e) => setIcon(e.target.value)} label='Ikonka'/>
+            <div className='text-[#f31260] text-sm'>{state?.message}</div>
             <div className='flex flex-row'>
               <span>zobacz dostępne ikony na&nbsp; </span><Link target='_blank' href='https://fonts.google.com/icons'>Ikonach
               Google</Link>

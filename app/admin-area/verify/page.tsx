@@ -3,9 +3,6 @@
 import {Button, Card, CardBody, CardHeader, Divider, Input} from "@nextui-org/react";
 import React, {useState, createRef, useEffect} from "react";
 import {useRouter} from "next/navigation";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "@/store/store";
-import {verify} from "@/store/slices/authSlice";
 import {useFormState} from "react-dom";
 import {verifyOtp} from "@/app/actions/auth";
 
@@ -14,9 +11,6 @@ export default function VerifyPage() {
 
   const [loading, setLoading] = useState(false);
   const [state, action] = useFormState(verifyOtp, undefined)
-
-  const dispatch = useDispatch<AppDispatch>();
-  const error = useSelector((state: RootState) => state.auth.error);
 
   const [otp, setOtp] = useState(Array(8).fill("")); // Create an array of 8 state variables
   const inputRefs = Array(8).fill(0).map((_, i) => createRef<HTMLInputElement>());
@@ -91,7 +85,7 @@ export default function VerifyPage() {
             ))}
           </div>
           <div className='mt-2 text-[#f31260] text-sm'>{state?.errors?.otp !== undefined ? state.errors.otp : state?.message == 'ERROR' ? 'Wystąpił błąd, spróbuj odświeżyć stronę.' : state?.message == 'INVALID_CODE' ? 'Wprowadzony kod jest niepoprawny.' : state?.message === undefined || state.message === "SUCCESS" ? null : 'Wystąpił błąd, spróbuj odświeżyć stronę.'}</div>
-          <div className={`mt-4 text-xs text-opacity-50'}`}>{error ? error : 'Wpisz kod wysłany na twojego maila.'}</div>
+          <div className={`mt-4 text-xs text-opacity-50'}`}>{state?.message !== 'SUCCESS' && state?.message !== undefined ? state.message : 'Wpisz kod wysłany na twojego maila.'}</div>
         </CardBody>
         <Divider/>
         <CardBody>

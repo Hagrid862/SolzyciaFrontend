@@ -10,7 +10,7 @@ import {Button} from "@nextui-org/button";
 import {deleteCategory} from "@/app/actions/category";
 
 export default function Category({params}: {params: {categoryId: string}}) {
-  const {isDeleteOpen, onDeleteOpen, onDeleteClose} = useDisclosure();
+  const {isOpen, onOpen, onClose} = useDisclosure();
 
   const categories = useAdminStore(state => state.categories);
   const fetchCategories = useAdminStore(state => state.fetchCategories);
@@ -80,7 +80,7 @@ export default function Category({params}: {params: {categoryId: string}}) {
               <Input onChange={(e) => setIcon(e.target.value)} label='Ikonka' variant='faded' value={icon} disabled={!editMode} className='w-full'/>
             </CardBody>
             <CardBody className='bg-white bg-opacity-5 flex flex-row gap-2'>
-              <Button color={editMode ? 'danger' : 'default'} onClick={editMode ? () => onDeleteOpen() : router.back}>
+              <Button color={editMode ? 'danger' : 'default'} onClick={editMode ? () => onOpen() : router.back}>
                 <MaterialSymbol icon={editMode ? 'delete' : 'arrow_back'} size={24}/>
               </Button>
               <Button className='w-full' onClick={() => setEditMode(!editMode)} color={editMode ? 'primary' : 'default'}>
@@ -96,7 +96,7 @@ export default function Category({params}: {params: {categoryId: string}}) {
         ) : 'Nie znaleziono kategorii'
       }
 
-      <Modal backdrop='blur' isOpen={isDeleteOpen} onClose={onDeleteClose}>
+      <Modal backdrop='blur' isOpen={isOpen} onClose={onClose}>
         <ModalContent>
           {(onClose) => (
             <>

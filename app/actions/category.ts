@@ -96,7 +96,55 @@ export async function fetchCategories() {
   }
 }
 
-export async function deleteCategory(categoryId: string) {
+export async function updateCategory(categoryId: string, formData: FormData) {
+  try {
+    const cookiesStorage = cookies();
+
+    const token = cookiesStorage.get('access');
+
+    if (token === null) {
+      return {
+        message: 'NO_TOKEN',
+      }
+    }
+
+    let object: {} = {
+      id: categoryId,
+      name: formData.get('name'),
+      description: formData.get('description'),
+      icon: formData.get('icon'),
+    };
+    const json = JSON.stringify(object);
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token!.value}`
+      },
+      body: json
+    });
+
+    console.log(response.status)
+    console.log(await response.text())
+
+    if (response.status == 200) {
+      return {
+        message: 'SUCCESS',
+      }
+    } else {
+      return {
+        message: 'ERROR',
+      }
+    }
+  } catch (e: any) {
+    return {
+      message: 'ERROR',
+    }
+  }
+}
+
+export async function removeCategory(categoryId: string) {
   try {
     const cookiesStorage = cookies();
 

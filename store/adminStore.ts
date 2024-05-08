@@ -1,9 +1,10 @@
 import { create } from "zustand";
-import {fetchCategories} from "@/app/actions/category";
+import {removeCategory, updateCategory, fetchCategories} from "@/app/actions/category";
 
 export const useAdminStore = create<IState>((set) => ({
   token: undefined,
   categories: ['loading'],
+
 
   fetchCategories: async () => {
     const categories = await fetchCategories();
@@ -16,11 +17,29 @@ export const useAdminStore = create<IState>((set) => ({
     } else {
       set({categories: ['error']})
     }
+  },
+  removeCategory: async (id: string) => {
+    const response = await removeCategory(id);
+    if (response.message === 'SUCCESS') {
+      set({categories: ['loading']});
+      await fetchCategories();
+    }
+  },
+  updateCategory: async (id: string, formData: FormData) => {
+    const response = await updateCategory(id, formData);
+    console.log(response)
+    if (response.message === 'SUCCESS') {
+      set({categories: ['loading']});
+      await fetchCategories();
+    }
   }
 }));
 
 interface IState {
   token: string | undefined;
-  categories: any[]; // replace any with the actual type of your categories
+  categories: any[];
+  
   fetchCategories: () => Promise<void>;
+  removeCategory: (id: string) => Promise<void>;
+  updateCategory: (id: string, formData: FormData) => Promise<void>;
 }

@@ -39,7 +39,7 @@ export default function Categories() {
             <div>Ładowanie...</div>
           </div> : null }
         {categories[0] !== 'loading' && categories[0] !== 'none' && categories[0] !== 'error' && categories.length !== 0 ? categories.map((category, index) => (
-          <Card isPressable onClick={() => console.log(category.id)} key={index} className='w-full w-[calc(100%/3-0.35rem)] bg-white bg-opacity-5 overflow-x-hidden'>
+          <Card isPressable onClick={() => router.push(`categories/${category.id}`)} key={index} className='w-[calc(100%/3-0.35rem)] min-w-[100px] max-w-[200px] bg-white bg-opacity-5 overflow-x-hidden'>
             <CardBody className='overflow-x-hidden bg-primary bg-opacity-15 text-center'>
               <MaterialSymbol icon={category.icon} size={40} color='#006FEE'/>
             </CardBody>

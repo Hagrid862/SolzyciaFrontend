@@ -11,11 +11,11 @@ export default function ProductsLayout({children}: Readonly<{children: React.Rea
   const [selected, setSelected] = useState<string>(pathname);
 
   function onSelectionChange(s: Key) {
-      if (s as string == '/admin-area/dashboard/products' || tabKeys.includes(s as string)) {
-        setSelected(s as string);
+      if ( tabKeys.includes(pathname) && tabKeys.includes(s as string)) {
+        console.log(s as string);
         router.push(s as string);
+        setSelected(s as string);
       } else {
-        console.error('Invalid tab key');
       }
   }
 
@@ -25,7 +25,8 @@ export default function ProductsLayout({children}: Readonly<{children: React.Rea
   //   });
 
     const tabKeys = [
-        '/admin-area/dashboard/products/categories',
+      '/admin-area/dashboard/products',
+      '/admin-area/dashboard/products/categories',
     ];
 
   return (

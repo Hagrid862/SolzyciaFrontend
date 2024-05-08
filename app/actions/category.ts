@@ -95,3 +95,38 @@ export async function fetchCategories() {
     return 'ERROR';
   }
 }
+
+export async function deleteCategory(categoryId: string) {
+  try {
+    const cookiesStorage = cookies();
+
+    const token = cookiesStorage.get('access');
+
+    if (token === null) {
+      return {
+        message: 'NO_TOKEN',
+      }
+    }
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category/${categoryId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token!.value}`
+      }}
+    );
+
+    if (response.status == 200) {
+      return {
+        message: 'SUCCESS',
+      }
+    } else {
+      return {
+        message: 'ERROR',
+      }
+    }
+  } catch (e: any) {
+    return {
+      message: 'ERROR',
+    }
+  }
+}

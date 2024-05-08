@@ -7,10 +7,6 @@ export async function middleware(req: NextRequest) {
   const loginUrl = req.nextUrl.clone()
   loginUrl.pathname = '/admin-area'
   const url = req.nextUrl.clone();
-  if (url.pathname === '/admin-area' || url.pathname === '/admin-area/verify' || url.pathname === '/admin-area/forgot-password') {
-    // Do nothing or handle specially for this path
-    return NextResponse.next();
-  }
   try {
     const cookieStore = cookies();
     const access = cookieStore.get('access');
@@ -50,13 +46,16 @@ export async function middleware(req: NextRequest) {
 
       const refreshData = await refreshResponse.json();
 
-      if (refreshData.refresh & refreshData.access) {
+      if (refreshData.refresh && refreshData.access) {
         cookieStore.set('refresh', refreshData.access, {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
         });
         cookieStore.set('access', refreshData.access, {
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 30)
         });
+        if (url.pathname === '/admin-area' || url.pathname === '/admin-area/verify' || url.pathname === '/admin-area/forgot-password') {
+          return NextResponse.redirect('/admin-area/dashboard')
+        }
         return NextResponse.next();
       } else {
         return NextResponse.redirect('/admin-area');

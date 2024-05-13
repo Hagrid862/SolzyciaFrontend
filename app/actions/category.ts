@@ -51,8 +51,6 @@ export async function createCategory(state: CreateCategoryFormState, action: For
       body: json
     });
 
-    console.log('category: ', await response.text())
-
     if (response.status == 200) {
       return {
         errors: undefined,
@@ -65,7 +63,6 @@ export async function createCategory(state: CreateCategoryFormState, action: For
       }
     }
   } catch (e: any) {
-    console.log(e)
     return {
       errors: undefined,
       message: 'ERROR',

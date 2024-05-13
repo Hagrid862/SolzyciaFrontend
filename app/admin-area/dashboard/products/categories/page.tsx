@@ -33,6 +33,14 @@ export default function Categories() {
 
       <Divider/>
 
+      <div className='w-full'>
+        <Button isIconOnly variant='flat' className='rounded-full' onClick={() => fetchCategories()}>
+          <MaterialSymbol icon={'refresh'} size={20} color='#006FEE'/>
+        </Button>
+      </div>
+
+      <Divider/>
+
       <div className='flex flex-row justify-stretch flex-wrap gap-2'>
         { categories[0] === 'loading' ? <div className='w-full flex flex-col items-center'>
             <Spinner className='mt-[5vh] mb-2'/>

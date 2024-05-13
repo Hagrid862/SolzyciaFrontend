@@ -127,3 +127,10 @@ export async function verifyOtp(state: VerifyOtpState, action: FormData) {
     }
   }
 }
+
+export async function logout() {
+  const cookieStore = cookies();
+  cookieStore.delete('access');
+  cookieStore.delete('refresh');
+  console.log("logout")
+}

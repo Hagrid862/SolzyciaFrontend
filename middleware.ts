@@ -7,6 +7,11 @@ export async function middleware(req: NextRequest) {
   const loginUrl = req.nextUrl.clone()
   loginUrl.pathname = '/admin-area'
   const url = req.nextUrl.clone();
+
+  if (url.pathname === '/admin-area' || url.pathname === '/admin-area/verify' || url.pathname === '/admin-area/forgot-password') {
+    return NextResponse.next();
+  }
+
   try {
     const cookieStore = cookies();
     const access = cookieStore.get('access');
@@ -22,15 +27,11 @@ export async function middleware(req: NextRequest) {
       }
     });
 
-    console.log(response.status)
-
     if (response.status !== 200) {
       return NextResponse.redirect('/admin-area');
     }
 
     const data = await response.json();
-
-    console.log('data: ', data)
 
     if (!data.isValid) {
       const refreshResponse = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/token/refresh`, {
@@ -61,6 +62,11 @@ export async function middleware(req: NextRequest) {
         return NextResponse.redirect('/admin-area');
       }
     } else {
+      if (url.pathname === '/admin-area' || url.pathname === '/admin-area/verify' || url.pathname === '/admin-area/forgot-password') {
+        const adminAreaUrl = req.nextUrl.clone()
+        adminAreaUrl.pathname = '/admin-area/dashboard'
+        return NextResponse.redirect(adminAreaUrl)
+      }
       return NextResponse.next();
     }
 

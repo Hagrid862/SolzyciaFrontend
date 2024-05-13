@@ -15,7 +15,6 @@ export default function ProductsLayout({children}: Readonly<{children: React.Rea
         console.log(s as string);
         router.push(s as string);
         setSelected(s as string);
-      } else {
       }
   }
 
@@ -30,7 +29,7 @@ export default function ProductsLayout({children}: Readonly<{children: React.Rea
     ];
 
   return (
-    <div>
+    <div className='overflow-y-auto'>
       <CardBody>
         <div className='flex flex-row justify-between items-center'>
           <div className='text-xl font-semibold'>Zarządzaj produktami</div>

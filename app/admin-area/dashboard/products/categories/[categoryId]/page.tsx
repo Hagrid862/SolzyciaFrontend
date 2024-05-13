@@ -8,7 +8,7 @@ import {MaterialSymbol} from "react-material-symbols";
 import {Textarea} from "@nextui-org/input";
 import {Button} from "@nextui-org/button";
 
-export default function Category({params}: {params: {categoryId: string}}) {
+export default function CategoryPage({params}: {params: {categoryId: string}}) {
   const {isOpen, onOpen, onClose} = useDisclosure();
 
   const categories = useAdminStore(state => state.categories);

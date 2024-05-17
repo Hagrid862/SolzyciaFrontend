@@ -19,9 +19,7 @@ import {
 import {MaterialSymbol} from "react-material-symbols";
 import {useAdminStore} from "@/store/adminStore";
 
-
 export default function AddProductObjectPage() {
-
   const [photos, setPhotos] = useState<File[]>([]);
   const [name, setName] = useState<string>('');
   const [title, setTitle] = useState<string>('');

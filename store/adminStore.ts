@@ -3,6 +3,7 @@ import {removeCategory, updateCategory, fetchCategories} from "@/app/actions/cat
 import {image} from "@nextui-org/react";
 import {createProduct, fetchProducts} from "@/app/actions/product";
 import {logout} from "@/app/actions/auth";
+import {createEvent} from "@/app/actions/event";
 
 export const useAdminStore = create<IState>((set) => ({
   token: undefined,
@@ -83,6 +84,41 @@ export const useAdminStore = create<IState>((set) => ({
 
     const response = await createProduct(formData);
     return response;
+  },
+
+  addEvent: async (name: string, price: number, description: string, time?: number, dates?: {date: Date, seats: number}[], category?: string, tags?: string[], images?:File[]) => {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('price', price.toString());
+    formData.append('description', description);
+    if (time) {
+      formData.append('time', time.toString());
+    }
+    if (dates) {
+      let datesObj: { dateIso: string, seats: number }[] = [];
+      dates.map((date, index) => {
+        datesObj.push({dateIso: date.date.toISOString(), seats: date.seats});
+        console.log(date)
+      });
+      formData.append(`dates`, JSON.stringify(datesObj));
+    }
+    if (category) {
+      formData.append('categoryId', category);
+    }
+    if (tags) {
+      formData.append('tags', tags.join(','));
+    }
+    if (images) {
+      images.forEach((image, index) => {
+        formData.append(`image${index}`, image, image.name);
+      });
+    }
+    const response = await createEvent(formData);
+    if (response.isSuccess) {
+      return {isSuccess: true};
+    } else {
+      return {isSuccess: false};
+    }
   }
 }));
 
@@ -99,4 +135,6 @@ interface IState {
 
   fetchProducts: () => Promise<{ isSuccess: boolean, products?: any }>;
   addProduct: (name: string, price: number, description: string, title?: string, categoryId?: string, tags?: string[], images?: File[]) => Promise<{ isSuccess: boolean }>;
+
+  addEvent: (name: string, price: number, description: string, time?: number, dates?: {date: Date, seats: number}[], category?: string, tags?: string[], images?:File[]) => Promise<{ isSuccess: boolean }>;
 }

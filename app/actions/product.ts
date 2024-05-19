@@ -19,9 +19,6 @@ export async function createProduct(formData: FormData): Promise<{isSuccess: boo
       body: formData,
     });
 
-    console.log(response.status)
-    console.log(await response.text());
-
     if (response.status === 200) {
       return {isSuccess: true}
     } else {

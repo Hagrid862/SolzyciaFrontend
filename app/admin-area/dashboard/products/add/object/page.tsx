@@ -71,17 +71,6 @@ export default function AddProductObjectPage() {
   }
 
   async function handleSubmit() {
-
-    console.log({
-      name: name,
-      price: price,
-      description: description,
-      title: title,
-      category: category,
-      tags: tags,
-      photos: photos
-    })
-
     var images: File[] = []
 
     photos.map((val, index) => {
@@ -113,10 +102,15 @@ export default function AddProductObjectPage() {
     setStatus('loading')
     setShowModal(true)
 
-    const response = await addProduct(name, price, description, title === '' ? undefined : title, category === '' ? undefined : category, tags.length === 0 ? undefined : tags, !photos[0] ? undefined : photos);
-
-    console.log(response);
-
+    const response = await addProduct(name, price, description, title === '' ? undefined : title, category === '' ? undefined : category, tags.length === 0 ? undefined : tags, !photos[0] ? undefined : photos).then((res) => {
+      if (res.isSuccess) {
+        setStatus('success')
+      } else {
+        setStatus('error')
+      }
+    }).catch(() => {
+      setStatus('error')
+    });
   }
 
   return (
@@ -190,7 +184,7 @@ export default function AddProductObjectPage() {
 
         <Button color='primary' onClick={() => handleSubmit()}>Dodaj produkt</Button>
       </div>
-      <Modal isOpen={showModal} backdrop='blur' onClose={() => setShowModal(false)}>
+      <Modal isOpen={showModal} backdrop='blur' onClose={() => setShowModal(false)} isDismissable={false} hideCloseButton={false}>
         <ModalContent>
           {
             status === 'loading' ? (

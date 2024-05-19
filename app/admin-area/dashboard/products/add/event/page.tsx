@@ -3,7 +3,7 @@
 import {
   CalendarDate,
   Card, CardBody, Chip, DatePicker, Divider, Image,
-  Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Spacer, TimeInput,
+  Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Spacer, Spinner, TimeInput,
 } from "@nextui-org/react";
 import React, {useEffect, useRef, useState} from "react";
 import {MaterialSymbol} from "react-material-symbols";
@@ -12,11 +12,13 @@ import {Button} from "@nextui-org/button";
 import {set} from "zod";
 import {Textarea} from "@nextui-org/input";
 import {useAdminStore} from "@/store/adminStore";
+import {Simulate} from "react-dom/test-utils";
+import error = Simulate.error;
 
 export default function AddEventPage() {
   const [photos, setPhotos] = useState<File[]>([]);
   const [name, setName] = useState<string>('');
-  const [duration, setDuration] = useState<number>(15);
+  const [duration, setDuration] = useState<number>(0);
   const [customDuration, setCustomDuration] = useState<number>(0);
   const [dates, setDates] = useState<{date: Date, seats: number}[]>([]);
   const [price, setPrice] = useState<number>(0);
@@ -28,11 +30,14 @@ export default function AddEventPage() {
   const [editDate, setEditDate] = useState<number | null>(null);
   const [selectedDate, setSelectedDate] = useState<{date: Date, seats: number} | null>(null);
 
+  const [status, setStatus] = useState<string>('');
+  const [err, setErr] = useState<number>(0);
+
   const fileInputs = useRef<(HTMLInputElement | null)[]>([]);
 
   const fetchCategories = useAdminStore(state => state.fetchCategories);
   const categories = useAdminStore(state => state.categories);
-  const addProduct = useAdminStore(state => state.addProduct);
+  const addEvent = useAdminStore(state => state.addEvent);
 
   useEffect(() => {
     fetchCategories();
@@ -125,6 +130,46 @@ export default function AddEventPage() {
     }
   }
 
+  const handleSubmit = () => {
+    var images: File[] = []
+
+    photos.map((val, index) => {
+      if (val) {
+        images.push(val);
+      }
+    })
+
+    if (images.length > 0) {
+      setPhotos(images)
+    } else {
+      setPhotos([])
+    }
+
+    if (name === '') {
+      setErr(1)
+      return;
+    } else if (duration === 0) {
+      setErr(2)
+      return;
+    } else if (description === '') {
+      setErr(3)
+      return;
+    } else if (description.length < 50) {
+      setErr(6)
+      return;
+    } else if (dates.length === 0) {
+      setErr(4)
+      return;
+    } else if (price === 0) {
+      setErr(5)
+      return;
+    }
+
+    addEvent(name, price, description, duration === -1 ? customDuration : duration, dates, category, tags, images)
+    setErr(0)
+    setStatus('loading')
+  }
+
   return (
     <div className='flex flex-col gap-2'>
       <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2'>
@@ -159,36 +204,36 @@ export default function AddEventPage() {
           </React.Fragment>
         ))}
       </div>
-      <Input label='Nazwa wydażenia' value={name} onChange={(e) => setName(e.target.value)}/>
-      <Select label='Czas trwania' onChange={(e) => setDuration(Number.parseInt(e.target.value))}>
-        <SelectItem key={15} value={15}>15 minut</SelectItem>
-        <SelectItem key={30} value={30}>30 minut</SelectItem>
-        <SelectItem key={45} value={45}>45 minut</SelectItem>
-        <SelectItem key={60} value={60}>1 godzina</SelectItem>
-        <SelectItem key={90} value={90}>1,5 godziny</SelectItem>
-        <SelectItem key={120} value={120}>2 godziny</SelectItem>
-        <SelectItem key={180} value={180}>3 godziny</SelectItem>
-        <SelectItem key={240} value={240}>4 godziny</SelectItem>
-        <SelectItem key={300} value={300}>5 godzin</SelectItem>
-        <SelectItem key={360} value={360}>6 godzin</SelectItem>
-        <SelectItem key={420} value={420}>7 godzin</SelectItem>
-        <SelectItem key={480} value={480}>8 godzin</SelectItem>
-        <SelectItem key={600} value={600}>10 godzin</SelectItem>
-        <SelectItem key={720} value={720}>12 godzin</SelectItem>
-        <SelectItem key={960} value={960}>16 godzin</SelectItem>
-        <SelectItem key={1440} value={1440}>1 doba</SelectItem>
-        <SelectItem key={2880} value={2880}>2 doby</SelectItem>
-        <SelectItem key={4320} value={4320}>3 doby</SelectItem>
-        <SelectItem key={5760} value={5760}>4 doby</SelectItem>
-        <SelectItem key={-1} value={-1}>Własne</SelectItem>
+      <Input label='Nazwa wydażenia' value={name} onChange={(e) => setName(e.target.value)} isInvalid={err === 1} errorMessage={err === 1 ? 'Nazwa wydarzenia jest wymagana' : ''}/>
+      <Select label='Czas trwania' onChange={(e) => setDuration(Number.parseInt(e.target.value))} isInvalid={err === 2 } errorMessage={err == 2 ? 'Musisz wybrać czas trwania Wydarzenia lub wprowadzić własny' : ''}>
+        <SelectItem key={15} value={15} textValue={'15'}>15 minut</SelectItem>
+        <SelectItem key={30} value={30} textValue={'30'}>30 minut</SelectItem>
+        <SelectItem key={45} value={45} textValue={'45'}>45 minut</SelectItem>
+        <SelectItem key={60} value={60} textValue={'60'}>1 godzina</SelectItem>
+        <SelectItem key={90} value={90} textValue={'90'}>1,5 godziny</SelectItem>
+        <SelectItem key={120} value={120} textValue={'120'}>2 godziny</SelectItem>
+        <SelectItem key={180} value={180} textValue={'180'}>3 godziny</SelectItem>
+        <SelectItem key={240} value={240} textValue={'240'}>4 godziny</SelectItem>
+        <SelectItem key={300} value={300} textValue={'300'}>5 godzin</SelectItem>
+        <SelectItem key={360} value={360} textValue={'360'}>6 godzin</SelectItem>
+        <SelectItem key={420} value={420} textValue={'420'}>7 godzin</SelectItem>
+        <SelectItem key={480} value={480} textValue={'480'}>8 godzin</SelectItem>
+        <SelectItem key={600} value={600} textValue={'600'}>10 godzin</SelectItem>
+        <SelectItem key={720} value={720} textValue={'720'}>12 godzin</SelectItem>
+        <SelectItem key={960} value={960} textValue={'960'}>16 godzin</SelectItem>
+        <SelectItem key={1440} value={1440} textValue={'1440'}>1 doba</SelectItem>
+        <SelectItem key={2880} value={2880} textValue={'2880'}>2 doby</SelectItem>
+        <SelectItem key={4320} value={4320} textValue={'4320'}>3 doby</SelectItem>
+        <SelectItem key={5760} value={5760} textValue={'5760'}>4 doby</SelectItem>
+        <SelectItem key={-1} value={-1} textValue={'-1'}>Własne</SelectItem>
       </Select>
       {
         duration === -1 && (
-          <Input label='Własny czas trwania (w minutach)' type='number' min={5} max={20160}
+          <Input label='Własny czas trwania (w minutach)' type='number' min={5} max={20160} isInvalid={err == 2}
                  onChange={(e) => setCustomDuration(Number.parseInt(e.target.value))}/>
         )
       }
-      <Textarea label='Opis wydarzenia' value={description} onChange={(e) => setDescription(e.target.value)}/>
+      <Textarea label='Opis wydarzenia' value={description} onChange={(e) => setDescription(e.target.value)} isInvalid={err == 6 || err == 3} errorMessage={err == 6 ? 'Opis musi posiadać minimum 50 znaków' : err == 3 ? 'opis jest wymagany' : ''}/>
       <Card shadow='none'>
         <CardBody className='bg-white bg-opacity-5'>
           <Card className='flex flex-row' radius='sm' isPressable onPress={handleAddDate}>
@@ -205,7 +250,7 @@ export default function AddEventPage() {
         <CardBody className='bg-white bg-opacity-5'>
           {
             dates.length == 0 ? (
-              <div>Wymagana jest minimum jedna data kiedy wydarzenie sie odbywa.</div>
+              <div className={err == 4 ? 'text-red-600' : ''}>Wymagana jest minimum jedna data kiedy wydarzenie sie odbywa.</div>
             ) : (
               <div className='flex flex-col gap-2 max-h-[250px]'>
                 {
@@ -238,11 +283,11 @@ export default function AddEventPage() {
           }
         </CardBody>
       </Card>
-      <Input label='Cena' type='number' onChange={(e) => setPrice(Number.parseFloat(e.target.value))}/>
+      <Input label='Cena' type='number' onChange={(e) => setPrice(Number.parseFloat(e.target.value))} isInvalid={err == 5} errorMessage={err == 5 ? 'Cena jest wymagana' : ''}/>
       <Select label='kategoria' onChange={(e) => setCategory(e.target.value)}>
         {
           categories.map((category, index) => (
-            <SelectItem key={index} value={category.id}
+            <SelectItem key={index} value={category.id} textValue={category.id}
                         startContent={<MaterialSymbol icon={category.icon} size={20} color={'#006FEE'}/>}>
               {category.name}
             </SelectItem>
@@ -260,6 +305,7 @@ export default function AddEventPage() {
           </Chip>
         )) : 'Brak tagów.'}
       </div>
+      <Button color='primary' onClick={() => handleSubmit()}>Dodaj wydarzenie</Button>
 
       
       <Modal hideCloseButton isDismissable={false} isOpen={editDate !== null} onClose={() => setEditDate(null)}
@@ -323,6 +369,44 @@ export default function AddEventPage() {
               Zapisz
             </Button>
           </ModalBody>
+        </ModalContent>
+      </Modal>
+      <Modal isOpen={status !== ''} backdrop='blur' onClose={() => setStatus('')} isDismissable={false} hideCloseButton={false}>
+        <ModalContent>
+          {
+            status === 'loading' ? (
+              <ModalBody>
+                <div className='flex flex-col items-center justify-center gap-4 py-6'>
+                  <Spinner size='lg'/>
+                  <span className='text-xl font-semibold'>Dodawanie przedmiotu...</span>
+                </div>
+              </ModalBody>
+            ) : null
+          }
+          {
+            status === 'success' ? (
+              <ModalBody>
+                <div className='flex flex-col items-center justify-center gap-4'>
+                  <MaterialSymbol icon='done' size={64} color='#006FEE'/>
+                  <span className='text-xl font-semibold'>Przedmiot dodany pomyślnie!</span>
+                  <span className='text-sm'>Twój przedmiot został dodany do bazy danych i jest już dostępny na stronie.</span>
+                  <Button color='success' onClick={() => setStatus('')}>Zamknij</Button>
+                </div>
+              </ModalBody>
+            ) : null
+          }
+          {
+            status === 'error' ? (
+              <ModalBody>
+                <div className='flex flex-col items-center justify-center gap-4'>
+                  <MaterialSymbol icon='error' size={64} color='#FF0000'/>
+                  <span className='text-xl font-semibold'>Wystąpił błąd podczas dodawania przedmiotu!</span>
+                  <span className='text-sm'>Spróbuj ponownie później.</span>
+                  <Button color='danger' onClick={() => setStatus('')}>Zamknij</Button>
+                </div>
+              </ModalBody>
+            ) : null
+          }
         </ModalContent>
       </Modal>
     </div>

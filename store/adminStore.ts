@@ -3,12 +3,13 @@ import {removeCategory, updateCategory, fetchCategories} from "@/app/actions/cat
 import {image} from "@nextui-org/react";
 import {createProduct, fetchProducts} from "@/app/actions/product";
 import {logout} from "@/app/actions/auth";
-import {createEvent} from "@/app/actions/event";
+import {createEvent, fetchEvents} from "@/app/actions/event";
 
 export const useAdminStore = create<IState>((set) => ({
   token: undefined,
   categories: ['loading'],
   products: ['loading'],
+  events: ['loading'],
 
   logout: () => {
     logout();
@@ -86,6 +87,22 @@ export const useAdminStore = create<IState>((set) => ({
     return response;
   },
 
+  fetchEvents: async () => {
+    const response = await fetchEvents();
+    if (response.isSuccess) {
+      const events = JSON.parse(response.eventsJson);
+      if (events && events.length > 0) {
+        set({events: events});
+        return {isSuccess: true};
+      } else {
+        set({events: ['none']});
+        return {isSuccess: false};
+      }
+    } else {
+      set({events: ['error']});
+      return {isSuccess: false};
+    }
+  },
   addEvent: async (name: string, price: number, description: string, time?: number, dates?: {date: Date, seats: number}[], category?: string, tags?: string[], images?:File[]) => {
     const formData = new FormData();
     formData.append('name', name);
@@ -126,6 +143,7 @@ interface IState {
   token: string | undefined;
   categories: any[];
   products: any[];
+  events: any[]
 
   logout: () => void;
 
@@ -136,5 +154,6 @@ interface IState {
   fetchProducts: () => Promise<{ isSuccess: boolean, products?: any }>;
   addProduct: (name: string, price: number, description: string, title?: string, categoryId?: string, tags?: string[], images?: File[]) => Promise<{ isSuccess: boolean }>;
 
+  fetchEvents: () => Promise<{ isSuccess: boolean }>;
   addEvent: (name: string, price: number, description: string, time?: number, dates?: {date: Date, seats: number}[], category?: string, tags?: string[], images?:File[]) => Promise<{ isSuccess: boolean }>;
 }

@@ -18,6 +18,7 @@ import {
 } from "@nextui-org/react";
 import {MaterialSymbol} from "react-material-symbols";
 import {useAdminStore} from "@/store/adminStore";
+import {useRouter} from "next/navigation";
 
 export default function AddProductObjectPage() {
   const [photos, setPhotos] = useState<File[]>([]);
@@ -39,6 +40,8 @@ export default function AddProductObjectPage() {
   const fetchCategories = useAdminStore(state => state.fetchCategories);
   const categories = useAdminStore(state => state.categories);
   const addProduct = useAdminStore(state => state.addProduct);
+
+  const router = useRouter()
 
   useEffect(() => {
     fetchCategories();
@@ -203,7 +206,7 @@ export default function AddProductObjectPage() {
                   <MaterialSymbol icon='done' size={64} color='#006FEE'/>
                   <span className='text-xl font-semibold'>Przedmiot dodany pomyślnie!</span>
                   <span className='text-sm'>Twój przedmiot został dodany do bazy danych i jest już dostępny na stronie.</span>
-                  <Button color='success' onClick={() => setShowModal(false)}>Zamknij</Button>
+                  <Button color='success' onClick={() => {setShowModal(false); router.push('/admin-area/dashboard/products')}}>Zamknij</Button>
                 </div>
               </ModalBody>
             ) : null
@@ -215,7 +218,7 @@ export default function AddProductObjectPage() {
                   <MaterialSymbol icon='error' size={64} color='#FF0000'/>
                   <span className='text-xl font-semibold'>Wystąpił błąd podczas dodawania przedmiotu!</span>
                   <span className='text-sm'>Spróbuj ponownie później.</span>
-                  <Button color='danger' onClick={() => setShowModal(false)}>Zamknij</Button>
+                  <Button color='danger' onClick={() => {setShowModal(false); router.push('/admin-area/dashboard/products')}}>Zamknij</Button>
                 </div>
               </ModalBody>
             ) : null

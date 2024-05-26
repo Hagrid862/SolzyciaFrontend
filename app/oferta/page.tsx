@@ -57,8 +57,7 @@ export default function Home() {
               </CardBody>
             </Card>
           </div> : null}
-          {products[0] === 'error' && filterType === 'products' || events[0] === 'error' && filterType === 'events' ?
-            <div>
+          {products[0] === 'error' && filterType === 'products' || events[0] === 'error' && filterType === 'events' ? <div>
               <Card
                 className='fixed left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 min-w-[250px] max-w-1/2'>
                 <CardBody className='items-center'>
@@ -73,7 +72,7 @@ export default function Home() {
             </div> : null}
           {filterType === 'events' && events[0] !== 'loading' && events[0] !== 'none' && events[0] !== 'error' && events.map((event: any) => (
             <div>
-              <Card className='md:hidden'>
+              <Card className='md:hidden' isPressable onPress={() => router.push(`oferta/wydarzenie/${event.id}`)}>
                 <CardBody className='w-full'>
                   {
                     event.images && event.images[0] ? (
@@ -104,7 +103,7 @@ export default function Home() {
                   </div>
                 </CardBody>
               </Card>
-              <Card className='hidden md:flex flex-row items-stretch h-[13rem]'>
+              <Card className='hidden md:flex flex-row items-stretch h-[13rem] w-full' isPressable onPress={() => router.push(`oferta/wydarzenie/${event.id}`)}>
                 <CardBody className='min-w-[13.25rem] w-[12rem] overflow-hidden'>
                   {
                     event.images && event.images[0] ? (
@@ -151,7 +150,7 @@ export default function Home() {
           ))}
           {filterType=== 'products' && products[0] !== 'loading' && products[0] !== 'none' && products[0] !== 'error' && products.map((product: any) => (
             <div>
-              <Card className='md:hidden'>
+              <Card className='md:hidden' isPressable onPress={() => router.push(`oferta/produkt/${product.id}`)}>
                 <CardBody>
                   {
                     product.images[0] ? (
@@ -181,7 +180,7 @@ export default function Home() {
                   </div>
                 </CardBody>
               </Card>
-              <Card className='hidden md:flex flex-row items-stretch h-[13rem]'>
+              <Card className='hidden md:flex flex-row items-stretch h-[13rem]' isPressable onPress={() => router.push(`oferta/produkt/${product.id}`)}>
                 <CardBody className='min-w-[13.25rem] w-[12rem] overflow-hidden'>
                   {
                     product.images[0] ? (

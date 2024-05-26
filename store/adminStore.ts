@@ -61,18 +61,20 @@ export const useAdminStore = create<IState>((set) => ({
       return {isSuccess: false};
     }
   },
-  addProduct: async (name: string, price: number, description: string, title?: string, categoryId?: string, tags?: string[], images?: File[]): Promise<{ isSuccess: boolean }> => {
+  addProduct: async (name: string, price: number, description: string, title?: string, category?: string, tags?: string[], images?: File[]): Promise<{ isSuccess: boolean }> => {
     const formData = new FormData();
 
     formData.append('name', name);
     formData.append('price', price.toString());
     formData.append('description', description);
 
+    console.log('CID ' + category)
+
     if (title) {
       formData.append('title', title);
     }
-    if (categoryId) {
-      formData.append('category', categoryId);
+    if (category) {
+      formData.append('categoryId', category);
     }
     if (tags) {
       formData.append('tags', tags.join(','));

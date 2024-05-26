@@ -88,6 +88,8 @@ export default function AddProductObjectPage() {
       setPhotos([])
     }
 
+    console.log(category)
+
     if (name === '') {
       setErr(1)
       return;
@@ -104,8 +106,8 @@ export default function AddProductObjectPage() {
     setErr(0)
     setStatus('loading')
     setShowModal(true)
-
-    const response = await addProduct(name, price, description, title === '' ? undefined : title, category === '' ? undefined : category, tags.length === 0 ? undefined : tags, !photos[0] ? undefined : photos).then((res) => {
+    console.log('category: ' + category)
+    await addProduct(name, price, description, title === '' ? undefined : title, category, tags.length === 0 ? undefined : tags, !photos[0] ? undefined : photos).then((res) => {
       if (res.isSuccess) {
         setStatus('success')
       } else {
@@ -166,7 +168,7 @@ export default function AddProductObjectPage() {
         <Select label='kategoria' onChange={(e) => setCategory(e.target.value)}>
           {
             categories.map((category, index) => (
-              <SelectItem key={index} value={category.id}
+              <SelectItem key={category.id} value={category.id}
                           startContent={<MaterialSymbol icon={category.icon} size={20} color={'#006FEE'}/>}>
                 {category.name}
               </SelectItem>

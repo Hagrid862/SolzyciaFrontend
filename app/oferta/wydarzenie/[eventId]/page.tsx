@@ -20,8 +20,8 @@ export default function OfferProductPage({params}: {params: {eventId: string}}) 
   }, [])
 
   return (
-    <div>
-      {'event: ' + event.id}
+    <div className='max-w-[1300px] mx-auto mt-2'>
+      {'event: ' + event?.id}
     </div>
   )
 }

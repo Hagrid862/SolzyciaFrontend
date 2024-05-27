@@ -1,7 +1,7 @@
 import {create} from "zustand";
 import {fetchCategories} from "@/app/actions/category";
 import {fetchProducts, fetchProductsByCategory} from "@/app/actions/product";
-import {fetchEvents, fetchEventsByCategory} from "@/app/actions/event";
+import {fetchEventById, fetchEvents, fetchEventsByCategory} from "@/app/actions/event";
 
 export const useOfferStore = create<IState>((set, get) => ({
   filterCategory: 'all-categories',
@@ -143,6 +143,19 @@ export const useOfferStore = create<IState>((set, get) => ({
       return {isSuccess: false};
     }
   },
+  fetchEventById: async (id: string) => {
+    const response = await fetchEventById(id);
+    if (response.isSuccess) {
+      const event = JSON.parse(response.eventJson);
+      if (event) {
+        return {isSuccess: true, event: event};
+      } else {
+        return {isSuccess: true, event: null};
+      }
+    } else {
+      return {isSuccess: false, event: {}};
+    }
+  }
 }));
 
 export interface IState {
@@ -165,4 +178,5 @@ export interface IState {
 
   fetchEvents: (reviews?: boolean, orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity', order?: 'desc' | 'asc', page?: number, limit?: number) => Promise<{ isSuccess: boolean }>;
   fetchEventsByCategory: (reviews?: boolean, orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity', order?: 'desc' | 'asc', page?: number, limit?: number) => Promise<{ isSuccess: boolean }>;
+  fetchEventById: (id: string) => Promise<{ isSuccess: boolean, event: any }>;
 }

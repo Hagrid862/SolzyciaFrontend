@@ -28,6 +28,34 @@ export async function fetchEvents(reviews?: boolean, orderBy?: 'created_at' | 'p
     return {isSuccess: false, eventsJson: '' }
   }
 }
+export async function fetchEventById(id: string): Promise<{isSuccess: boolean, eventJson: string}> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/event/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    console.log(response.status)
+
+    if (response.status === 200) {
+      const data = await response.json();
+      if (data.eventDto) {
+        const eventJson = JSON.stringify(data.eventDto);
+        return {isSuccess: true, eventJson: eventJson }
+      } else {
+        return {isSuccess: false, eventJson: '' }
+      }
+    } else {
+      if (response.status === 404) {
+        return {isSuccess: true, eventJson: '[]'}
+      }
+      return {isSuccess: false, eventJson: '' }
+    }
+  } catch {
+    return {isSuccess: false, eventJson: '' }
+  }
+}
 export async function fetchEventsByCategory(category: string, reviews?: boolean, orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity', order?: 'desc' | 'asc', page?: number, limit?: number): Promise<{isSuccess: boolean, eventsJson: string}> {
   try{
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/event/category/${category}${reviews || orderBy || order || page || limit ? '?' : ''}${reviews ? 'reviews=true' : ''}${orderBy ? `&orderBy=${orderBy}` : ''}${order ? `&order=${order}` : ''}${page ? `&page=${page}` : ''}${limit ? `&limit=${limit}` : ''}`,
@@ -58,6 +86,7 @@ export async function fetchEventsByCategory(category: string, reviews?: boolean,
     return {isSuccess: false, eventsJson: '' }
   }
 }
+
 
 export async function createEvent(fromData: FormData): Promise<{isSuccess: boolean, status: string }> {
    try {

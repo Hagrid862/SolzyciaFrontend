@@ -87,7 +87,6 @@ export async function fetchEventsByCategory(category: string, reviews?: boolean,
   }
 }
 
-
 export async function createEvent(fromData: FormData): Promise<{isSuccess: boolean, status: string }> {
    try {
     const cookiesStorage = cookies();
@@ -103,6 +102,9 @@ export async function createEvent(fromData: FormData): Promise<{isSuccess: boole
       },
       body: fromData,
     });
+
+    console.log(await response.text())
+
 
     if (response.ok) {
       return {isSuccess: true, status: 'SUCCESS'};

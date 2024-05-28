@@ -116,9 +116,10 @@ export const useAdminStore = create<IState>((set) => ({
     if (dates) {
       let datesObj: { dateIso: string, seats: number }[] = [];
       dates.map((date, index) => {
-        datesObj.push({dateIso: date.date.toISOString(), seats: date.seats});
-        console.log(date)
+        const dateString = date.date.toISOString()
+        datesObj.push({dateIso: dateString, seats: date.seats});
       });
+      console.log(datesObj)
       formData.append(`dates`, JSON.stringify(datesObj));
     }
     if (category) {

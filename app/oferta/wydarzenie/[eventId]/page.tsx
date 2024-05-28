@@ -121,9 +121,19 @@ export default function OfferProductPage({params}: {params: {eventId: string}}) 
             }
           </CardBody>
           <Divider/>
-          <CardBody className='h-full'>
-            <div className='text-2xl font-medium'>Opis:</div>
-            <div className='text-lg'>{event?.description}</div>
+          <CardBody className='h-full gap-2'>
+            <Card>
+              <CardBody className='bg-white bg-opacity-5'>
+                <div className='text-2xl font-medium'>Czas
+                  trwania: {event?.time >= 60 ? event?.time / 60 == 1 ? '1 godzina' : event?.time > 1 && event?.time < 5 ? `${event?.time / 60} godziny` : `${event?.time / 60} godzin` : `${event?.time} minut`}</div>
+              </CardBody>
+            </Card>
+            <Card>
+              <CardBody className='bg-white bg-opacity-5'>
+                <div className='text-2xl font-medium'>Opis:</div>
+                <div className='text-lg'>{event?.description}</div>
+              </CardBody>
+            </Card>
           </CardBody>
           <Divider/>
           <CardBody className='flex flex-row min-h-16 justify-between gap-2'>

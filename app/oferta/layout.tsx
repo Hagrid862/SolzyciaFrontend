@@ -32,7 +32,7 @@ export default function OfertaLayout({children}: Readonly<{children: React.React
     <div>
       <Card className='sticky mb-2 w-[1200px] max-w-[calc(100vw-1rem)] mx-auto'>
         {
-          pathname === '/oferta/wydarzenia' || pathname === '/oferta/produkty' ? (
+          pathname === '/oferta' || pathname === '/oferta' ? (
             <CardBody className='flex flex-col gap-2' >
               <Tabs fullWidth onSelectionChange={(e) => store.setFilterType(e as string)} selectedKey={store.filterType}>
                 <Tab key='events' title='wydarzenia'/>

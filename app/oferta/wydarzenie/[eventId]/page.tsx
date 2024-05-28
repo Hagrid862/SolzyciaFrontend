@@ -13,7 +13,7 @@ import {
   TableCell,
   TableColumn,
   TableHeader,
-  TableRow
+  TableRow, Tooltip
 } from "@nextui-org/react";
 import {MaterialSymbol} from "react-material-symbols";
 import {DateTimeFormat} from "@formatjs/ecma402-abstract";
@@ -138,20 +138,28 @@ export default function OfferProductPage({params}: {params: {eventId: string}}) 
           <Divider/>
           <CardBody className='flex flex-row min-h-16 justify-between gap-2'>
             <div className='flex flex-row gap-2'>
-              <Button color='warning' variant='flat' isIconOnly>
-                <MaterialSymbol icon='email' size={24} color='white'/>
-              </Button>
-              <Button color='success' variant='flat' isIconOnly>
-                <MaterialSymbol icon='favorite' size={24} color='white'/>
-              </Button>
-              <Button color='secondary' variant='flat' isIconOnly>
-                <MaterialSymbol icon='share' size={24} color='white'/>
-              </Button>
+              <Tooltip content='Kontakt' placement='bottom'>
+                <Button color='primary' variant='flat' isIconOnly>
+                  <MaterialSymbol icon='call' size={24} color='white'/>
+                </Button>
+              </Tooltip>
+              <Tooltip content='Polub' placement='bottom'>
+                <Button color='success' variant='flat' isIconOnly>
+                  <MaterialSymbol icon='favorite' size={24} color='white'/>
+                </Button>
+              </Tooltip>
+              <Tooltip content='Udostępnij' placement='bottom'>
+                <Button color='secondary' variant='flat' isIconOnly>
+                  <MaterialSymbol icon='share' size={24} color='white'/>
+                </Button>
+              </Tooltip>
             </div>
             <div className='gap-2 flex flex-row'>
-              <Button color='secondary' variant='solid' isIconOnly>
-                <MaterialSymbol icon='add_shopping_cart' size={24} color='white'/>
-              </Button>
+              <Tooltip content='Dodaj do koszyka' placement='bottom'>
+                <Button color='secondary' variant='solid' isIconOnly>
+                  <MaterialSymbol icon='add_shopping_cart' size={24} color='white'/>
+                </Button>
+              </Tooltip>
               <Button color='primary' variant='solid'>
                 <MaterialSymbol icon='event_available' size={24} color='white'/>
                 Zarezerwuj

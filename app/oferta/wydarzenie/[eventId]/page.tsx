@@ -81,7 +81,7 @@ export default function OfferProductPage({params}: {params: {eventId: string}}) 
             <div className='flex flex-row overflow-x-auto'>
               {
                 event?.images && event.images.length > 0 ? event.images.map((image: string, index: number) => (
-                  <div className='relative h-[75px] flex flex-col items-center justify-center'>
+                  <div className='relative h-[75px] flex flex-col items-center justify-center' key='event-photo'>
                     <Image src={image} alt={event.name} className={`max-w-[75px] max-h-[75px] rounded-lg scale-${currentPhoto === index ? '100' : '80'}`}/>
                   </div>
                 )) : (
@@ -173,23 +173,57 @@ export default function OfferProductPage({params}: {params: {eventId: string}}) 
           Opinie innych
         </CardHeader>
         <Divider/>
-        <div className='flex flex-row'>
-          <CardBody className='w-4/6'>
-            reviews
+        <div className='flex flex-row h-64'>
+          <CardBody className='w-4/6 flex flex-col gap-2'>
+            <Card className=' min-h-48 max-h-48 bg-white bg-opacity-5'>
+              <CardHeader className='flex flex-row justify-between'>
+                <div className='text-2xl font-medium'>Grayna123</div>
+                <div className='relative'>
+                  <div className="flex flex-row">
+                    <MaterialSymbol icon='star' size={32}/>
+                    <MaterialSymbol icon='star' size={32}/>
+                    <MaterialSymbol icon='star' size={32}/>
+                    <MaterialSymbol icon='star' size={32}/>
+                    <MaterialSymbol icon='star' size={32}/>
+                  </div>
+                  <div className="flex flex-row top-0 absolute">
+                    <MaterialSymbol icon='star' size={32} fill color='#F7B750'/>
+                    <MaterialSymbol icon='star' size={32} fill color='#F7B750'/>
+                    <MaterialSymbol icon='star' size={32} fill color='#F7B750'/>
+                    <MaterialSymbol icon='star' size={32} fill color='#F7B750'/>
+                  </div>
+                </div>
+              </CardHeader>
+              <Divider/>
+              <CardBody>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed non risus. Suspendisse lectus tortor, dignissim sit amet, adipiscing nec, ultricies sed, dolor. Cras elementum ultrices diam. Maecenas ligula massa, varius a, semper congue, euismod non, mi. Proin porttitor, orci nec nonummy molestie, enim est eleifend mi, non fermentum diam nisl sit amet erat. Duis semper.
+              </CardBody>
+            </Card>
+            <Button color='primary' variant='flat' className='w-full'>
+              Pokaż wszystkie opinie
+            </Button>
           </CardBody>
           <Divider className='h-64' orientation='vertical'/>
           <CardBody className='w-2/6'>
-            <div>
-              <Sta
-                count={5}
-                value={3.5}
-                size={24}
-                isHalf={true}
-                activeColor="#ffd700"
-                onChange={newValue => {
-                  console.log(`New rating is ${newValue}`);
-                }}
-              />
+            <div className='flex flex-col items-center justify-center h-full'>
+              <div className='relative'>
+                <div className="flex flex-row">
+                  <MaterialSymbol icon='star' size={32}/>
+                  <MaterialSymbol icon='star' size={32}/>
+                  <MaterialSymbol icon='star' size={32}/>
+                  <MaterialSymbol icon='star' size={32}/>
+                  <MaterialSymbol icon='star' size={32}/>
+                </div>
+                <div className="flex flex-row top-0 absolute">
+                  <MaterialSymbol icon='star' size={32} fill color='#F7B750'/>
+                  <MaterialSymbol icon='star' size={32} fill color='#F7B750'/>
+                  <MaterialSymbol icon='star' size={32} fill color='#F7B750'/>
+                  <MaterialSymbol icon='star' size={32} fill color='#F7B750'/>
+                  <MaterialSymbol icon='star' size={32} fill color='#F7B750' className='w-[16px] overflow-hidden'/>
+                </div>
+              </div>
+              <div>Średnia ocen:</div>
+              <div className='text-2xl'>4.5 / 5</div>
             </div>
           </CardBody>
         </div>

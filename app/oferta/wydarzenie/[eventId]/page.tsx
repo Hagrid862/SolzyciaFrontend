@@ -169,8 +169,9 @@ export default function OfferProductPage({params}: {params: {eventId: string}}) 
         </Card>
       </div>
       <Card className='m-6'>
-        <CardHeader className='text-xl font-semibold'>
-          Opinie innych
+        <CardHeader className='flex flex-row justify-between'>
+          <span className='text-xl font-semibold'>Opinie innych</span>
+          <div className='text-lg text-white text-opacity-50'>21 opinii</div>
         </CardHeader>
         <Divider/>
         <div className='flex flex-row h-64'>

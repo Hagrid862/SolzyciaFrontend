@@ -1,22 +1,16 @@
-'use client'
+'use client';
 
 import { getCart } from '@/app/actions/cart'
-import { ICartItem } from '@/models/cart'
 import { useCartStore } from '@/store/cartStore'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 export default function CartPage() {
   const cartStore = useCartStore()
-  const [cartRaw, setCartRaw] = useState<string[]>([])
+  const items = cartStore.cartItems
 
   useEffect(() => {
     async function fetchCart() {
-      const cardResult = await cartStore.getRawCartItems()
-      if (cardResult.isSuccess && cardResult.items) {
-        setCartRaw(cardResult.items)
-      } else {
-        setCartRaw(['error'])
-      }
+      const response = await getCart()
     }
 
     fetchCart()
@@ -24,9 +18,9 @@ export default function CartPage() {
 
   return (
     <div>
-      {cartRaw.map((item, index) => (
+      {/* {cartRaw.map((item, index) => (
         <div key={index}>{item}</div>
-      ))}
+      ))} */}
     </div>
   )
 }

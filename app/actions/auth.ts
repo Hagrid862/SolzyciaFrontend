@@ -39,7 +39,6 @@ export async function login(state: LoginFormState, action: FormData) {
       }
     }
   } catch (e: any) {
-    console.log('error: ', e)
     const data = e.response.data
     if (data.message == 'Invalid username or password') {
       return {
@@ -77,8 +76,6 @@ export async function verifyOtp(state: VerifyOtpState, action: FormData) {
     if (response.status == 200) {
       const data = response.data
 
-      console.log(data)
-
       const cookieStore = cookies()
 
       const expiryDate = new Date()
@@ -90,7 +87,6 @@ export async function verifyOtp(state: VerifyOtpState, action: FormData) {
           path: '/',
           httpOnly: true
         })
-        console.log('refresh saved')
       }
 
       cookieStore.set('access', data.access, {
@@ -98,7 +94,6 @@ export async function verifyOtp(state: VerifyOtpState, action: FormData) {
         path: '/',
         httpOnly: true
       })
-      console.log('access saved')
 
       return {
         errors: undefined,
@@ -112,7 +107,6 @@ export async function verifyOtp(state: VerifyOtpState, action: FormData) {
     }
   } catch (e: any) {
     const data = e.response.data
-    console.log(data)
     if (data.message == 'Invalid code') {
       return {
         errors: undefined,

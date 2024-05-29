@@ -1,16 +1,16 @@
 'use server'
 
-import { ICartItem } from '@/models/cart'
+import { ICartItem } from '@/models/CartItem'
 import { cookies } from 'next/headers'
 
-export async function addToCart(itemId: string): Promise<{ isSuccess: boolean }> {
+export async function addToCart(itemId: string, quantity: number, isEvent: boolean): Promise<{ isSuccess: boolean }> {
   const cookiesStorage = cookies()
   const cart = cookiesStorage.get('cart')?.value || '[]'
   const cartArray = JSON.parse(cart)
-  if (cartArray.includes(itemId)) {
+  if (cartArray.includes({id: itemId, quantity, isEvent})) {
     return { isSuccess: false }
   }
-  cartArray.push(itemId)
+  cartArray.push({id: itemId, quantity, isEvent})
   cookiesStorage.set('cart', JSON.stringify(cartArray))
   return { isSuccess: true }
 }
@@ -27,6 +27,10 @@ export async function getCart(): Promise<ICartItem[]> {
   const cookiesStorage = cookies()
   const cart = cookiesStorage.get('cart')?.value || '[]'
   const cartArray = JSON.parse(cart)
+
+  cartArray.map((item: ICartItem) => {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/cart`)
+  });
 
   return []
 }

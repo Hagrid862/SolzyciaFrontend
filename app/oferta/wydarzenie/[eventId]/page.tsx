@@ -5,7 +5,7 @@ import {useOfferStore} from "@/store/offerStore";
 import {
   Button,
   Card,
-  CardBody,
+  CardBody, CardHeader,
   Divider,
   Image,
   Table,
@@ -168,6 +168,32 @@ export default function OfferProductPage({params}: {params: {eventId: string}}) 
           </CardBody>
         </Card>
       </div>
+      <Card className='m-6'>
+        <CardHeader className='text-xl font-semibold'>
+          Opinie innych
+        </CardHeader>
+        <Divider/>
+        <div className='flex flex-row'>
+          <CardBody className='w-4/6'>
+            reviews
+          </CardBody>
+          <Divider className='h-64' orientation='vertical'/>
+          <CardBody className='w-2/6'>
+            <div>
+              <Sta
+                count={5}
+                value={3.5}
+                size={24}
+                isHalf={true}
+                activeColor="#ffd700"
+                onChange={newValue => {
+                  console.log(`New rating is ${newValue}`);
+                }}
+              />
+            </div>
+          </CardBody>
+        </div>
+      </Card>
     </div>
   )
 }

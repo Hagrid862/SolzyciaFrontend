@@ -2,27 +2,17 @@
 
 import React, {useEffect, useState} from "react";
 import {useOfferStore} from "@/store/offerStore";
-import {
-  Button,
-  Card,
-  CardBody, CardHeader,
-  Divider,
-  Image,
-  Table,
-  TableBody,
-  TableCell,
-  TableColumn,
-  TableHeader,
-  TableRow, Tooltip
-} from "@nextui-org/react";
-import {MaterialSymbol} from "react-material-symbols";
-import {DateTimeFormat} from "@formatjs/ecma402-abstract";
+import { Button, Card, CardBody, CardHeader, Divider, Image, Tooltip } from "@nextui-org/react";
+import { MaterialSymbol } from "react-material-symbols";
+import { DateTimeFormat } from "@formatjs/ecma402-abstract";
+import { useCartStore } from "@/store/cartStore";
 
 export default function OfferProductPage({params}: {params: {eventId: string}}) {
   const [event, setEvent] = useState<any>(null);
   const [currentPhoto, setCurrentPhoto] = useState<number>(0);
 
   const store = useOfferStore();
+  const cartStore = useCartStore();
 
   const formatDate = (date: string) => {
     const newDate = new Date(date); // use the date passed to the function
@@ -50,6 +40,10 @@ export default function OfferProductPage({params}: {params: {eventId: string}}) 
 
     fetchProduct();
   }, [])
+
+  const addToCart = () => {
+    cartStore.addToCart(params.eventId);
+  }
 
   return (
     <div className='max-w-[1300px] mx-auto mt-2'>
@@ -156,7 +150,7 @@ export default function OfferProductPage({params}: {params: {eventId: string}}) 
             </div>
             <div className='gap-2 flex flex-row'>
               <Tooltip content='Dodaj do koszyka' placement='bottom'>
-                <Button color='secondary' variant='solid' isIconOnly>
+                <Button color='secondary' variant='solid' isIconOnly onClick={() => addToCart()}>
                   <MaterialSymbol icon='add_shopping_cart' size={24} color='white'/>
                 </Button>
               </Tooltip>

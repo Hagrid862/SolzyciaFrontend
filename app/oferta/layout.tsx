@@ -1,6 +1,6 @@
 'use client';
 
-import {Card, CardBody, Divider, Select, SelectItem, Tab, Tabs} from "@nextui-org/react";
+import {Card, CardBody, Divider, Select, SelectItem, Tab, Tabs, Tooltip} from "@nextui-org/react";
 import 'react-material-symbols/rounded';
 import React, {useEffect} from "react";
 import {useOfferStore} from "@/store/offerStore";
@@ -55,10 +55,15 @@ export default function OfertaLayout({children}: Readonly<{children: React.React
               </div>
             </CardBody>
           ) : (
-            <CardBody>
-              <Button>
+            <CardBody className='flex flex-row gap-2'>
+              <Button className='w-full'>
                 Wróć do oferty
               </Button>
+              <Tooltip content='Koszyk' placement='bottom'>
+                <Button isIconOnly color='primary' onClick={() => router.push('/oferta/koszyk')}>
+                  <MaterialSymbol icon='shopping_cart' size={20} color={'#ffffff'}/>
+                </Button>
+              </Tooltip>
             </CardBody>
           )
         }

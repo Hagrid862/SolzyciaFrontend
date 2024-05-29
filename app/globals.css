@@ -1,4 +1,4 @@
-@import "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined";
+@import 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined';
 
 @tailwind base;
 @tailwind components;
@@ -20,12 +20,7 @@
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 @layer utilities {

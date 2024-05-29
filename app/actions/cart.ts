@@ -1,47 +1,47 @@
-'use server';
+'use server'
 
-import { ICartItem } from "@/models/cart";
-import { cookies } from "next/headers";
+import { ICartItem } from '@/models/cart'
+import { cookies } from 'next/headers'
 
 export async function addToCart(itemId: string): Promise<{ isSuccess: boolean }> {
-  const cookiesStorage = cookies();
-  const cart = cookiesStorage.get('cart')?.value || '[]';
-  const cartArray = JSON.parse(cart);
+  const cookiesStorage = cookies()
+  const cart = cookiesStorage.get('cart')?.value || '[]'
+  const cartArray = JSON.parse(cart)
   if (cartArray.includes(itemId)) {
-    return {isSuccess: false};
+    return { isSuccess: false }
   }
-  cartArray.push(itemId);
-  cookiesStorage.set('cart', JSON.stringify(cartArray));
-  return {isSuccess: true};
+  cartArray.push(itemId)
+  cookiesStorage.set('cart', JSON.stringify(cartArray))
+  return { isSuccess: true }
 }
 
 export async function removeFromCart(itemId: string): Promise<void> {
-  const cookiesStorage = cookies();
-  const cart = cookiesStorage.get('cart')?.value || '[]';
-  const cartArray = JSON.parse(cart);
-  const newCartArray = cartArray.filter((id: string) => id !== itemId);
-  cookiesStorage.set('cart', JSON.stringify(newCartArray));
+  const cookiesStorage = cookies()
+  const cart = cookiesStorage.get('cart')?.value || '[]'
+  const cartArray = JSON.parse(cart)
+  const newCartArray = cartArray.filter((id: string) => id !== itemId)
+  cookiesStorage.set('cart', JSON.stringify(newCartArray))
 }
 
 export async function getCart(): Promise<ICartItem[]> {
-  const cookiesStorage = cookies();
-  const cart = cookiesStorage.get('cart')?.value || '[]';
-  const cartArray = JSON.parse(cart);
-  
-  return [];
+  const cookiesStorage = cookies()
+  const cart = cookiesStorage.get('cart')?.value || '[]'
+  const cartArray = JSON.parse(cart)
+
+  return []
 }
 
 export async function getRawCart(): Promise<string[]> {
-  const cookiesStorage = cookies();
-  const cart = cookiesStorage.get('cart')?.value || '[]';
-  console.log('cart', cart);
-  const cartArray = JSON.parse(cart);
-  console.log('cartArray', cartArray);
-  
-  return cartArray;
+  const cookiesStorage = cookies()
+  const cart = cookiesStorage.get('cart')?.value || '[]'
+  console.log('cart', cart)
+  const cartArray = JSON.parse(cart)
+  console.log('cartArray', cartArray)
+
+  return cartArray
 }
 
 export async function clearCart(): Promise<void> {
-  const cookiesStorage = cookies();
-  cookiesStorage.set('cart', '[]');
+  const cookiesStorage = cookies()
+  cookiesStorage.set('cart', '[]')
 }

@@ -3,13 +3,16 @@
 import { ICartItem } from "@/models/cart";
 import { cookies } from "next/headers";
 
-export async function addToCart(itemId: string): Promise<void> {
-  console.log('addToCart', itemId);
+export async function addToCart(itemId: string): Promise<{ isSuccess: boolean }> {
   const cookiesStorage = cookies();
   const cart = cookiesStorage.get('cart')?.value || '[]';
   const cartArray = JSON.parse(cart);
+  if (cartArray.includes(itemId)) {
+    return {isSuccess: false};
+  }
   cartArray.push(itemId);
   cookiesStorage.set('cart', JSON.stringify(cartArray));
+  return {isSuccess: true};
 }
 
 export async function removeFromCart(itemId: string): Promise<void> {

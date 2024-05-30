@@ -42,7 +42,7 @@ export default function OfferProductPage({ params }: { params: { eventId: string
   }, [])
 
   const addToCart = () => {
-    cartStore.addToCart(params.eventId)
+    cartStore.addToCart(params.eventId, true)
   }
 
   return (

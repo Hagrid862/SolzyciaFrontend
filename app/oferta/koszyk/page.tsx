@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import { getCart } from '@/app/actions/cart'
 import { useCartStore } from '@/store/cartStore'

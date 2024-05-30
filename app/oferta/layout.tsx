@@ -67,7 +67,9 @@ export default function OfertaLayout({ children }: Readonly<{ children: React.Re
           </CardBody>
         ) : (
           <CardBody className='flex flex-row gap-2'>
-            <Button className='w-full'>Wróć do oferty</Button>
+            <Button className='w-full' onClick={() => router.push('/oferta')}>
+              Wróć do oferty
+            </Button>
             <Tooltip content='Koszyk' placement='bottom'>
               <Button isIconOnly color='primary' onClick={() => router.push('/oferta/koszyk')}>
                 <MaterialSymbol icon='shopping_cart' size={20} color={'#ffffff'} />

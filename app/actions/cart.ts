@@ -31,33 +31,33 @@ export async function getCart(): Promise<ICartItem[]> {
 
   let cartItems: ICartItem[] = []
 
-  cartArray.map(async (item: ICartItemCookie) => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${item.id}?quantity=${item.quantity}&isEvent=${item.isEvent}`
-    )
+  await Promise.all(
+    cartArray.map(async (item: ICartItemCookie) => {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${item.id}?quantity=${item.quantity}&isEvent=${item.isEvent}`
+      )
 
-    const data = await response.json()
+      const data = await response.json()
 
-    cartItems.push({
-      itemId: data.itemId,
-      name: data.name,
-      price: data.price,
-      quantity: item.quantity,
-      image: data.image,
-      isEvent: data.isEvent,
-      isOnSale: data.isOnSale,
-      salePrice: data.salePrice,
-      saleEndDate: data.saleEndDate,
-      isArchived: data.isArchived,
-      isDeleted: data.isDeleted
+      console.log('data', data)
+
+      cartItems.push({
+        itemId: data.itemId,
+        name: data.name,
+        price: data.price,
+        quantity: item.quantity,
+        image: data.image,
+        isEvent: data.isEvent,
+        isOnSale: data.isOnSale,
+        salePrice: data.salePrice,
+        saleEndDate: data.saleEndDate,
+        isArchived: data.isArchived,
+        isDeleted: data.isDeleted
+      })
     })
-  })
+  )
 
-  if (cartItems.length > 0) {
-    return cartItems
-  } else {
-    return []
-  }
+  return cartItems
 }
 
 export async function getRawCart(): Promise<string[]> {

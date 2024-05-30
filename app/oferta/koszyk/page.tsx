@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useCartStore } from '@/store/cartStore'
 import { Button, Card, CardBody, Checkbox, Divider, Image } from '@nextui-org/react'
 import { MaterialSymbol } from 'react-material-symbols'
+import { ICartItem } from '@/models/CartItem'
 
 export default function CartPage() {
   const store = useCartStore()
@@ -17,6 +18,15 @@ export default function CartPage() {
 
     fetchCart()
   }, [])
+
+  const order = () => {
+    let items: { item: ICartItem; quantity: number }[] = []
+    store.cartItems.map((item, index) => {
+      if (!unselected.includes(index)) {
+        items.push({ item, quantity: item.quantity })
+      }
+    })
+  }
 
   return (
     <div className='flex flex-col items-center h-full'>

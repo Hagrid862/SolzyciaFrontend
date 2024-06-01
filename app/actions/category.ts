@@ -1,7 +1,6 @@
 'use server'
 
 import { CreateCategoryFormSchema, CreateCategoryFormState } from '@/app/lib/definitions'
-import axios from 'axios'
 import { cookies } from 'next/headers'
 
 export async function createCategory(state: CreateCategoryFormState, action: FormData) {

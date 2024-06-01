@@ -54,7 +54,6 @@ export async function login(state: LoginFormState, action: FormData) {
   }
 }
 
-// export async function verifyOtp(state: VerifyOtpState, action: FormData) {
 export async function verifyOtp(state: VerifyOtpState, action: FormData) {
   const validatedFields = VerifyOtpSchema.safeParse({
     otp: action.get('otp')

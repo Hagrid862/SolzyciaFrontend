@@ -1,7 +1,6 @@
 'use server'
 
 import { cookies } from 'next/headers'
-import { json } from 'node:stream/consumers'
 
 export async function fetchEvents(
   reviews?: boolean,
@@ -26,7 +25,7 @@ export async function fetchEvents(
         const eventsJson = JSON.stringify(data.events)
         return { isSuccess: true, eventsJson: eventsJson }
       } else {
-        return { isSuccess: false, eventsJson: '' }
+        return { isSuccess: true, eventsJson: '[]' }
       }
     } else {
       return { isSuccess: false, eventsJson: '' }
@@ -35,6 +34,7 @@ export async function fetchEvents(
     return { isSuccess: false, eventsJson: '' }
   }
 }
+
 export async function fetchEventById(id: string): Promise<{ isSuccess: boolean; eventJson: string }> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/event/${id}`, {
@@ -63,6 +63,7 @@ export async function fetchEventById(id: string): Promise<{ isSuccess: boolean; 
     return { isSuccess: false, eventJson: '' }
   }
 }
+
 export async function fetchEventsByCategory(
   category: string,
   reviews?: boolean,

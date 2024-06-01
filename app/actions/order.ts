@@ -13,8 +13,6 @@ export async function createOrder(products: { id: string, quantity: number, isEv
     body: JSON.stringify({ products: products }),
   });
 
-  console.log(await response.json());
-
   if (response.ok) {
     const data = await response.json();
     return { isSuccess: true, status: 'SUCCESS', orderId: data.orderId };

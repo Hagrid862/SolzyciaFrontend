@@ -5,9 +5,11 @@ import { useCartStore } from '@/store/cartStore'
 import { Button, Card, CardBody, Checkbox, Divider, Image } from '@nextui-org/react'
 import { MaterialSymbol } from 'react-material-symbols'
 import { ICartItem } from '@/models/CartItem'
+import { useOrderStore } from '@/store/orderStore'
 
 export default function CartPage() {
   const store = useCartStore()
+  const orderStore = useOrderStore()
 
   const [unselected, setUnselected] = useState<number[]>([])
 
@@ -19,13 +21,17 @@ export default function CartPage() {
     fetchCart()
   }, [])
 
-  const order = () => {
-    let items: { item: ICartItem; quantity: number }[] = []
-    store.cartItems.map((item, index) => {
+  const order = async () => {
+    let items: { id: string, quantity: number, isEvent: boolean }[] = []
+
+    store.cartItems.forEach((item, index) => {
       if (!unselected.includes(index)) {
-        items.push({ item, quantity: item.quantity })
+        items.push({ id: item.itemId, quantity: item.quantity, isEvent: item.isEvent })
       }
     })
+
+    const response = await orderStore.placeOrder(items)
+    console.log(response)
   }
 
   return (
@@ -98,7 +104,7 @@ export default function CartPage() {
             </CardBody>
             <Divider orientation='vertical' />
             <CardBody className='w-32 flex flex-col items-stretch justify-center'>
-              <Button variant='shadow' color='primary'>
+              <Button variant='shadow' color='primary' onClick={async () => await order()}>
                 Zamów
               </Button>
             </CardBody>

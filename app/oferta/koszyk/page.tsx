@@ -6,10 +6,13 @@ import { Button, Card, CardBody, Checkbox, Divider, Image } from '@nextui-org/re
 import { MaterialSymbol } from 'react-material-symbols'
 import { ICartItem } from '@/models/CartItem'
 import { useOrderStore } from '@/store/orderStore'
+import { useRouter } from 'next/navigation'
 
 export default function CartPage() {
   const store = useCartStore()
   const orderStore = useOrderStore()
+
+  const router = useRouter()
 
   const [unselected, setUnselected] = useState<number[]>([])
 
@@ -31,7 +34,9 @@ export default function CartPage() {
     })
 
     const response = await orderStore.placeOrder(items)
-    console.log(response)
+    if (response.orderId !== 0) {
+      router.push(`/oferta/zamowienie/${response.orderId}`)
+    }
   }
 
   return (

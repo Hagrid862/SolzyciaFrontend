@@ -1,3 +1,5 @@
+import { OrderProduct } from "./OrderProduct";
+
 export interface Order {
   id: string;
   products: OrderProduct[];

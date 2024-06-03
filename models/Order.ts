@@ -1,4 +1,4 @@
-interface Order {
+export interface Order {
   id: string;
   products: OrderProduct[];
   address?: string;

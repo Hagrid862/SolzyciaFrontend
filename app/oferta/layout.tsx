@@ -65,7 +65,17 @@ export default function OfertaLayout({ children }: Readonly<{ children: React.Re
               </Select>
             </div>
           </CardBody>
-        ) : (
+        ) : pathname.startsWith('/oferta/koszyk') ? (
+          <CardBody className='flex flex-row gap-2'>
+            <Button className='w-full' onClick={() => router.push('/oferta')}>
+              Wróć do koszyka
+            </Button>
+            <Tooltip content='Koszyk' placement='bottom'>
+              <Button isIconOnly color='primary' onClick={() => router.push('/oferta/koszyk')}>
+                <MaterialSymbol icon='shopping_cart' size={20} color={'#ffffff'} />
+              </Button>
+            </Tooltip>
+          </CardBody>        ) : (
           <CardBody className='flex flex-row gap-2'>
             <Button className='w-full' onClick={() => router.push('/oferta')}>
               Wróć do oferty
@@ -76,7 +86,8 @@ export default function OfertaLayout({ children }: Readonly<{ children: React.Re
               </Button>
             </Tooltip>
           </CardBody>
-        )}
+        )
+        }
       </Card>
       <Divider />
       {children}

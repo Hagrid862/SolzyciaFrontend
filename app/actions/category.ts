@@ -33,7 +33,6 @@ export async function createCategory(state: CreateCategoryFormState, action: For
       }
     }
 
-    // Convert FormData to JSON
     let object: {} = {
       name: action.get('name'),
       description: action.get('description'),

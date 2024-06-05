@@ -4,7 +4,7 @@ import { Order } from '@/models/Order'
 import { Product } from '@/models/Product'
 import { Event } from '@/models/Event'
 import { useOrderStore } from '@/store/orderStore'
-import { Button, Card, CardBody, Divider } from '@nextui-org/react'
+import { Button, Card, CardBody, Divider, Input } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import { MaterialSymbol } from 'react-material-symbols'
 
@@ -85,7 +85,19 @@ export default function Page({ params }: { params: { orderId: string } }) {
           <Divider />
           {currentStep === 0 && (
             <Card className='flex flex-row h-[calc(100vh-346px)]'>
-              <CardBody className='w-[65%]'>form</CardBody>
+              <CardBody className='w-[65%] flex flex-col gap-2'>
+                <div className='text-xl'>Dane osobowe</div>
+                <div className='flex flex-row gap-2'>
+                  <Input label='Imie' />
+                  <Input label='Nazwisko' />
+                </div>
+                <Divider />
+                <div className='text-xl'>Dane kontaktowe</div>
+                <div className='flex flex-row gap-2'>
+                  <Input label='Email' />
+                  <Input label='Telefon' />
+                </div>
+              </CardBody>
               <Divider orientation='vertical' className='h-full' />
               <CardBody className='w-[35%] justify-between flex flex-col'>
                 {products !== null && events !== null && (
@@ -100,7 +112,7 @@ export default function Page({ params }: { params: { orderId: string } }) {
                               <div className='text-lg'>{product.Name}</div>
                               <div className='text-md text-primary'>{product.Price} zł</div>
                             </div>
-                            <Divider/>
+                            <Divider />
                           </div>
                         ))}
                       </>
@@ -115,7 +127,7 @@ export default function Page({ params }: { params: { orderId: string } }) {
                               <div className='text-lg'>{event.Name}</div>
                               <div className='text-md text-primary'>{event.Price} zł</div>
                             </div>
-                            <Divider/>
+                            <Divider />
                           </div>
                         ))}
                       </>
@@ -123,7 +135,74 @@ export default function Page({ params }: { params: { orderId: string } }) {
                   </div>
                 )}
                 <div>
-                  <Divider/>
+                  <Divider />
+                  <div className='text-2xl mt-2'>Suma: {totalPrice} zł</div>
+                  <Button
+                    onPress={() => {
+                      setCurrentStep(1)
+                    }}
+                    color='primary'
+                    className='w-full mt-2'
+                  >
+                    Dalej
+                  </Button>
+                </div>
+              </CardBody>
+            </Card>
+          )}
+          {currentStep === 1 && (
+            <Card className='flex flex-row h-[calc(100vh-346px)]'>
+              <CardBody className='w-[65%] flex flex-col gap-2'>
+                <div className='text-xl'>Dane osobowe</div>
+                <div className='flex flex-row gap-2'>
+                  <Input label='Imie' />
+                  <Input label='Nazwisko' />
+                </div>
+                <Divider />
+                <div className='text-xl'>Dane kontaktowe</div>
+                <div className='flex flex-row gap-2'>
+                  <Input label='Email' />
+                  <Input label='Telefon' />
+                </div>
+              </CardBody>
+              <Divider orientation='vertical' className='h-full' />
+              <CardBody className='w-[35%] justify-between flex flex-col'>
+                {products !== null && events !== null && (
+                  <div>
+                    {products.length > 0 && (
+                      <>
+                        <div>Produkty</div>
+                        <Divider />
+                        {products.map((product, index) => (
+                          <div className='text-sm' key={index}>
+                            <div className='flex flex-row justify-between items-center my-1'>
+                              <div className='text-lg'>{product.Name}</div>
+                              <div className='text-md text-primary'>{product.Price} zł</div>
+                            </div>
+                            <Divider />
+                          </div>
+                        ))}
+                      </>
+                    )}
+                    {events.length > 0 && (
+                      <>
+                        <div className='text-xl mb-1'>Wydarzenia</div>
+                        <Divider />
+                        {events.map((event, index) => (
+                          <div className='text-sm' key={index}>
+                            <div className='flex flex-row justify-between items-center my-1'>
+                              <div className='text-lg'>{event.Name}</div>
+                              <div className='text-md text-primary'>{event.Price} zł</div>
+                            </div>
+                            <Divider />
+                          </div>
+                        ))}
+                      </>
+                    )}
+                  </div>
+                )}
+                <div>
+                  <Divider />
                   <div className='text-2xl mt-2'>Suma: {totalPrice} zł</div>
                   <Button
                     onPress={() => {

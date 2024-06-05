@@ -1,5 +1,5 @@
 export interface ICartItemCookie {
-  id: string
-  quantity: number
-  isEvent: boolean
+  Id: string
+  Quantity: number
+  IsEvent: boolean
 }

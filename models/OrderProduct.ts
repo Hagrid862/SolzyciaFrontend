@@ -1,6 +1,6 @@
 export interface OrderProduct {
-  id: string;
-  productId: string;
-  quantity: number;
-  isEvent: boolean;
+  Id: string
+  ProductId: string
+  Quantity: number
+  IsEvent: boolean
 }

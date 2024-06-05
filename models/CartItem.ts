@@ -1,13 +1,13 @@
 export interface ICartItem {
-  itemId: string
-  name: string
-  price: number
-  quantity: number
-  image: string
-  isEvent: boolean
-  isOnSale: boolean
-  salePrice?: number
-  saleEndDate?: string
-  isArchived?: boolean
-  isDeleted?: boolean
+  ItemId: string
+  Name: string
+  Price: number
+  Quantity: number
+  Image: string
+  IsEvent: boolean
+  IsOnSale: boolean
+  SalePrice?: number
+  SaleEndDate?: string
+  IsArchived?: boolean
+  IsDeleted?: boolean
 }

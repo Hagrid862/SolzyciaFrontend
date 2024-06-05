@@ -1,6 +1,6 @@
 export interface Tag {
-  id: string;
-  name: string;
-  description: string;
-  createdAt: Date;
+  Id: string
+  Name: string
+  Description: string
+  CreatedAt: Date
 }

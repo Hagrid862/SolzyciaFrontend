@@ -1,8 +1,8 @@
 export interface Review {
-  id: string;
-  title: string;
-  content: string;
-  rating: number;
-  createdAt: Date;
-  username: string;
+  Id: string
+  Title: string
+  Content: string
+  Rating: number
+  CreatedAt: Date
+  Username: string
 }

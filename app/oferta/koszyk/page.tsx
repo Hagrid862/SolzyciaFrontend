@@ -25,7 +25,7 @@ export default function CartPage() {
   }, [])
 
   const order = async () => {
-    let items: { id: string, quantity: number, isEvent: boolean }[] = []
+    let items: { id: string; quantity: number; isEvent: boolean }[] = []
 
     store.cartItems.forEach((item, index) => {
       if (!unselected.includes(index)) {

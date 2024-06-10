@@ -59,90 +59,101 @@ export default function ProductsPage() {
       </Tabs>
       <Divider />
       <div className='flex flex-row justify-stretch flex-wrap gap-2'>
-        {products[0] === 'loading' ? (
-          'Ładowanie...'
-        ) : products[0] === 'none' ? (
-          'Brak produktów'
-        ) : products[0] === 'error' ? (
-          'Błąd'
-        ) : (
-          <>
-            {tab == 0
-              ? products.map((product: any) => {
-                  return (
-                    <Card
-                      key={product.id}
-                      className='w-full sm:w-[calc(50%-0.35rem)] md:w-[calc(100%/3-0.35rem)]  min-w-[150px] md:max-w-[200px] bg-white bg-opacity-5 overflow-x-hidden'
-                      isPressable
-                      onPress={() => router.push(`products/${product.id}`)}
-                    >
-                      <CardBody>
-                        {product.images && product.images.length > 0 ? (
-                          <Image
-                            radius='sm'
-                            src={product.images[0]}
-                            height={200}
-                            alt={product.images[0]}
-                            className='w-full aspect-square object-cover'
-                          />
-                        ) : (
-                          <div className='w-full aspect-square bg-primary bg-opacity-15 flex items-center justify-center rounded-lg'>
-                            <MaterialSymbol icon={'no_photography'} size={40} color='#006FEE' />
+        {
+          products[0] === 'loading' && (
+            'Ładowanie...'
+          )
+        }
+        {
+          products[0] === 'none' && (
+            'Brak produktów'
+          )
+        }
+        {
+          products[0] === 'error' && (
+            'Błąd'
+          )
+        }
+        {
+          products[0] !== 'loading' && products[0] !== 'none' && products[0] !== 'error' && (
+            <>
+              {tab == 0
+                ? products.map((product: any) => {
+                    return (
+                      <Card
+                        key={product.id}
+                        className='w-full sm:w-[calc(50%-0.35rem)] md:w-[calc(100%/3-0.35rem)]  min-w-[150px] md:max-w-[200px] bg-white bg-opacity-5 overflow-x-hidden'
+                        isPressable
+                        onPress={() => router.push(`products/${product.id}`)}
+                      >
+                        <CardBody>
+                          {product.images && product.images.length > 0 ? (
+                            <Image
+                              radius='sm'
+                              src={product.images[0]}
+                              height={200}
+                              alt={product.images[0]}
+                              className='w-full aspect-square object-cover'
+                            />
+                          ) : (
+                            <div className='w-full aspect-square bg-primary bg-opacity-15 flex items-center justify-center rounded-lg'>
+                              <MaterialSymbol icon={'no_photography'} size={40} color='#006FEE' />
+                            </div>
+                          )}
+                        </CardBody>
+                        <Divider />
+                        <CardBody className='flex flex-col items-start'>
+                          <div className='font-semibold text-ellipsis whitespace-nowrap overflow-hidden w-full'>
+                            {product.name}
                           </div>
-                        )}
-                      </CardBody>
-                      <Divider />
-                      <CardBody className='flex flex-col items-start'>
-                        <div className='font-semibold text-ellipsis whitespace-nowrap overflow-hidden w-full'>
-                          {product.name}
-                        </div>
-                        <div className='text-sm bg-primary bg-opacity-20 px-1 text-primary mt-1 rounded-md'>
-                          {product.price} zł
-                        </div>
-                      </CardBody>
-                    </Card>
-                  )
-                })
-              : null}
-            {tab == 1
-              ? events.map((event: any) => {
-                  return (
-                    <Card
-                      key={event.id}
-                      className='w-full sm:w-[calc(50%-0.35rem)] md:w-[calc(100%/3-0.35rem)]  min-w-[150px] md:max-w-[200px] bg-white bg-opacity-5 overflow-x-hidden'
-                      isPressable
-                      onPress={() => router.push(`products/${event.id}`)}
-                    >
-                      <CardBody>
-                        {event.images && event.images.length > 0 ? (
-                          <Image
-                            radius='sm'
-                            src={event.images[0]}
-                            height={200}
-                            alt={event.images[0]}
-                            className='w-full aspect-square object-cover'
-                          />
-                        ) : (
-                          <div className='w-full aspect-square bg-primary bg-opacity-15 flex items-center justify-center rounded-lg'>
-                            <MaterialSymbol icon={'no_photography'} size={40} color='#006FEE' />
+                          <div className='text-sm bg-primary bg-opacity-20 px-1 text-primary mt-1 rounded-md'>
+                            {product.price} zł
                           </div>
-                        )}
-                      </CardBody>
-                      <Divider />
-                      <CardBody className='flex flex-col items-start'>
-                        <div className='font-semibold text-ellipsis whitespace-nowrap overflow-hidden w-full'>
-                          {event.name}
-                        </div>
-                        <div className='text-sm bg-primary bg-opacity-20 px-1 text-primary mt-1 rounded-md'>
-                          {event.price} zł
-                        </div>
-                      </CardBody>
-                    </Card>
-                  )
-                })
-              : null}
-          </>
-        )}
+                        </CardBody>
+                      </Card>
+                    )
+                  })
+                : null}
+              {tab == 1
+                ? events.map((event: any) => {
+                    return (
+                      <Card
+                        key={event.id}
+                        className='w-full sm:w-[calc(50%-0.35rem)] md:w-[calc(100%/3-0.35rem)]  min-w-[150px] md:max-w-[200px] bg-white bg-opacity-5 overflow-x-hidden'
+                        isPressable
+                        onPress={() => router.push(`products/${event.id}`)}
+                      >
+                        <CardBody>
+                          {event.images && event.images.length > 0 ? (
+                            <Image
+                              radius='sm'
+                              src={event.images[0]}
+                              height={200}
+                              alt={event.images[0]}
+                              className='w-full aspect-square object-cover'
+                            />
+                          ) : (
+                            <div className='w-full aspect-square bg-primary bg-opacity-15 flex items-center justify-center rounded-lg'>
+                              <MaterialSymbol icon={'no_photography'} size={40} color='#006FEE' />
+                            </div>
+                          )}
+                        </CardBody>
+                        <Divider />
+                        <CardBody className='flex flex-col items-start'>
+                          <div className='font-semibold text-ellipsis whitespace-nowrap overflow-hidden w-full'>
+                            {event.name}
+                          </div>
+                          <div className='text-sm bg-primary bg-opacity-20 px-1 text-primary mt-1 rounded-md'>
+                            {event.price} zł
+                          </div>
+                        </CardBody>
+                      </Card>
+                    )
+                  })
+                : null}
+            </>
+          )
+        }
       </div>
     </div>
   )

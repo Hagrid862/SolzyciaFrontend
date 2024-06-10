@@ -84,143 +84,175 @@ export default function Page({ params }: { params: { orderId: string } }) {
           </Card>
           <Divider />
           {currentStep === 0 && (
-            <Card className='flex flex-row h-[calc(100vh-346px)]'>
-              <CardBody className='w-[65%] flex flex-col gap-2'>
-                <div className='text-xl'>Dane osobowe</div>
-                <div className='flex flex-row gap-2'>
-                  <Input label='Imie' />
-                  <Input label='Nazwisko' />
-                </div>
-                <Divider />
-                <div className='text-xl'>Dane kontaktowe</div>
-                <div className='flex flex-row gap-2'>
-                  <Input label='Email' />
-                  <Input label='Telefon' />
-                </div>
-              </CardBody>
-              <Divider orientation='vertical' className='h-full' />
-              <CardBody className='w-[35%] justify-between flex flex-col'>
-                {products !== null && events !== null && (
-                  <div>
-                    {products.length > 0 && (
-                      <>
-                        <div>Produkty</div>
-                        <Divider />
-                        {products.map((product, index) => (
-                          <div className='text-sm' key={index}>
-                            <div className='flex flex-row justify-between items-center my-1'>
-                              <div className='text-lg'>{product.Name}</div>
-                              <div className='text-md text-primary'>{product.Price} zł</div>
-                            </div>
-                            <Divider />
-                          </div>
-                        ))}
-                      </>
-                    )}
-                    {events.length > 0 && (
-                      <>
-                        <div className='text-xl mb-1'>Wydarzenia</div>
-                        <Divider />
-                        {events.map((event, index) => (
-                          <div className='text-sm' key={index}>
-                            <div className='flex flex-row justify-between items-center my-1'>
-                              <div className='text-lg'>{event.Name}</div>
-                              <div className='text-md text-primary'>{event.Price} zł</div>
-                            </div>
-                            <Divider />
-                          </div>
-                        ))}
-                      </>
-                    )}
-                  </div>
-                )}
-                <div>
-                  <Divider />
-                  <div className='text-2xl mt-2'>Suma: {totalPrice} zł</div>
-                  <Button
-                    onPress={() => {
-                      setCurrentStep(1)
-                    }}
-                    color='primary'
-                    className='w-full mt-2'
-                  >
-                    Dalej
-                  </Button>
-                </div>
-              </CardBody>
-            </Card>
+            <OrderStep0
+              productsProp={products}
+              eventsProp={events}
+              totalPriceProp={totalPrice}
+              setCurrentStep={setCurrentStep}
+            />
           )}
           {currentStep === 1 && (
-            <Card className='flex flex-row h-[calc(100vh-346px)]'>
-              <CardBody className='w-[65%] flex flex-col gap-2'>
-                <div className='text-xl'>Dane osobowe</div>
-                <div className='flex flex-row gap-2'>
-                  <Input label='Imie' />
-                  <Input label='Nazwisko' />
-                </div>
-                <Divider />
-                <div className='text-xl'>Dane kontaktowe</div>
-                <div className='flex flex-row gap-2'>
-                  <Input label='Email' />
-                  <Input label='Telefon' />
-                </div>
-              </CardBody>
-              <Divider orientation='vertical' className='h-full' />
-              <CardBody className='w-[35%] justify-between flex flex-col'>
-                {products !== null && events !== null && (
-                  <div>
-                    {products.length > 0 && (
-                      <>
-                        <div>Produkty</div>
-                        <Divider />
-                        {products.map((product, index) => (
-                          <div className='text-sm' key={index}>
-                            <div className='flex flex-row justify-between items-center my-1'>
-                              <div className='text-lg'>{product.Name}</div>
-                              <div className='text-md text-primary'>{product.Price} zł</div>
-                            </div>
-                            <Divider />
-                          </div>
-                        ))}
-                      </>
-                    )}
-                    {events.length > 0 && (
-                      <>
-                        <div className='text-xl mb-1'>Wydarzenia</div>
-                        <Divider />
-                        {events.map((event, index) => (
-                          <div className='text-sm' key={index}>
-                            <div className='flex flex-row justify-between items-center my-1'>
-                              <div className='text-lg'>{event.Name}</div>
-                              <div className='text-md text-primary'>{event.Price} zł</div>
-                            </div>
-                            <Divider />
-                          </div>
-                        ))}
-                      </>
-                    )}
-                  </div>
-                )}
-                <div>
-                  <Divider />
-                  <div className='text-2xl mt-2'>Suma: {totalPrice} zł</div>
-                  <Button
-                    onPress={() => {
-                      setCurrentStep(1)
-                    }}
-                    color='primary'
-                    className='w-full mt-2'
-                  >
-                    Dalej
-                  </Button>
-                </div>
-              </CardBody>
-            </Card>
+            <OrderStep1
+              productsProp={products}
+              eventsProp={events}
+              totalPriceProp={totalPrice}
+              setCurrentStep={setCurrentStep}
+            />
           )}
         </div>
       )}
       {status === 'notfound' && <p>Order not found</p>}
       {status === 'error' && <p>Error</p>}
     </div>
+  )
+}
+
+function OrderStep0({ productsProp, eventsProp, totalPriceProp, setCurrentStep }: { productsProp: Product[] | null, eventsProp: Event[] | null, totalPriceProp: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) {
+  return (
+    <Card className='flex flex-row h-[calc(100vh-346px)]'>
+      <CardBody className='w-[65%] flex flex-col gap-2'>
+        <div className='text-xl'>Dane osobowe</div>
+        <div className='flex flex-row gap-2'>
+          <Input label='Imie' />
+          <Input label='Nazwisko' />
+        </div>
+        <Divider />
+        <div className='text-xl'>Dane kontaktowe</div>
+        <div className='flex flex-row gap-2'>
+          <Input label='Email' />
+          <Input label='Telefon' />
+        </div>
+      </CardBody>
+      <Divider orientation='vertical' className='h-full' />
+      <CardBody className='w-[35%] justify-between flex flex-col'>
+        {productsProp !== null && eventsProp !== null && (
+          <div>
+            {productsProp.length > 0 && (
+              <>
+                <div>Produkty</div>
+                <Divider />
+                {productsProp.map((product, index) => (
+                  <div className='text-sm' key={index}>
+                    <div className='flex flex-row justify-between items-center my-1'>
+                      <div className='text-lg'>{product.Name}</div>
+                      <div className='text-md text-primary'>{product.Price} zł</div>
+                    </div>
+                    <Divider />
+                  </div>
+                ))}
+              </>
+            )}
+            {eventsProp.length > 0 && (
+              <>
+                <div className='text-xl mb-1'>Wydarzenia</div>
+                <Divider />
+                {eventsProp.map((event, index) => (
+                  <div className='text-sm' key={index}>
+                    <div className='flex flex-row justify-between items-center my-1'>
+                      <div className='text-lg'>{event.Name}</div>
+                      <div className='text-md text-primary'>{event.Price} zł</div>
+                    </div>
+                    <Divider />
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        )}
+        <div>
+          <Divider />
+          <div className='text-2xl mt-2'>Suma: {totalPriceProp} zł</div>
+          <Button
+            onPress={() => {
+              setCurrentStep(1)
+            }}
+            color='primary'
+            className='w-full mt-2'
+          >
+            Dalej
+          </Button>
+        </div>
+      </CardBody>
+    </Card>
+  )
+}
+
+function OrderStep1({ productsProp, eventsProp, totalPriceProp, setCurrentStep }: { productsProp: Product[] | null, eventsProp: Event[] | null, totalPriceProp: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) {
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (productsProp && productsProp.length > 0) {
+      setSelectedProduct(productsProp[0].Id)
+    } else if (eventsProp && eventsProp.length > 0) {
+      setSelectedProduct(eventsProp[0].Id)
+    } else {
+      setSelectedProduct(null)
+    }
+  }, [])
+
+  return (
+    <Card className='flex flex-row h-[calc(100vh-346px)]'>
+      <CardBody className='w-[65%] flex flex-col gap-2'>
+        <div className='text-xl'>Dane osobowe</div>
+        <div className='flex flex-row gap-2'>
+          <Input label='Imie' />
+          <Input label='Nazwisko' />
+        </div>
+        <Divider />
+        <div className='text-xl'>Dane kontaktowe</div>
+        <div className='flex flex-row gap-2'>
+          <Input label='Email' />
+          <Input label='Telefon' />
+        </div>
+      </CardBody>
+      <Divider orientation='vertical' className='h-full' />
+      <CardBody className='w-[35%] justify-between flex flex-col'>
+        {productsProp !== null && eventsProp !== null && (
+          <div>
+            {productsProp.length > 0 && (
+              <>
+                <div>Produkty</div>
+                <Divider />
+                {productsProp.map((productProp, index) => (
+                  <div className='text-sm' key={index}>
+                    <Button>
+                      {productProp.Name} - {productProp.Price} zł
+                    </Button>
+                    <Divider />
+                  </div>
+                ))}
+              </>
+            )}
+            {eventsProp.length > 0 && (
+              <>
+                <div className='text-xl mb-1'>Wydarzenia</div>
+                <Divider />
+                {eventsProp.map((eventProp, index) => (
+                  <div className='text-sm' key={index}>
+                    <Button className='my-2 w-full'>
+                      {eventProp.Name}
+                    </Button>
+                    <Divider />
+                  </div>
+                ))}
+              </>
+            )}
+          </div>
+        )}
+        <div>
+          <Divider />
+          <div className='text-2xl mt-2'>Suma: {totalPriceProp} zł</div>
+          <Button
+            onPress={() => {
+              setCurrentStep(1)
+            }}
+            color='primary'
+            className='w-full mt-2'
+          >
+            Dalej
+          </Button>
+        </div>
+      </CardBody>
+    </Card>
   )
 }

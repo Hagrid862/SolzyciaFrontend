@@ -40,25 +40,26 @@ export async function getOrder(
   orderId: string
 ): Promise<{ isSuccess: boolean; status: string; order: Order | string }> {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/order/${orderId}`)
+  console.log(orderId)
   if (response.ok) {
     const data = await response.json()
     console.log(data)
     var order: Order = {
-      id: data.Id,
-      products: data.Products,
-      address: data.Address,
-      address2: data.Address2,
-      city: data.City,
-      state: data.State,
-      zip: data.Zip,
-      country: data.Country,
-      phone: data.Phone,
-      email: data.Email,
-      name: data.Name,
-      lastName: data.LastName,
-      status: data.Status,
-      paymentMethod: data.PaymentMethod,
-      createdAt: new Date(data.CreatedAt)
+      Id: data.Id,
+      Products: data.Products,
+      Address: data.Address,
+      Address2: data.Address2,
+      City: data.City,
+      State: data.State,
+      Zip: data.Zip,
+      Country: data.Country,
+      Phone: data.Phone,
+      Email: data.Email,
+      Name: data.Name,
+      LastName: data.LastName,
+      Status: data.Status,
+      PaymentMethod: data.PaymentMethod,
+      CreatedAt: new Date(data.CreatedAt)
     }
     return { isSuccess: true, status: 'SUCCESS', order: order }
   } else if (response.status === 404) {

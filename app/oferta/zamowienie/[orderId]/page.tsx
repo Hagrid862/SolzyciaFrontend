@@ -108,7 +108,17 @@ export default function Page({ params }: { params: { orderId: string } }) {
   )
 }
 
-function OrderStep0({ productsProp, eventsProp, totalPriceProp, setCurrentStep }: { productsProp: Product[] | null, eventsProp: Event[] | null, totalPriceProp: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) {
+function OrderStep0({
+  productsProp,
+  eventsProp,
+  totalPriceProp,
+  setCurrentStep
+}: {
+  productsProp: Product[] | null
+  eventsProp: Event[] | null
+  totalPriceProp: number
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>
+}) {
   const [name, setName] = useState<string>('')
   const [lastName, setLastName] = useState<string>('')
   const [email, setEmail] = useState<string>('')
@@ -132,21 +142,49 @@ function OrderStep0({ productsProp, eventsProp, totalPriceProp, setCurrentStep }
     if (name !== '' && lastName !== '' && email !== '' && phone !== '') {
       setCurrentStep(1)
     }
-  };
-  
+  }
+
   return (
     <Card className='flex flex-row h-[calc(100vh-346px)]'>
       <CardBody className='w-[65%] flex flex-col gap-2'>
         <div className='text-xl'>Dane osobowe</div>
         <div className='flex flex-row gap-2'>
-          <Input label='Imie' value={name} onChange={(e) => setName(e.target.value)} isInvalid={invalid.includes(1)} errorMessage='Pole jest wymagane' isRequired/>
-          <Input label='Nazwisko' value={lastName} onChange={(e) => setLastName(e.target.value)} isInvalid={invalid.includes(2)} errorMessage='Pole jest wymagane' isRequired/>
+          <Input
+            label='Imie'
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            isInvalid={invalid.includes(1)}
+            errorMessage='Pole jest wymagane'
+            isRequired
+          />
+          <Input
+            label='Nazwisko'
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+            isInvalid={invalid.includes(2)}
+            errorMessage='Pole jest wymagane'
+            isRequired
+          />
         </div>
         <Divider />
         <div className='text-xl'>Dane kontaktowe</div>
         <div className='flex flex-row gap-2'>
-          <Input label='Email' value={email} onChange={(e) => setEmail(e.target.value)} isInvalid={invalid.includes(3)} errorMessage='Pole jest wymagane' isRequired/>
-          <Input label='Telefon' value={phone} onChange={(e) => setPhone(e.target.value)} isInvalid={invalid.includes(4)} errorMessage='Pole jest wymagane' isRequired/>
+          <Input
+            label='Email'
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            isInvalid={invalid.includes(3)}
+            errorMessage='Pole jest wymagane'
+            isRequired
+          />
+          <Input
+            label='Telefon'
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            isInvalid={invalid.includes(4)}
+            errorMessage='Pole jest wymagane'
+            isRequired
+          />
         </div>
       </CardBody>
       <Divider orientation='vertical' className='h-full' />
@@ -203,8 +241,20 @@ function OrderStep0({ productsProp, eventsProp, totalPriceProp, setCurrentStep }
   )
 }
 
-function OrderStep1({ productsProp, eventsProp, totalPriceProp, setCurrentStep }: { productsProp: Product[] | null, eventsProp: Event[] | null, totalPriceProp: number, setCurrentStep: React.Dispatch<React.SetStateAction<number>> }) {
-  const [selectedProduct, setSelectedProduct] = useState<Event | Product | null>(eventsProp ? eventsProp[0] : productsProp ? productsProp[0] : null)
+function OrderStep1({
+  productsProp,
+  eventsProp,
+  totalPriceProp,
+  setCurrentStep
+}: {
+  productsProp: Product[] | null
+  eventsProp: Event[] | null
+  totalPriceProp: number
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>
+}) {
+  const [selectedProduct, setSelectedProduct] = useState<Event | Product | null>(
+    eventsProp ? eventsProp[0] : productsProp ? productsProp[0] : null
+  )
 
   useEffect(() => {
     if (productsProp && productsProp.length > 0) {
@@ -217,61 +267,55 @@ function OrderStep1({ productsProp, eventsProp, totalPriceProp, setCurrentStep }
   }, [])
 
   function formatDate(dateString: string): string {
-    const date = new Date(dateString);
-  
+    const date = new Date(dateString)
+
     const options: Intl.DateTimeFormatOptions = {
       year: 'numeric',
       month: 'long',
-      day: 'numeric',
-    };
-  
-    const formattedDate = date.toLocaleDateString('pl-PL', options);
-  
+      day: 'numeric'
+    }
+
+    const formattedDate = date.toLocaleDateString('pl-PL', options)
+
     const optionsTime: Intl.DateTimeFormatOptions = {
       hour: '2-digit',
-      minute: '2-digit',
-    };
-  
-    const formattedTime = date.toLocaleTimeString('pl-PL', optionsTime);
-  
-    return `${formattedDate} | ${formattedTime}`;
+      minute: '2-digit'
+    }
+
+    const formattedTime = date.toLocaleTimeString('pl-PL', optionsTime)
+
+    return `${formattedDate} | ${formattedTime}`
   }
 
   return (
     <Card className='flex flex-row h-[calc(100vh-346px)]'>
       <CardBody className='w-[65%] flex flex-col gap-2'>
-        {
-          selectedProduct !== null ? (
-            <div>
-              {
-                productsProp?.includes(selectedProduct as Product) ? (
-                  <div>
-                    
-                  </div>
-                ) : eventsProp?.includes(selectedProduct as Event) ? (
-                  <div>
-                    <div className='text-lg'>Wybierz datę wydarzenia:</div>
-                    <Select>
-                      {
-                        (selectedProduct as Event).Dates.map((date, index) => (
-                          <SelectItem key={index} value={date.Id}>{formatDate(date.Date.toString())}</SelectItem>
-                        ))
-                      }
-                    </Select>
-                  </div>
-                ) : (
-                  <div>
-                    <div className='text-xl'>Wybierz produkt lub wydarzenie</div>
-                  </div>
-                )
-              }
-            </div>
-          ) : (
-            <div>
-              <div className='text-xl'>Wybierz produkt lub wydarzenie</div>
-            </div>
-          )
-        }
+        {selectedProduct !== null ? (
+          <div>
+            {productsProp?.includes(selectedProduct as Product) ? (
+              <div></div>
+            ) : eventsProp?.includes(selectedProduct as Event) ? (
+              <div>
+                <div className='text-lg'>Wybierz datę wydarzenia:</div>
+                <Select>
+                  {(selectedProduct as Event).Dates.map((date, index) => (
+                    <SelectItem key={index} value={date.Id}>
+                      {formatDate(date.Date.toString())}
+                    </SelectItem>
+                  ))}
+                </Select>
+              </div>
+            ) : (
+              <div>
+                <div className='text-xl'>Wybierz produkt lub wydarzenie</div>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div>
+            <div className='text-xl'>Wybierz produkt lub wydarzenie</div>
+          </div>
+        )}
       </CardBody>
       <Divider orientation='vertical' className='h-full' />
       <CardBody className='w-[35%] justify-between flex flex-col'>
@@ -283,7 +327,11 @@ function OrderStep1({ productsProp, eventsProp, totalPriceProp, setCurrentStep }
                 <Divider />
                 {productsProp.map((productProp, index) => (
                   <div className='text-sm' key={index}>
-                    <Button color={productProp === selectedProduct ? 'primary' : 'default'} className='w-full' onPress={() => setSelectedProduct(productProp)}>
+                    <Button
+                      color={productProp === selectedProduct ? 'primary' : 'default'}
+                      className='w-full'
+                      onPress={() => setSelectedProduct(productProp)}
+                    >
                       {productProp.Name} - {productProp.Price} zł
                     </Button>
                     <Divider />
@@ -297,7 +345,11 @@ function OrderStep1({ productsProp, eventsProp, totalPriceProp, setCurrentStep }
                 <Divider />
                 {eventsProp.map((eventProp, index) => (
                   <div className='text-sm' key={index}>
-                    <Button className='my-2 w-full' color={eventProp === selectedProduct ? 'primary' : 'default'} onPress={() => setSelectedProduct(eventProp)}>
+                    <Button
+                      className='my-2 w-full'
+                      color={eventProp === selectedProduct ? 'primary' : 'default'}
+                      onPress={() => setSelectedProduct(eventProp)}
+                    >
                       {eventProp.Name}
                     </Button>
                     <Divider />
@@ -312,7 +364,7 @@ function OrderStep1({ productsProp, eventsProp, totalPriceProp, setCurrentStep }
           <div className='text-2xl mt-2'>Suma: {totalPriceProp} zł</div>
           <div className='flex flex-row mt-2 gap-2'>
             <Button isIconOnly color='secondary' onClick={() => setCurrentStep(0)}>
-              <MaterialSymbol icon='arrow_back_ios_new' size={24}/>
+              <MaterialSymbol icon='arrow_back_ios_new' size={24} />
             </Button>
             <Button
               onPress={() => {

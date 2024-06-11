@@ -384,7 +384,7 @@ function OrderStep1({
       </CardBody>
       <Divider/>
       <CardBody className='flex flex-row gap-2 overflow-hidden'>
-        <Button isIconOnly>
+        <Button isIconOnly onPress={() => setCurrentStep(0)}>
           <MaterialSymbol icon={'arrow_back_ios_new'} size={24} />
         </Button>
         <Button color='primary' className='w-full'>

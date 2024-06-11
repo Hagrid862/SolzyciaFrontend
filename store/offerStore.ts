@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { fetchCategories } from '@/app/actions/category'
-import { fetchProducts, fetchProductsByCategory } from '@/app/actions/product'
+import { fetchProductById, fetchProducts, fetchProductsByCategory } from '@/app/actions/product'
 import { fetchEventById, fetchEvents, fetchEventsByCategory } from '@/app/actions/event'
+import { Product } from '@/models/Product'
 
 export const useOfferStore = create<IState>((set, get) => ({
   filterCategory: 'all-categories',
@@ -93,6 +94,7 @@ export const useOfferStore = create<IState>((set, get) => ({
     }
   },
   fetchProductsByCategory: async (
+
     reviews?: boolean,
     orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity',
     order?: 'desc' | 'asc',
@@ -113,6 +115,23 @@ export const useOfferStore = create<IState>((set, get) => ({
     } else {
       set({ products: ['error'] })
       return { isSuccess: false }
+    }
+  },
+  fetchProductById: async (id: string): Promise<{ isSuccess: boolean; product: Product | null }> => {
+    set({ products: ['loading'] })
+    const response = await fetchProductById(id)
+    if (response.isSuccess) {
+      const products = JSON.parse(response.productJson)
+      if (products && products.length > 0) {
+        set({ products: products })
+        return { isSuccess: true, product: products[0] } // Assuming you want to return the first product
+      } else {
+        set({ products: ['none'] })
+        return { isSuccess: false, product: null }
+      }
+    } else {
+      set({ products: ['error'] })
+      return { isSuccess: false, product: null }
     }
   },
 
@@ -210,6 +229,7 @@ export interface IState {
     page?: number,
     limit?: number
   ) => Promise<{ isSuccess: boolean }>
+  fetchProductById: (id: string) => Promise<{ isSuccess: boolean; product: Product | null }>
 
   fetchEvents: (
     reviews?: boolean,

@@ -35,35 +35,6 @@ export async function fetchEvents(
   }
 }
 
-export async function fetchEventById(id: string): Promise<{ isSuccess: boolean; eventJson: string }> {
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/event/${id}`, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-    console.log(response.status)
-
-    if (response.status === 200) {
-      const data = await response.json()
-      if (data.eventDto) {
-        const eventJson = JSON.stringify(data.eventDto)
-        return { isSuccess: true, eventJson: eventJson }
-      } else {
-        return { isSuccess: false, eventJson: '' }
-      }
-    } else {
-      if (response.status === 404) {
-        return { isSuccess: true, eventJson: '[]' }
-      }
-      return { isSuccess: false, eventJson: '' }
-    }
-  } catch {
-    return { isSuccess: false, eventJson: '' }
-  }
-}
-
 export async function fetchEventsByCategory(
   category: string,
   reviews?: boolean,
@@ -100,6 +71,35 @@ export async function fetchEventsByCategory(
     }
   } catch (e) {
     return { isSuccess: false, eventsJson: '' }
+  }
+}
+
+export async function fetchEventById(id: string): Promise<{ isSuccess: boolean; eventJson: string }> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/event/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    console.log(response.status)
+
+    if (response.status === 200) {
+      const data = await response.json()
+      if (data.eventDto) {
+        const eventJson = JSON.stringify(data.eventDto)
+        return { isSuccess: true, eventJson: eventJson }
+      } else {
+        return { isSuccess: false, eventJson: '' }
+      }
+    } else {
+      if (response.status === 404) {
+        return { isSuccess: true, eventJson: '[]' }
+      }
+      return { isSuccess: false, eventJson: '' }
+    }
+  } catch {
+    return { isSuccess: false, eventJson: '' }
   }
 }
 

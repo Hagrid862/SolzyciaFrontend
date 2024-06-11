@@ -383,9 +383,12 @@ function OrderStep1({
         }
       </CardBody>
       <Divider/>
-      <CardBody>
-        <Button className='w-full' isIconOnly>
-
+      <CardBody className='flex flex-row gap-2 overflow-hidden'>
+        <Button isIconOnly>
+          <MaterialSymbol icon={'arrow_back_ios_new'} size={24} />
+        </Button>
+        <Button color='primary' className='w-full'>
+          Dalej
         </Button>
       </CardBody>
     </Card>

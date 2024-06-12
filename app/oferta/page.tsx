@@ -6,6 +6,7 @@ import { Card, CardBody, Chip, Divider, Image, Spinner } from '@nextui-org/react
 import { MaterialSymbol } from 'react-material-symbols'
 import { Button } from '@nextui-org/button'
 import { useRouter } from 'next/navigation'
+import { useCartStore } from '@/store/cartStore'
 
 export default function Home() {
   const router = useRouter()
@@ -13,10 +14,29 @@ export default function Home() {
   const fetchEvents = useOfferStore((state) => state.fetchEvents)
   const products = useOfferStore((state) => state.products)
   const events = useOfferStore((state) => state.events)
+  const cartItems = useCartStore((state) => state.cartItems)
+  const addToCartStore = useCartStore((state) => state.addToCart)
+  
+  const cartStore = useCartStore()
+
+  const [showAddToCardBanner, setShowAddToCardBanner] = useState(false)
+
+  const addToCart = (itemId: string, isEvent: boolean) => {
+    setShowAddToCardBanner(true)
+    addToCartStore(itemId, isEvent)
+    setTimeout(() => {
+      setShowAddToCardBanner(false)
+    }, 3000)
+  }
 
   const filterType = useOfferStore((state) => state.filterType)
 
   useEffect(() => {
+    async function fetchCart() {
+      const response = await cartStore.getCartItems()
+    }
+
+    fetchCart()
     fetchProducts()
     fetchEvents()
   }, [])
@@ -26,7 +46,9 @@ export default function Home() {
     console.log(products)
     console.log('events')
     console.log(events)
-  }, [products, events])
+    console.log('cartItems')
+    console.log(cartItems)
+  }, [products, events, cartItems])
 
   return (
     <main className='p-2 flex items-center justify-start flex-col'>
@@ -115,8 +137,8 @@ export default function Home() {
                     <Button isIconOnly color='secondary'>
                       <MaterialSymbol icon='share' size={22} />
                     </Button>
-                    <Button color='primary'>
-                      <span>Dodaj do koszyka</span>
+                    <Button color='primary' isDisabled={cartItems.find((item) => item.ItemId === event.Id) ? true : false} onClick={() => addToCart(event.id, true)}>
+                      <span>{ cartItems.find((item) => item.ItemId === event.Id) ? 'Dodano do koszyka' : 'Dodaj do koszyka' }</span>
                       <MaterialSymbol icon='add_shopping_cart' size={22} />
                     </Button>
                   </div>
@@ -161,8 +183,8 @@ export default function Home() {
                     <Button isIconOnly color='secondary' radius='sm'>
                       <MaterialSymbol icon='share' size={22} />
                     </Button>
-                    <Button isIconOnly color='primary' radius='sm'>
-                      <MaterialSymbol icon='add_shopping_cart' size={22} />
+                    <Button isIconOnly color='primary' radius='sm' isDisabled={cartItems.find((item) => item.ItemId === event.Id) ? true : false} onClick={() => addToCart(event.id, true)}>
+                      <MaterialSymbol icon={cartItems.find((item) => item.ItemId === event.Id) ? 'shopping_cart_checkout' : 'add_shopping_cart'} size={22} />
                     </Button>
                   </div>
                 </CardBody>
@@ -202,7 +224,7 @@ export default function Home() {
                     <Button isIconOnly color='secondary'>
                       <MaterialSymbol icon='share' size={22} />
                     </Button>
-                    <Button color='primary'>
+                    <Button color='primary' radius='sm' onClick={() => addToCart(product.Id, false)} isDisabled={cartItems.find((item) => item.ItemId === product.Id) ? true : false}>
                       <span>Dodaj do koszyka</span>
                       <MaterialSymbol icon='add_shopping_cart' size={22} />
                     </Button>
@@ -248,7 +270,7 @@ export default function Home() {
                     <Button isIconOnly color='secondary' radius='sm'>
                       <MaterialSymbol icon='share' size={22} />
                     </Button>
-                    <Button isIconOnly color='primary' radius='sm'>
+                    <Button isIconOnly color='primary' radius='sm' onClick={() => addToCart(product.Id, false)} isDisabled={cartItems.find((item) => item.ItemId === product.Id) ? true : false}>
                       <MaterialSymbol icon='add_shopping_cart' size={22} />
                     </Button>
                   </div>
@@ -258,6 +280,11 @@ export default function Home() {
 
           ))}
       </div>
+        <Card className={`fixed left-1/2 transform -translate-x-1/2 bottom-0 ${showAddToCardBanner ? 'transform -translate-y-10 scale-100' : 'transform translate-y-24 scale-75'} transition-transform duration-150`}>
+          <CardBody> 
+            Produktu został dodany do koszyka
+          </CardBody>
+        </Card>
     </main>
   )
 }

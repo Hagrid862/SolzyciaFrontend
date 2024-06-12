@@ -7,11 +7,13 @@ import { useOfferStore } from '@/store/offerStore'
 import { MaterialSymbol } from 'react-material-symbols'
 import { usePathname, useRouter } from 'next/navigation'
 import { Button } from '@nextui-org/button'
+import { useCartStore } from '@/store/cartStore'
 
 export default function OfertaLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const router = useRouter()
   const pathname = usePathname()
   const store = useOfferStore()
+  const cartStore = useCartStore()
 
   const selectedCategory = store.filterCategory
 
@@ -32,6 +34,28 @@ export default function OfertaLayout({ children }: Readonly<{ children: React.Re
       <Card className='sticky mb-2 w-[1200px] max-w-[calc(100vw-1rem)] mx-auto'>
         {pathname === '/oferta' || pathname === '/oferta' ? (
           <CardBody className='flex flex-col gap-2'>
+            <div className='flex flex-row gap-2'>
+              <Button
+                color='secondary'
+                variant='flat'
+                className='w-full'
+                onPress={() => {
+                  router.push('/oferta/koszyk')
+                }}
+              >
+                Koszyk
+              </Button>
+              <Button
+              color='success'
+                variant='flat'
+                className='w-full'
+                onPress={() => {
+                  router.push('/oferta/koszyk')
+                }}
+              >
+                Twoje zamówienia
+              </Button>
+            </div>
             <Tabs fullWidth onSelectionChange={(e) => store.setFilterType(e as string)} selectedKey={store.filterType}>
               <Tab key='events' title='wydarzenia' />
               <Tab key='products' title='Produkty' />
@@ -68,7 +92,7 @@ export default function OfertaLayout({ children }: Readonly<{ children: React.Re
         ) : pathname.startsWith('/oferta/koszyk') ? (
           <CardBody className='flex flex-row gap-2'>
             <Button className='w-full' onClick={() => router.push('/oferta')}>
-              Wróć do koszyka
+              Wróć do oferty
             </Button>
             <Tooltip content='Koszyk' placement='bottom'>
               <Button isIconOnly color='primary' onClick={() => router.push('/oferta/koszyk')}>
@@ -79,7 +103,7 @@ export default function OfertaLayout({ children }: Readonly<{ children: React.Re
         ) : (
           <CardBody className='flex flex-row gap-2'>
             <Button className='w-full' onClick={() => router.push('/oferta')}>
-              Wróć do oferty
+              Wróć do koszyka
             </Button>
             <Tooltip content='Koszyk' placement='bottom'>
               <Button isIconOnly color='primary' onClick={() => router.push('/oferta/koszyk')}>

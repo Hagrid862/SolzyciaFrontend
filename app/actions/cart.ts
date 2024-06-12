@@ -17,15 +17,22 @@ export async function addToCart(itemId: string, quantity: number, isEvent: boole
 }
 
 export async function removeFromCart(itemId: string): Promise<void> {
+  console.log('removeFromCart', itemId)
   const cookiesStorage = cookies()
   const cart = cookiesStorage.get('cart')?.value || '[]'
-  const cartArray = JSON.parse(cart)
-  const newCartArray = cartArray.filter((id: string) => id !== itemId)
-  cookiesStorage.set('cart', JSON.stringify(newCartArray))
+  const cartArray = JSON.parse(cart) as ICartItemCookie[]
+  const index = cartArray.findIndex((c: ICartItemCookie) => c.Id === itemId)
+  if (index !== -1) {
+    cartArray.splice(index, 1)
+  }
+  cookiesStorage.set('cart', JSON.stringify(cartArray))
+
+  return
 }
 
 export async function getCart(): Promise<ICartItem[]> {
   // clearCart()
+  getRawCart()
   const cookiesStorage = cookies()
   const cart = cookiesStorage.get('cart')?.value || '[]'
   const cartArray = JSON.parse(cart)

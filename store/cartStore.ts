@@ -1,8 +1,8 @@
-import { addToCart, getCart, getRawCart } from '@/app/actions/cart'
+import { addToCart, getCart, getRawCart, removeFromCart } from '@/app/actions/cart'
 import { ICartItem } from '@/models/CartItem'
 import { create } from 'zustand'
 
-export const useCartStore = create<IState>((set) => ({
+export const useCartStore = create<IState>((set, get) => ({
   cartItems: [],
 
   getCartItems: async () => {
@@ -20,6 +20,8 @@ export const useCartStore = create<IState>((set) => ({
     return { isSuccess: true }
   },
   removeFromCart: async (itemId: string) => {
+    removeFromCart(itemId)
+    get().getCartItems()
     return { isSuccess: true }
   },
   clearCart: async () => {

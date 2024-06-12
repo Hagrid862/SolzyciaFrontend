@@ -79,7 +79,7 @@ export default function CartPage() {
                 </div>
                 <div className='h-full flex flex-col justify-between items-end'>
                   <h2 className='text-xl font-semibold'>{item.Price} zł</h2>
-                  <Button isIconOnly variant='faded' color='danger'>
+                  <Button isIconOnly variant='faded' color='danger' onClick={() => store.removeFromCart(item.ItemId)}>
                     <MaterialSymbol icon='delete' size={24} />
                   </Button>
                 </div>

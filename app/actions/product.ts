@@ -62,7 +62,7 @@ export async function fetchProductsByCategory(
   }
 }
 
-export async function fetchProductById (id: string): Promise<{ isSuccess: boolean; productJson: string }> {
+export async function fetchProductById(id: string): Promise<{ isSuccess: boolean; productJson: string }> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product/${id}`, {
       method: 'GET',
@@ -70,7 +70,7 @@ export async function fetchProductById (id: string): Promise<{ isSuccess: boolea
         'Content-Type': 'application/json'
       }
     })
-    console.log("response: " + await response.text())
+    console.log('response: ' + (await response.text()))
     if (response.status === 200) {
       const data = await response.json()
       if (data.productDto) {

@@ -257,13 +257,13 @@ function OrderStep1({
   totalPriceProp,
   eventDates,
   setCurrentStep,
-  changeEventDate,
+  changeEventDate
 }: {
   productsProp: Product[] | null
   eventsProp: Event[] | null
   totalPriceProp: number
-  eventDates: { eventId: string; dateId: string }[],
-  setCurrentStep: React.Dispatch<React.SetStateAction<number>>,
+  eventDates: { eventId: string; dateId: string }[]
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>
   changeEventDate: (eventId: string, dateId: string) => void
 }) {
   const [selectedProduct, setSelectedProduct] = useState<Event | Product | null>(
@@ -310,79 +310,72 @@ function OrderStep1({
   return (
     <Card className='flex flex-col h-[calc(100vh-346px)]'>
       <CardBody className='w-full flex flex-col gap-2'>
-        {
-          productsProp !== undefined && productsProp !== null && productsProp.length > 0 && (
-            <div key='products-container' className='flex flex-col gap-4'>
-              <div className='text-xl font-semibold'>Produkty:</div>
-              {
-                productsProp.map((product, index) => (
-                  <div
-                    className='flex flex-row justify-between items-center text-sm'
-                    key={index}
-                  >
-                    <div className='text-lg'>{product.Name}</div>
-                    <div className='text-md text-primary'>{product.Price} zł</div>
-                  </div>
-                ))
-              }
-            </div>
-          )
-        }
-        {
-          eventsProp !== undefined && eventsProp !== null && eventsProp.length > 0 && (
-            <div key='events-container' className='flex flex-col gap-4'>
-              <div className='text-xl font-semibold'>Wydarzenia:</div>
-              {
-                eventsProp.map((event, index) => (
-                  <div key={`event-card-${index}`}>
-                    <Card>
-                      <CardHeader className='bg-white bg-opacity-5 font-semibold'>
-                        {event.Name}
-                      </CardHeader>
-                      <Divider/>
-                      <CardBody className='bg-white bg-opacity-5 flex flex-col gap-2'>
-                        <div>Termin rezerwacji:</div>
-                        <div className='flex flex-row flex-nowrap max-w-[100%] overflow-x-auto gap-4'>
-                        {
-                          event.Dates.map((date, index) => (
-                            <Card key={`date-${date.Date}`} className={`min-w-[300px] max-w-[300px] ${eventDates.find((eventDate) => eventDate.eventId === event.Id && eventDate.dateId === date.Id) ? 'bg-white bg-opacity-15' : ''}`} isPressable isHoverable={eventDates.find((eventDate) => eventDate.eventId === event.Id && eventDate.dateId === date.Id) == null} onPress={() => {setDate(event.Id, date.Id); console.log(eventDates)}}>
-                              <CardHeader>
-                                {formatDate(date.Date.toString())}
-                              </CardHeader>
-                              <Divider/>
-                              <CardBody>
-                                lokalizacja:
-                                {
-                                  date.Location?.City && date.Location.HouseNumber && date.Location.Street && date.Location.PostalCode ? (
-                                    <div>
-                                      {date.Location?.Street}/{date.Location?.HouseNumber}, {date.Location?.City}
-                                    </div>
-                                  ) : ( 
-                                    <>
-                                      <div>
-                                        Brak informacji.
-                                      </div> 
-                                      <div className='text-xs'>
-                                        Skontaktuj sie z nami po wiecej informacji
-                                      </div>
-                                    </>
-                                  )
-                                }
-                              </CardBody>
-                            </Card>
-                          ))
-                        }
-                        </div>
-                      </CardBody>
-                    </Card>
-                  </div>
-                ))
-              }
-            </div>
-          )
-        }
+        {productsProp !== undefined && productsProp !== null && productsProp.length > 0 && (
+          <div key='products-container' className='flex flex-col gap-4'>
+            <div className='text-xl font-semibold'>Produkty:</div>
+            {productsProp.map((product, index) => (
+              <div className='flex flex-row justify-between items-center text-sm' key={index}>
+                <div className='text-lg'>{product.Name}</div>
+                <div className='text-md text-primary'>{product.Price} zł</div>
+              </div>
+            ))}
+          </div>
+        )}
+        {eventsProp !== undefined && eventsProp !== null && eventsProp.length > 0 && (
+          <div key='events-container' className='flex flex-col gap-4'>
+            <div className='text-xl font-semibold'>Wydarzenia:</div>
+            {eventsProp.map((event, index) => (
+              <div key={`event-card-${index}`}>
+                <Card>
+                  <CardHeader className='bg-white bg-opacity-5 font-semibold'>{event.Name}</CardHeader>
+                  <Divider />
+                  <CardBody className='bg-white bg-opacity-5 flex flex-col gap-2'>
+                    <div>Termin rezerwacji:</div>
+                    <div className='flex flex-row flex-nowrap max-w-[100%] overflow-x-auto gap-4'>
+                      {event.Dates.map((date, index) => (
+                        <Card
+                          key={`date-${date.Date}`}
+                          className={`min-w-[300px] max-w-[300px] ${eventDates.find((eventDate) => eventDate.eventId === event.Id && eventDate.dateId === date.Id) ? 'bg-white bg-opacity-15' : ''}`}
+                          isPressable
+                          isHoverable={
+                            eventDates.find(
+                              (eventDate) => eventDate.eventId === event.Id && eventDate.dateId === date.Id
+                            ) == null
+                          }
+                          onPress={() => {
+                            setDate(event.Id, date.Id)
+                            console.log(eventDates)
+                          }}
+                        >
+                          <CardHeader>{formatDate(date.Date.toString())}</CardHeader>
+                          <Divider />
+                          <CardBody>
+                            lokalizacja:
+                            {date.Location?.City &&
+                            date.Location.HouseNumber &&
+                            date.Location.Street &&
+                            date.Location.PostalCode ? (
+                              <div>
+                                {date.Location?.Street}/{date.Location?.HouseNumber}, {date.Location?.City}
+                              </div>
+                            ) : (
+                              <>
+                                <div>Brak informacji.</div>
+                                <div className='text-xs'>Skontaktuj sie z nami po wiecej informacji</div>
+                              </>
+                            )}
+                          </CardBody>
+                        </Card>
+                      ))}
+                    </div>
+                  </CardBody>
+                </Card>
+              </div>
+            ))}
+          </div>
+        )}
       </CardBody>
-      <Divider/>
+      <Divider />
       <CardBody className='flex flex-row gap-2 overflow-hidden'>
         <Button isIconOnly onPress={() => setCurrentStep(0)}>
           <MaterialSymbol icon={'arrow_back_ios_new'} size={24} />

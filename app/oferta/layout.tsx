@@ -46,7 +46,7 @@ export default function OfertaLayout({ children }: Readonly<{ children: React.Re
                 Koszyk
               </Button>
               <Button
-              color='success'
+                color='success'
                 variant='flat'
                 className='w-full'
                 onPress={() => {

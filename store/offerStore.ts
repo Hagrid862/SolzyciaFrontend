@@ -95,7 +95,6 @@ export const useOfferStore = create<IState>((set, get) => ({
     }
   },
   fetchProductsByCategory: async (
-
     reviews?: boolean,
     orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity',
     order?: 'desc' | 'asc',

@@ -146,13 +146,15 @@ export default function ProductsPage() {
           </>
         )} */}
 
-        {
-          tab == 0 && (
-            <>
-              { products[0] === 'loading' && 'Ładowanie...' }
-              { products[0] === 'none' && 'Brak produktów' }
-              { products[0] === 'error' && 'Błąd' }
-              { products[0] !== 'none' && products[0] !== 'error' && products[0] !== 'loading' && products.map((product: any) => {
+        {tab == 0 && (
+          <>
+            {products[0] === 'loading' && 'Ładowanie...'}
+            {products[0] === 'none' && 'Brak produktów'}
+            {products[0] === 'error' && 'Błąd'}
+            {products[0] !== 'none' &&
+              products[0] !== 'error' &&
+              products[0] !== 'loading' &&
+              products.map((product: any) => {
                 return (
                   <Card
                     key={product.id}
@@ -187,17 +189,18 @@ export default function ProductsPage() {
                   </Card>
                 )
               })}
-            </>
-          )
-        }
+          </>
+        )}
 
-        {
-          tab == 1 && (
-            <>
-              { events[0] === 'loading' && 'Ładowanie...' }
-              { events[0] === 'none' && 'Brak wydarzeń' }
-              { events[0] === 'error' && 'Błąd' }
-              { events[0] !== 'none' && events[0] !== 'error' && events[0] !== 'loading' && events.map((event: any) => {
+        {tab == 1 && (
+          <>
+            {events[0] === 'loading' && 'Ładowanie...'}
+            {events[0] === 'none' && 'Brak wydarzeń'}
+            {events[0] === 'error' && 'Błąd'}
+            {events[0] !== 'none' &&
+              events[0] !== 'error' &&
+              events[0] !== 'loading' &&
+              events.map((event: any) => {
                 return (
                   <Card
                     key={event.id}
@@ -232,9 +235,8 @@ export default function ProductsPage() {
                   </Card>
                 )
               })}
-            </>
-          )
-        }
+          </>
+        )}
       </div>
     </div>
   )

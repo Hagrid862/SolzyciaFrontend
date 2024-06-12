@@ -30,6 +30,7 @@ export async function fetchProducts(
     return { isSuccess: false, productsJson: '' }
   }
 }
+
 export async function fetchProductsByCategory(
   category: string,
   reviews?: boolean,
@@ -58,6 +59,34 @@ export async function fetchProductsByCategory(
   } catch (e) {
     console.log('error: ' + e)
     return { isSuccess: false, productsJson: '' }
+  }
+}
+
+export async function fetchProductById (id: string): Promise<{ isSuccess: boolean; productJson: string }> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    console.log("response: " + await response.text())
+    if (response.status === 200) {
+      const data = await response.json()
+      if (data.productDto) {
+        const productJson = JSON.stringify(data.productDto)
+        return { isSuccess: true, productJson: productJson }
+      } else {
+        return { isSuccess: false, productJson: '' }
+      }
+    } else {
+      if (response.status === 404) {
+        return { isSuccess: true, productJson: '[]' }
+      }
+      return { isSuccess: false, productJson: '' }
+    }
+  } catch {
+    return { isSuccess: false, productJson: '' }
   }
 }
 

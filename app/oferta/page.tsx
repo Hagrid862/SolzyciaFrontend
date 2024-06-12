@@ -22,7 +22,9 @@ export default function Home() {
   }, [])
 
   useEffect(() => {
+    console.log('products')
     console.log(products)
+    console.log('events')
     console.log(events)
   }, [products, events])
 
@@ -83,7 +85,7 @@ export default function Home() {
           events[0] !== 'none' &&
           events[0] !== 'error' &&
           events.map((event: any) => (
-            <div>
+            <div key={event.id}>
               <Card className='md:hidden' isPressable onPress={() => router.push(`oferta/wydarzenie/${event.id}`)}>
                 <CardBody className='w-full'>
                   {event.images && event.images[0] ? (
@@ -172,11 +174,11 @@ export default function Home() {
           products[0] !== 'none' &&
           products[0] !== 'error' &&
           products.map((product: any) => (
-            <div>
-              <Card className='md:hidden' isPressable onPress={() => router.push(`oferta/produkt/${product.id}`)}>
+            <div key={product.Id}>
+              <Card className='md:hidden' isPressable onPress={() => router.push(`oferta/produkt/${product.Id}`)}>
                 <CardBody>
-                  {product.images[0] ? (
-                    <Image src={product.images[0]} alt={product.name} className='w-full aspect-square cover' />
+                  {product.Images?.[0] ? (
+                    <Image src={product.Images[0]} alt={product.Name} className='w-full aspect-square cover' />
                   ) : (
                     <div className='bg-primary w-full aspect-square bg-opacity-25 flex items-center justify-center rounded-xl'>
                       <MaterialSymbol icon='no_photography' size={72} className='text-white' />
@@ -185,17 +187,17 @@ export default function Home() {
                 </CardBody>
                 <Divider />
                 <CardBody>
-                  <div className='text-md font-semibold'>{product.name}</div>
+                  <div className='text-md font-semibold'>{product.Name}</div>
                   <div
                     className={
-                      product.price
+                      product.Price
                         ? 'text-3xl font-bold rounded-xl whitespace-nowrap mr-2'
                         : 'text-lg font-bold text-gray-500'
                     }
                   >
-                    {product.price ? `${product.price} zł` : 'Brak ceny'}
+                    {product.Price ? `${product.Price} zł` : 'Brak ceny'}
                   </div>
-                  <div className='text-xs text-white text-opacity-35'>{product.description.substring(0, 200)}</div>
+                  <div className='text-xs text-white text-opacity-35'>{product.Description?.substring(0, 200)}</div>
                   <div className='flex flex-row justify-end w-full items-center mt-2 gap-2'>
                     <Button isIconOnly color='secondary'>
                       <MaterialSymbol icon='share' size={22} />
@@ -208,14 +210,14 @@ export default function Home() {
                 </CardBody>
               </Card>
               <Card
-                className='hidden md:flex flex-row items-stretch h-[13rem]'
+                className='hidden md:flex flex-row items-stretch h-[13rem] w-full'
                 isPressable
-                onPress={() => router.push(`oferta/produkt/${product.id}`)}
+                onPress={() => router.push(`oferta/produkt/${product.Id}`)}
               >
                 <CardBody className='min-w-[13.25rem] w-[12rem] overflow-hidden'>
-                  {product.images[0] ? (
+                  {product.Images?.[0] ? (
                     <div className='w-[11.5rem] h-[11.5rem] overflow-hidden flex flex-row items-center justify-center'>
-                      <Image src={product.images[0]} alt={product.name} className='max-h-[11.5rem] max-w-[11.5rem]' />
+                      <Image src={product.Images[0]} alt={product.Name} className='max-h-[11.5rem] max-w-[11.5rem]' />
                     </div>
                   ) : (
                     <div className='bg-primary h-[11.5rem] w-[11.5rem] bg-opacity-25 flex items-center justify-center rounded-xl'>
@@ -225,21 +227,21 @@ export default function Home() {
                 </CardBody>
                 <Divider orientation='vertical' />
                 <CardBody className='relative'>
-                  <span className='text-2xl font-semibold'>{product.name}</span>
+                  <span className='text-2xl font-semibold'>{product.Name}</span>
                   <span className='text-3xl font-bold text-white bg-opacity-75 p-2 bg-primary rounded-lg absolute right-3'>
-                    {product.price ? `${product.price} zł` : 'Brak ceny'}
+                    {product.Price ? `${product.Price} zł` : 'Brak ceny'}
                   </span>
-                  {product.tags ? (
+                  {product.Tags ? (
                     <div className='flex-row mt-2 max-w-1/2'>
-                      {product.tags.map((tag: any) => (
-                        <Chip key={tag.id} color='primary'>
-                          {tag.name}
+                      {product.Tags.map((tag: any) => (
+                        <Chip key={tag.Id} color='primary'>
+                          {tag.Name}
                         </Chip>
                       ))}
                     </div>
                   ) : null}
                   <div className='text-xs text-white text-opacity-35 w-3/4'>
-                    {product.description.substring(0, 200)}
+                    {product.Description?.substring(0, 200)}
                   </div>
 
                   <div className='flex flex-col absolute right-3 bottom-3 gap-2'>
@@ -253,6 +255,7 @@ export default function Home() {
                 </CardBody>
               </Card>
             </div>
+
           ))}
       </div>
     </main>

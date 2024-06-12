@@ -29,7 +29,7 @@ export default function CartPage() {
 
     store.cartItems.forEach((item, index) => {
       if (!unselected.includes(index)) {
-        items.push({ id: item.itemId, quantity: item.quantity, isEvent: item.isEvent })
+        items.push({ id: item.ItemId, quantity: item.Quantity, isEvent: item.IsEvent })
       }
     })
 
@@ -43,7 +43,7 @@ export default function CartPage() {
     <div className='flex flex-col items-center h-full'>
       <div className='max-w-[1300px] h-[calc(100vh-288px)] w-full px-2 pt-2 flex flex-col gap-2'>
         {store.cartItems.map((item, index) => (
-          <div key={item.itemId} className='flex flex-row w-full'>
+          <div key={item.ItemId} className='flex flex-row w-full'>
             <Checkbox
               className='mx-2'
               size='lg'
@@ -60,25 +60,25 @@ export default function CartPage() {
               className={`flex flex-row w-full h-32 ${unselected.includes(index) ? 'opacity-75 scale-[97%]' : 'opacity-100 scale-100'}`}
             >
               <CardBody className='min-w-32 max-w-32 aspect-square'>
-                {item.image === 'noimage' ? (
+                {item.Image === 'noimage' ? (
                   <div className='w-full aspect-square flex items-center justify-center bg-primary bg-opacity-50 rounded-lg'>
                     <MaterialSymbol icon='no_photography' size={48} />
                   </div>
                 ) : (
                   <div className='w-full h-full flex items-center justify-center'>
-                    <Image src={item.image} alt={item.name} className='max-w-24 max-h-24' radius='sm' />
+                    <Image src={item.Image} alt={item.Name} className='max-w-24 max-h-24' radius='sm' />
                   </div>
                 )}
               </CardBody>
               <Divider orientation='vertical' className='h-32' />
               <CardBody className='flex flex-row justify-between'>
                 <div>
-                  <div className='text-xl font-semibold'>{item.name}</div>
-                  <p className='text-sm'>Ilość: {item.quantity}</p>
-                  <p className='text-sm'>Typ: {item.isEvent ? 'Wydarzenie' : 'Produkt'}</p>
+                  <div className='text-xl font-semibold'>{item.Name}</div>
+                  <p className='text-sm'>Ilość: {item.Quantity}</p>
+                  <p className='text-sm'>Typ: {item.IsEvent ? 'Wydarzenie' : 'Produkt'}</p>
                 </div>
                 <div className='h-full flex flex-col justify-between items-end'>
-                  <h2 className='text-xl font-semibold'>{item.price} zł</h2>
+                  <h2 className='text-xl font-semibold'>{item.Price} zł</h2>
                   <Button isIconOnly variant='faded' color='danger'>
                     <MaterialSymbol icon='delete' size={24} />
                   </Button>
@@ -99,7 +99,7 @@ export default function CartPage() {
               <div className='overflow-auto'>
                 <div className='flex flex-row justify-between'>
                   <p>Łącznie:</p>
-                  <h2>{store.cartItems.reduce((acc, item) => acc + item.price, 0)} zł</h2>
+                  <h2>{store.cartItems.reduce((acc, item) => acc + item.Price, 0)} zł</h2>
                 </div>
                 <div className='flex flex-row justify-between'>
                   <p>Przesyłka:</p>

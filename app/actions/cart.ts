@@ -8,10 +8,10 @@ export async function addToCart(itemId: string, quantity: number, isEvent: boole
   const cookiesStorage = cookies()
   const cart = cookiesStorage.get('cart')?.value || '[]'
   const cartArray = JSON.parse(cart) as ICartItemCookie[]
-  if (cartArray.some((c: ICartItemCookie) => c.id === itemId)) {
+  if (cartArray.some((c: ICartItemCookie) => c.Id === itemId)) {
     return { isSuccess: false }
   }
-  cartArray.push({ id: itemId, quantity, isEvent: isEvent })
+  cartArray.push({ Id: itemId, Quantity: quantity, IsEvent: isEvent })
   cookiesStorage.set('cart', JSON.stringify(cartArray))
   return { isSuccess: true }
 }
@@ -25,16 +25,19 @@ export async function removeFromCart(itemId: string): Promise<void> {
 }
 
 export async function getCart(): Promise<ICartItem[]> {
+  // clearCart()
   const cookiesStorage = cookies()
   const cart = cookiesStorage.get('cart')?.value || '[]'
   const cartArray = JSON.parse(cart)
 
   let cartItems: ICartItem[] = []
 
+  console.log('cartArray', cartArray)
+
   await Promise.all(
     cartArray.map(async (item: ICartItemCookie) => {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${item.id}?quantity=${item.quantity}&isEvent=${item.isEvent}`
+        `${process.env.NEXT_PUBLIC_API_URL}/api/cart/${item.Id}?quantity=${item.Quantity}&isEvent=${item.IsEvent}`
       )
 
       const data = await response.json()
@@ -42,17 +45,17 @@ export async function getCart(): Promise<ICartItem[]> {
       console.log('data', data)
 
       cartItems.push({
-        itemId: data.itemId,
-        name: data.name,
-        price: data.price,
-        quantity: item.quantity,
-        image: data.image,
-        isEvent: data.isEvent,
-        isOnSale: data.isOnSale,
-        salePrice: data.salePrice,
-        saleEndDate: data.saleEndDate,
-        isArchived: data.isArchived,
-        isDeleted: data.isDeleted
+        ItemId: data.itemId,
+        Name: data.name,
+        Price: data.Price,
+        Quantity: item.Quantity,
+        Image: data.image,
+        IsEvent: data.isEvent,
+        IsOnSale: data.isOnSale,
+        SalePrice: data.salePrice,
+        SaleEndDate: data.saleEndDate,
+        IsArchived: data.isArchived,
+        IsDeleted: data.isDeleted
       })
     })
   )

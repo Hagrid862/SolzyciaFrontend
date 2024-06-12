@@ -3,6 +3,7 @@ import { fetchCategories } from '@/app/actions/category'
 import { fetchProductById, fetchProducts, fetchProductsByCategory } from '@/app/actions/product'
 import { fetchEventById, fetchEvents, fetchEventsByCategory } from '@/app/actions/event'
 import { Product } from '@/models/Product'
+import { Category } from '@/models/Category'
 
 export const useOfferStore = create<IState>((set, get) => ({
   filterCategory: 'all-categories',
@@ -205,9 +206,9 @@ export interface IState {
   filterType: string
   filterSearch: string
 
-  products: any
-  events: any
-  categories: any
+  products: Product[] | string[]
+  events: Event[] | string[]
+  categories: Category[] | string[]
 
   initFilters: () => void
   setFilterType: (type: string) => void

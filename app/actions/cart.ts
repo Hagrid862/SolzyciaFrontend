@@ -48,34 +48,33 @@ export async function getCart(): Promise<ICartItem[]> {
       )
 
       const data = await response.json()
+      console.log('data: ' + data)
 
       console.log('data', data)
-
       cartItems.push({
-        ItemId: data.itemId,
-        Name: data.name,
+        ItemId: data.ItemId,
+        Name: data.Name,
         Price: data.Price,
         Quantity: item.Quantity,
-        Image: data.image,
-        IsEvent: data.isEvent,
-        IsOnSale: data.isOnSale,
-        SalePrice: data.salePrice,
-        SaleEndDate: data.saleEndDate,
-        IsArchived: data.isArchived,
-        IsDeleted: data.isDeleted
+        Image: data.Image,
+        IsEvent: data.IsEvent,
+        IsOnSale: data.IsOnSale,
+        SalePrice: data.SalePrice,
+        SaleEndDate: data.SaleEndDate,
+        IsArchived: data.IsArchived,
+        IsDeleted: data.IsDeleted
       })
     })
   )
 
+
   return cartItems
 }
 
-export async function getRawCart(): Promise<string[]> {
+export async function getRawCart(): Promise<ICartItemCookie[]> {
   const cookiesStorage = cookies()
   const cart = cookiesStorage.get('cart')?.value || '[]'
-  console.log('cart', cart)
   const cartArray = JSON.parse(cart)
-  console.log('cartArray', cartArray)
 
   return cartArray
 }

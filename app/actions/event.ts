@@ -21,6 +21,7 @@ export async function fetchEvents(
     )
     if (response.status === 200) {
       const data = await response.json()
+      console.log(data)
       if (data.events) {
         const eventsJson = JSON.stringify(data.events)
         return { isSuccess: true, eventsJson: eventsJson }

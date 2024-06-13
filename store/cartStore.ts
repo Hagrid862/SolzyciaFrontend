@@ -1,9 +1,11 @@
 import { addToCart, getCart, getRawCart, removeFromCart } from '@/app/actions/cart'
 import { ICartItem } from '@/models/CartItem'
+import { ICartItemCookie } from '@/models/CartItemCookie'
 import { create } from 'zustand'
 
 export const useCartStore = create<IState>((set, get) => ({
   cartItems: [],
+  rawCart: [],
 
   getCartItems: async () => {
     const cart = await getCart()
@@ -13,7 +15,10 @@ export const useCartStore = create<IState>((set, get) => ({
   },
   getRawCartItems: async () => {
     const rawCart = await getRawCart()
-    return { isSuccess: true, items: rawCart }
+    set({ rawCart: rawCart })
+    console.log('rawCart')
+    console.log(rawCart)
+    return { isSuccess: true }
   },
   addToCart: async (itemId: string, isEvent: boolean) => {
     addToCart(itemId, 1, isEvent)
@@ -31,9 +36,10 @@ export const useCartStore = create<IState>((set, get) => ({
 
 interface IState {
   cartItems: ICartItem[]
+  rawCart: ICartItemCookie[]
 
   getCartItems(): Promise<{ isSuccess: boolean }>
-  getRawCartItems(): Promise<{ isSuccess: boolean; items?: string[] }>
+  getRawCartItems(): Promise<{ isSuccess: boolean }>
   addToCart(itemId: string, isEvent: boolean): Promise<{ isSuccess: boolean }>
   removeFromCart(itemId: string): Promise<{ isSuccess: boolean }>
   clearCart(): Promise<{ isSuccess: boolean }>

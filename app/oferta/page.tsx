@@ -7,6 +7,7 @@ import { MaterialSymbol } from 'react-material-symbols'
 import { Button } from '@nextui-org/button'
 import { useRouter } from 'next/navigation'
 import { useCartStore } from '@/store/cartStore'
+import { ICartItemCookie } from '@/models/CartItemCookie'
 
 export default function Home() {
   const router = useRouter()
@@ -14,8 +15,6 @@ export default function Home() {
   const fetchEvents = useOfferStore((state) => state.fetchEvents)
   const products = useOfferStore((state) => state.products)
   const events = useOfferStore((state) => state.events)
-  const cartItems = useCartStore((state) => state.cartItems)
-  const addToCartStore = useCartStore((state) => state.addToCart)
 
   const cartStore = useCartStore()
 
@@ -23,7 +22,8 @@ export default function Home() {
 
   const addToCart = (itemId: string, isEvent: boolean) => {
     setShowAddToCardBanner(true)
-    addToCartStore(itemId, isEvent)
+    cartStore.addToCart(itemId, isEvent)
+    cartStore.getCartItems()
     setTimeout(() => {
       setShowAddToCardBanner(false)
     }, 3000)
@@ -36,7 +36,7 @@ export default function Home() {
       const response = await cartStore.getCartItems()
     }
 
-    fetchCart()
+    cartStore.getRawCartItems()
     fetchProducts()
     fetchEvents()
   }, [])
@@ -47,8 +47,8 @@ export default function Home() {
     console.log('events')
     console.log(events)
     console.log('cartItems')
-    console.log(cartItems)
-  }, [products, events, cartItems])
+    console.log(cartStore.rawCart)
+  }, [products, events, cartStore.rawCart, cartStore.cartItems])
 
   return (
     <main className='p-2 flex items-center justify-start flex-col'>
@@ -139,11 +139,11 @@ export default function Home() {
                     </Button>
                     <Button
                       color='primary'
-                      isDisabled={cartItems.find((item) => item.ItemId === event.Id) ? true : false}
+                      isDisabled={cartStore.rawCart.find((item: ICartItemCookie) => item.Id === event.Id) ? true : false}
                       onClick={() => addToCart(event.id, true)}
                     >
                       <span>
-                        {cartItems.find((item) => item.ItemId === event.Id) ? 'Dodano do koszyka' : 'Dodaj do koszyka'}
+                        {cartStore.rawCart.find((item: ICartItemCookie) => item.Id === event.Id) ? 'Dodano do koszyka' : 'Dodaj do koszyka'}
                       </span>
                       <MaterialSymbol icon='add_shopping_cart' size={22} />
                     </Button>
@@ -182,6 +182,7 @@ export default function Home() {
                     </div>
                   ) : null}
                   <div className='text-xs text-white text-opacity-35 w-3/4'>
+                    {event.id}
                     {event.description ? event.description.substring(0, 200) : ''}
                   </div>
 
@@ -193,13 +194,13 @@ export default function Home() {
                       isIconOnly
                       color='primary'
                       radius='sm'
-                      isDisabled={cartItems.find((item) => item.ItemId === event.Id) ? true : false}
+                      isDisabled={cartStore.rawCart.find((item) => item.Id === event.Id) ? true : false}
                       onClick={() => addToCart(event.id, true)}
                     >
                       <MaterialSymbol
                         icon={
-                          cartItems.find((item) => item.ItemId === event.Id)
-                            ? 'shopping_cart_checkout'
+                          cartStore.rawCart.find((item: ICartItemCookie) => item.Id === event.Id)
+                            ? 'check_circle_filled'
                             : 'add_shopping_cart'
                         }
                         size={22}
@@ -247,10 +248,17 @@ export default function Home() {
                       color='primary'
                       radius='sm'
                       onClick={() => addToCart(product.Id, false)}
-                      isDisabled={cartItems.find((item) => item.ItemId === product.Id) ? true : false}
+                      isDisabled={cartStore.rawCart.find((item: ICartItemCookie) => item.Id === product.Id) ? true : false}
                     >
                       <span>Dodaj do koszyka</span>
-                      <MaterialSymbol icon='add_shopping_cart' size={22} />
+                      <MaterialSymbol
+                        icon={
+                          cartStore.rawCart.find((item: ICartItemCookie) => item.Id === product.Id)
+                            ? 'check_circle_filled'
+                            : 'add_shopping_cart'
+                        }
+                        size={22}
+                      />
                     </Button>
                   </div>
                 </CardBody>
@@ -299,10 +307,16 @@ export default function Home() {
                       color='primary'
                       radius='sm'
                       onClick={() => addToCart(product.Id, false)}
-                      isDisabled={cartItems.find((item) => item.ItemId === product.Id) ? true : false}
+                      isDisabled={cartStore.rawCart.find((item: ICartItemCookie) => item.Id === product.Id) ? true : false}
                     >
-                      <MaterialSymbol icon='add_shopping_cart' size={22} />
-                    </Button>
+                      <MaterialSymbol
+                        icon={
+                          cartStore.rawCart.find((item: ICartItemCookie) => item.Id === product.Id)
+                            ? 'check_circle_filled'
+                            : 'add_shopping_cart'
+                        }
+                        size={22}
+                      />                    </Button>
                   </div>
                 </CardBody>
               </Card>

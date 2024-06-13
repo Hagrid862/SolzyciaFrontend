@@ -60,7 +60,7 @@ export default function OfertaLayout({ children }: Readonly<{ children: React.Re
               <Tab key='events' title='wydarzenia' />
               <Tab key='products' title='Produkty' />
             </Tabs>
-            <div className='flex flexrow flex-nowrap'>
+            <div className='flex flex-row flex-nowrap'>
               <Select
                 placeholder='Kategorie'
                 className='w-full'

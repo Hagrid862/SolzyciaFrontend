@@ -24,6 +24,10 @@ export default function CartPage() {
     fetchCart()
   }, [])
 
+  useEffect(() => {
+    console.log(store.cartItems)
+  }, [store.cartItems])
+
   const order = async () => {
     let items: { id: string; quantity: number; isEvent: boolean }[] = []
 

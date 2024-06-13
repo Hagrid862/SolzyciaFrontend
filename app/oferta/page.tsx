@@ -8,6 +8,7 @@ import { Button } from '@nextui-org/button'
 import { useRouter } from 'next/navigation'
 import { useCartStore } from '@/store/cartStore'
 import { ICartItemCookie } from '@/models/CartItemCookie'
+import { Event } from '@/models/Event'
 
 export default function Home() {
   const router = useRouter()
@@ -106,12 +107,12 @@ export default function Home() {
           events[0] !== 'loading' &&
           events[0] !== 'none' &&
           events[0] !== 'error' &&
-          events.map((event: any) => (
-            <div key={event.id}>
-              <Card className='md:hidden' isPressable onPress={() => router.push(`oferta/wydarzenie/${event.id}`)}>
+          events.map((event: Event | any) => (
+            <div key={event.Id}>
+              <Card className='md:hidden' isPressable onPress={() => router.push(`oferta/wydarzenie/${event.Id}`)}>
                 <CardBody className='w-full'>
-                  {event.images && event.images[0] ? (
-                    <Image src={event.images[0]} alt={event.name} className='min-w-full w-full cover' />
+                  {event.Images && event.Images[0] ? (
+                    <Image src={event.Images[0]} alt={event.Name} className='min-w-full w-full cover' />
                   ) : (
                     <div className='bg-primary w-full aspect-square bg-opacity-25 flex items-center justify-center rounded-xl'>
                       <MaterialSymbol icon='no_photography' size={72} className='text-white' />
@@ -120,18 +121,18 @@ export default function Home() {
                 </CardBody>
                 <Divider />
                 <CardBody>
-                  <div className='text-md font-semibold'>{event.name}</div>
+                  <div className='text-md font-semibold'>{event.Name}</div>
                   <div
                     className={
-                      event.price
+                      event.Price
                         ? 'text-3xl font-bold rounded-xl whitespace-nowrap mr-2'
                         : 'text-lg font-bold text-gray-500'
                     }
                   >
-                    {event.price ? `${event.price} zł` : 'Brak ceny'}
+                    {event.Price ? `${event.Price} zł` : 'Brak ceny'}
                   </div>
                   <div className='text-xs text-white text-opacity-35'>
-                    {event.description ? event.description.substring(0, 200) : ''}
+                    {event.Description ? event.Description.substring(0, 200) : ''}
                   </div>
                   <div className='flex flex-row justify-end w-full items-center mt-2 gap-2'>
                     <Button isIconOnly color='secondary'>
@@ -140,7 +141,7 @@ export default function Home() {
                     <Button
                       color='primary'
                       isDisabled={cartStore.rawCart.find((item: ICartItemCookie) => item.Id === event.Id) ? true : false}
-                      onClick={() => addToCart(event.id, true)}
+                      onClick={() => addToCart(event.Id, true)}
                     >
                       <span>
                         {cartStore.rawCart.find((item: ICartItemCookie) => item.Id === event.Id) ? 'Dodano do koszyka' : 'Dodaj do koszyka'}
@@ -153,12 +154,12 @@ export default function Home() {
               <Card
                 className='hidden md:flex flex-row items-stretch h-[13rem] w-full'
                 isPressable
-                onPress={() => router.push(`oferta/wydarzenie/${event.id}`)}
+                onPress={() => router.push(`oferta/wydarzenie/${event.Id}`)}
               >
                 <CardBody className='min-w-[13.25rem] w-[12rem] overflow-hidden'>
-                  {event.images && event.images[0] ? (
+                  {event.Images && event.Images[0] ? (
                     <div className='w-[11.5rem] h-[11.5rem] overflow-hidden flex flex-row items-center justify-center'>
-                      <Image src={event.images[0]} alt={event.name} className='max-h-[11.5rem] max-w-[11.5rem]' />
+                      <Image src={event.Images[0]} alt={event.Name} className='max-h-[11.5rem] max-w-[11.5rem]' />
                     </div>
                   ) : (
                     <div className='bg-primary h-[11.5rem] w-[11.5rem] bg-opacity-25 flex items-center justify-center rounded-xl'>
@@ -168,24 +169,23 @@ export default function Home() {
                 </CardBody>
                 <Divider orientation='vertical' />
                 <CardBody className='relative'>
-                  <span className='text-2xl font-semibold'>{event.name}</span>
+                  <span className='text-2xl font-semibold'>{event.Name}</span>
                   <span className='text-3xl font-bold text-white bg-opacity-75 p-2 bg-primary rounded-lg absolute right-3'>
-                    {event.price ? `${event.price} zł` : 'Brak ceny'}
+                    {event.Price ? `${event.Price} zł` : 'Brak ceny'}
                   </span>
-                  {event.tags ? (
+                  {event.Tags ? (
                     <div className='flex-row mt-2 max-w-1/2'>
-                      {event.tags.map((tag: any) => (
-                        <Chip key={tag.id} color='primary'>
-                          {tag.name}
+                      {event.Tags.map((tag: any) => (
+                        <Chip key={tag.Id} color='primary'>
+                          {tag.Name}
                         </Chip>
                       ))}
                     </div>
                   ) : null}
                   <div className='text-xs text-white text-opacity-35 w-3/4'>
-                    {event.id}
-                    {event.description ? event.description.substring(0, 200) : ''}
+                    {event.Description ? event.Description.substring(0, 200) : ''}
                   </div>
-
+          
                   <div className='flex flex-col absolute right-3 bottom-3 gap-2'>
                     <Button isIconOnly color='secondary' radius='sm'>
                       <MaterialSymbol icon='share' size={22} />
@@ -195,7 +195,7 @@ export default function Home() {
                       color='primary'
                       radius='sm'
                       isDisabled={cartStore.rawCart.find((item) => item.Id === event.Id) ? true : false}
-                      onClick={() => addToCart(event.id, true)}
+                      onClick={() => addToCart(event.Id, true)}
                     >
                       <MaterialSymbol
                         icon={

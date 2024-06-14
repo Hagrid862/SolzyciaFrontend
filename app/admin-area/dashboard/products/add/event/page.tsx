@@ -2,131 +2,146 @@
 
 import {
   CalendarDate,
-  Card, CardBody, Chip, DatePicker, Divider, Image,
-  Input, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Select, SelectItem, Spacer, Spinner, TimeInput,
-} from "@nextui-org/react";
-import React, {useEffect, useRef, useState} from "react";
-import {MaterialSymbol} from "react-material-symbols";
-import {parseAbsoluteToLocal, parseDate, parseTime, Time, ZonedDateTime} from "@internationalized/date";
-import {Button} from "@nextui-org/button";
-import {set} from "zod";
-import {Textarea} from "@nextui-org/input";
-import {useAdminStore} from "@/store/adminStore";
-import {Simulate} from "react-dom/test-utils";
-import error = Simulate.error;
+  Card,
+  CardBody,
+  Chip,
+  DatePicker,
+  Divider,
+  Image,
+  Input,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Select,
+  SelectItem,
+  Spacer,
+  Spinner,
+  TimeInput
+} from '@nextui-org/react'
+import React, { useEffect, useRef, useState } from 'react'
+import { MaterialSymbol } from 'react-material-symbols'
+import { parseAbsoluteToLocal, parseDate, parseTime, Time, ZonedDateTime } from '@internationalized/date'
+import { Button } from '@nextui-org/button'
+import { set } from 'zod'
+import { Textarea } from '@nextui-org/input'
+import { useAdminStore } from '@/store/adminStore'
+import { Simulate } from 'react-dom/test-utils'
+import error = Simulate.error
 
 export default function AddEventPage() {
-  const [photos, setPhotos] = useState<File[]>([]);
-  const [name, setName] = useState<string>('');
-  const [duration, setDuration] = useState<number>(0);
-  const [customDuration, setCustomDuration] = useState<number>(0);
-  const [dates, setDates] = useState<{date: Date, seats: number}[]>([]);
-  const [price, setPrice] = useState<number>(0);
-  const [description, setDescription] = useState<string>('');
-  const [category, setCategory] = useState<string>('');
-  const [tags, setTags] = useState<string[]>([]);
-  const [tag, setTag] = useState<string>('');
+  const [photos, setPhotos] = useState<File[]>([])
+  const [name, setName] = useState<string>('')
+  const [duration, setDuration] = useState<number>(0)
+  const [customDuration, setCustomDuration] = useState<number>(0)
+  const [dates, setDates] = useState<{ date: Date; seats: number }[]>([])
+  const [price, setPrice] = useState<number>(0)
+  const [description, setDescription] = useState<string>('')
+  const [category, setCategory] = useState<string>('')
+  const [tags, setTags] = useState<string[]>([])
+  const [tag, setTag] = useState<string>('')
 
-  const [editDate, setEditDate] = useState<number | null>(null);
-  const [selectedDate, setSelectedDate] = useState<{date: Date, seats: number} | null>(null);
+  const [editDate, setEditDate] = useState<number | null>(null)
+  const [selectedDate, setSelectedDate] = useState<{ date: Date; seats: number } | null>(null)
 
-  const [status, setStatus] = useState<string>('');
-  const [err, setErr] = useState<number>(0);
+  const [status, setStatus] = useState<string>('')
+  const [err, setErr] = useState<number>(0)
 
-  const fileInputs = useRef<(HTMLInputElement | null)[]>([]);
+  const fileInputs = useRef<(HTMLInputElement | null)[]>([])
 
-  const fetchCategories = useAdminStore(state => state.fetchCategories);
-  const categories = useAdminStore(state => state.categories);
-  const addEvent = useAdminStore(state => state.addEvent);
+  const fetchCategories = useAdminStore((state) => state.fetchCategories)
+  const categories = useAdminStore((state) => state.categories)
+  const addEvent = useAdminStore((state) => state.addEvent)
 
   useEffect(() => {
-    fetchCategories();
-  }, []);
+    fetchCategories()
+  }, [])
 
   function handleTagFieldKeyPress(e: any) {
     if (e.key == 'Enter') {
-      var tag = e.target.value;
+      var tag = e.target.value
       if (tag.length > 0) {
         if (tags.includes(tag)) {
-          return;
+          return
         }
-        setTags([...tags, tag]);
-        setTag('');
+        setTags([...tags, tag])
+        setTag('')
       }
     }
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>, index: number) {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (file) {
-      const newPhotos = [...photos];
-      newPhotos[index] = file;
-      setPhotos(newPhotos);
+      const newPhotos = [...photos]
+      newPhotos[index] = file
+      setPhotos(newPhotos)
     }
   }
 
   function handleCardClick(index: number) {
-    fileInputs.current[index]?.click();
+    fileInputs.current[index]?.click()
   }
 
   const toCalendarDate = (date: Date) => {
-    return parseDate(date.toISOString().split('T')[0]);
+    return parseDate(date.toISOString().split('T')[0])
   }
 
   const handleAddDate = () => {
-    const date = new Date();
+    const date = new Date()
 
-    date.setMilliseconds(0);
-    date.setSeconds(0);
+    date.setMilliseconds(0)
+    date.setSeconds(0)
 
-    setDates([...dates, {date, seats: 1}])
+    setDates([...dates, { date, seats: 1 }])
   }
 
   const handleChangeDate = (date: CalendarDate) => {
-    const dateObj = new Date(date.toString());
+    const dateObj = new Date(date.toString())
 
     if (dateObj < new Date()) {
-      setSelectedDate({seats: selectedDate!.seats, date: new Date()});
+      setSelectedDate({ seats: selectedDate!.seats, date: new Date() })
     }
 
-    setSelectedDate({seats: selectedDate!.seats, date: dateObj});
+    setSelectedDate({ seats: selectedDate!.seats, date: dateObj })
   }
 
   const handleTimeChange = (time: Time) => {
-    const date = selectedDate!.date;
+    const date = selectedDate!.date
 
-    date.setHours(time.hour);
-    date.setMinutes(time.minute);
+    date.setHours(time.hour)
+    date.setMinutes(time.minute)
 
-    setSelectedDate({seats: selectedDate!.seats, date});
+    setSelectedDate({ seats: selectedDate!.seats, date })
   }
 
   const handleSeatsChange = (value: string) => {
     console.log(value)
     if (value == '') {
-      setSelectedDate({seats: 1, date: selectedDate!.date});
-      return;
+      setSelectedDate({ seats: 1, date: selectedDate!.date })
+      return
     }
 
     if (Number.isNaN(Number.parseInt(value))) {
-      return;
+      return
     }
 
-    const seats = Number.parseInt(value);
+    const seats = Number.parseInt(value)
 
     if (seats < 0) {
-      setSelectedDate({seats: 1, date: selectedDate!.date});
+      setSelectedDate({ seats: 1, date: selectedDate!.date })
     }
 
-    setSelectedDate({seats: seats, date: selectedDate!.date});
+    setSelectedDate({ seats: seats, date: selectedDate!.date })
   }
 
   const handleDateSave = () => {
     if (selectedDate) {
-      const newDates = dates;
-      newDates[editDate!] = selectedDate;
-      setDates(newDates);
-      setEditDate(null);
+      const newDates = dates
+      newDates[editDate!] = selectedDate
+      setDates(newDates)
+      setEditDate(null)
     }
   }
 
@@ -135,7 +150,7 @@ export default function AddEventPage() {
 
     photos.map((val, index) => {
       if (val) {
-        images.push(val);
+        images.push(val)
       }
     })
 
@@ -147,22 +162,22 @@ export default function AddEventPage() {
 
     if (name === '') {
       setErr(1)
-      return;
+      return
     } else if (duration === 0) {
       setErr(2)
-      return;
+      return
     } else if (description === '') {
       setErr(3)
-      return;
+      return
     } else if (description.length < 50) {
       setErr(6)
-      return;
+      return
     } else if (dates.length === 0) {
       setErr(4)
-      return;
+      return
     } else if (price === 0) {
       setErr(5)
-      return;
+      return
     }
 
     addEvent(name, price, description, duration === -1 ? customDuration : duration, dates, category, tags, images)
@@ -176,12 +191,12 @@ export default function AddEventPage() {
         {[...Array(6)].map((_, index) => (
           <React.Fragment key={index}>
             <input
-              type="file"
+              type='file'
               ref={(el) => {
-                fileInputs.current[index] = el;
+                fileInputs.current[index] = el
               }}
-              style={{display: 'none'}}
-              accept="image/*"
+              style={{ display: 'none' }}
+              accept='image/*'
               onChange={(e) => handleFileChange(e, index)}
             />
             <Card
@@ -189,136 +204,218 @@ export default function AddEventPage() {
               onClick={() => handleCardClick(index)}
               isPressable
             >
-              {
-                photos[index] ? (
-                  <div className='w-full h-full flex flex-col items-center justify-center'>
-                    <Image src={photos[index] ? URL.createObjectURL(photos[index]) : ''} alt={'obraz ' + index}/>
-                  </div>
-                ) : (
-                  <CardBody className='flex items-center justify-center'>
-                    <MaterialSymbol icon={'add_a_photo'} size={40} color='#006FEE'/>
-                  </CardBody>
-                )
-              }
+              {photos[index] ? (
+                <div className='w-full h-full flex flex-col items-center justify-center'>
+                  <Image src={photos[index] ? URL.createObjectURL(photos[index]) : ''} alt={'obraz ' + index} />
+                </div>
+              ) : (
+                <CardBody className='flex items-center justify-center'>
+                  <MaterialSymbol icon={'add_a_photo'} size={40} color='#006FEE' />
+                </CardBody>
+              )}
             </Card>
           </React.Fragment>
         ))}
       </div>
-      <Input label='Nazwa wydażenia' value={name} onChange={(e) => setName(e.target.value)} isInvalid={err === 1} errorMessage={err === 1 ? 'Nazwa wydarzenia jest wymagana' : ''}/>
-      <Select label='Czas trwania' onChange={(e) => setDuration(Number.parseInt(e.target.value))} isInvalid={err === 2 } errorMessage={err == 2 ? 'Musisz wybrać czas trwania Wydarzenia lub wprowadzić własny' : ''}>
-        <SelectItem key={15} value={15} textValue={'15'}>15 minut</SelectItem>
-        <SelectItem key={30} value={30} textValue={'30'}>30 minut</SelectItem>
-        <SelectItem key={45} value={45} textValue={'45'}>45 minut</SelectItem>
-        <SelectItem key={60} value={60} textValue={'60'}>1 godzina</SelectItem>
-        <SelectItem key={90} value={90} textValue={'90'}>1,5 godziny</SelectItem>
-        <SelectItem key={120} value={120} textValue={'120'}>2 godziny</SelectItem>
-        <SelectItem key={180} value={180} textValue={'180'}>3 godziny</SelectItem>
-        <SelectItem key={240} value={240} textValue={'240'}>4 godziny</SelectItem>
-        <SelectItem key={300} value={300} textValue={'300'}>5 godzin</SelectItem>
-        <SelectItem key={360} value={360} textValue={'360'}>6 godzin</SelectItem>
-        <SelectItem key={420} value={420} textValue={'420'}>7 godzin</SelectItem>
-        <SelectItem key={480} value={480} textValue={'480'}>8 godzin</SelectItem>
-        <SelectItem key={600} value={600} textValue={'600'}>10 godzin</SelectItem>
-        <SelectItem key={720} value={720} textValue={'720'}>12 godzin</SelectItem>
-        <SelectItem key={960} value={960} textValue={'960'}>16 godzin</SelectItem>
-        <SelectItem key={1440} value={1440} textValue={'1440'}>1 doba</SelectItem>
-        <SelectItem key={2880} value={2880} textValue={'2880'}>2 doby</SelectItem>
-        <SelectItem key={4320} value={4320} textValue={'4320'}>3 doby</SelectItem>
-        <SelectItem key={5760} value={5760} textValue={'5760'}>4 doby</SelectItem>
-        <SelectItem key={-1} value={-1} textValue={'-1'}>Własne</SelectItem>
+      <Input
+        label='Nazwa wydażenia'
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        isInvalid={err === 1}
+        errorMessage={err === 1 ? 'Nazwa wydarzenia jest wymagana' : ''}
+      />
+      <Select
+        label='Czas trwania'
+        onChange={(e) => setDuration(Number.parseInt(e.target.value))}
+        isInvalid={err === 2}
+        errorMessage={err == 2 ? 'Musisz wybrać czas trwania Wydarzenia lub wprowadzić własny' : ''}
+      >
+        <SelectItem key={15} value={15} textValue={'15'}>
+          15 minut
+        </SelectItem>
+        <SelectItem key={30} value={30} textValue={'30'}>
+          30 minut
+        </SelectItem>
+        <SelectItem key={45} value={45} textValue={'45'}>
+          45 minut
+        </SelectItem>
+        <SelectItem key={60} value={60} textValue={'60'}>
+          1 godzina
+        </SelectItem>
+        <SelectItem key={90} value={90} textValue={'90'}>
+          1,5 godziny
+        </SelectItem>
+        <SelectItem key={120} value={120} textValue={'120'}>
+          2 godziny
+        </SelectItem>
+        <SelectItem key={180} value={180} textValue={'180'}>
+          3 godziny
+        </SelectItem>
+        <SelectItem key={240} value={240} textValue={'240'}>
+          4 godziny
+        </SelectItem>
+        <SelectItem key={300} value={300} textValue={'300'}>
+          5 godzin
+        </SelectItem>
+        <SelectItem key={360} value={360} textValue={'360'}>
+          6 godzin
+        </SelectItem>
+        <SelectItem key={420} value={420} textValue={'420'}>
+          7 godzin
+        </SelectItem>
+        <SelectItem key={480} value={480} textValue={'480'}>
+          8 godzin
+        </SelectItem>
+        <SelectItem key={600} value={600} textValue={'600'}>
+          10 godzin
+        </SelectItem>
+        <SelectItem key={720} value={720} textValue={'720'}>
+          12 godzin
+        </SelectItem>
+        <SelectItem key={960} value={960} textValue={'960'}>
+          16 godzin
+        </SelectItem>
+        <SelectItem key={1440} value={1440} textValue={'1440'}>
+          1 doba
+        </SelectItem>
+        <SelectItem key={2880} value={2880} textValue={'2880'}>
+          2 doby
+        </SelectItem>
+        <SelectItem key={4320} value={4320} textValue={'4320'}>
+          3 doby
+        </SelectItem>
+        <SelectItem key={5760} value={5760} textValue={'5760'}>
+          4 doby
+        </SelectItem>
+        <SelectItem key={-1} value={-1} textValue={'-1'}>
+          Własne
+        </SelectItem>
       </Select>
-      {
-        duration === -1 && (
-          <Input label='Własny czas trwania (w minutach)' type='number' min={5} max={20160} isInvalid={err == 2}
-                 onChange={(e) => setCustomDuration(Number.parseInt(e.target.value))}/>
-        )
-      }
-      <Textarea label='Opis wydarzenia' value={description} onChange={(e) => setDescription(e.target.value)} isInvalid={err == 6 || err == 3} errorMessage={err == 6 ? 'Opis musi posiadać minimum 50 znaków' : err == 3 ? 'opis jest wymagany' : ''}/>
+      {duration === -1 && (
+        <Input
+          label='Własny czas trwania (w minutach)'
+          type='number'
+          min={5}
+          max={20160}
+          isInvalid={err == 2}
+          onChange={(e) => setCustomDuration(Number.parseInt(e.target.value))}
+        />
+      )}
+      <Textarea
+        label='Opis wydarzenia'
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
+        isInvalid={err == 6 || err == 3}
+        errorMessage={err == 6 ? 'Opis musi posiadać minimum 50 znaków' : err == 3 ? 'opis jest wymagany' : ''}
+      />
       <Card shadow='none'>
         <CardBody className='bg-white bg-opacity-5'>
           <Card className='flex flex-row' radius='sm' isPressable onPress={handleAddDate}>
             <CardBody className='bg-primary bg-opacity-15 w-16'>
-              <MaterialSymbol icon={'calendar_add_on'} size={40} color='#006FEE'/>
+              <MaterialSymbol icon={'calendar_add_on'} size={40} color='#006FEE' />
             </CardBody>
-            <Divider orientation='vertical' className='h-16'/>
+            <Divider orientation='vertical' className='h-16' />
             <CardBody className='flex justify-center h-16'>
               <div className='text-xl font-semibold'>Dodaj datę wydarzenia</div>
             </CardBody>
           </Card>
         </CardBody>
-        <Divider/>
+        <Divider />
         <CardBody className='bg-white bg-opacity-5'>
-          {
-            dates.length == 0 ? (
-              <div className={err == 4 ? 'text-red-600' : ''}>Wymagana jest minimum jedna data kiedy wydarzenie sie odbywa.</div>
-            ) : (
-              <div className='flex flex-col gap-2 max-h-[250px]'>
-                {
-                  dates.map((date, index) => (
-                    <Card key={index} isPressable isHoverable onPress={() => {
-                      setEditDate(index);
-                      setSelectedDate(dates[index])
-                    }} radius='sm' className='min-h-[72px]'>
-                      <CardBody>
-                        <div className='flex flex-row justify-between'>
-                          <div className='text-small'>
-                            <div className='font-semibold'>Data:</div>
-                            {date.date.toLocaleDateString()}
-                          </div>
-                          <div className='text-sm'>
-                            <div className='font-semibold'>Godzina:</div>
-                            {date.date.toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'})}
-                          </div>
-                          <div>
-                            <div className='font-semibold'>Miejsca:</div>
-                            {date.seats}
-                          </div>
-                        </div>
-                      </CardBody>
-                    </Card>
-                  ))
-                }
-              </div>
-            )
-          }
+          {dates.length == 0 ? (
+            <div className={err == 4 ? 'text-red-600' : ''}>
+              Wymagana jest minimum jedna data kiedy wydarzenie sie odbywa.
+            </div>
+          ) : (
+            <div className='flex flex-col gap-2 max-h-[250px]'>
+              {dates.map((date, index) => (
+                <Card
+                  key={index}
+                  isPressable
+                  isHoverable
+                  onPress={() => {
+                    setEditDate(index)
+                    setSelectedDate(dates[index])
+                  }}
+                  radius='sm'
+                  className='min-h-[72px]'
+                >
+                  <CardBody>
+                    <div className='flex flex-row justify-between'>
+                      <div className='text-small'>
+                        <div className='font-semibold'>Data:</div>
+                        {date.date.toLocaleDateString()}
+                      </div>
+                      <div className='text-sm'>
+                        <div className='font-semibold'>Godzina:</div>
+                        {date.date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      </div>
+                      <div>
+                        <div className='font-semibold'>Miejsca:</div>
+                        {date.seats}
+                      </div>
+                    </div>
+                  </CardBody>
+                </Card>
+              ))}
+            </div>
+          )}
         </CardBody>
       </Card>
-      <Input label='Cena' type='number' onChange={(e) => setPrice(Number.parseFloat(e.target.value))} isInvalid={err == 5} errorMessage={err == 5 ? 'Cena jest wymagana' : ''}/>
+      <Input
+        label='Cena'
+        type='number'
+        onChange={(e) => setPrice(Number.parseFloat(e.target.value))}
+        isInvalid={err == 5}
+        errorMessage={err == 5 ? 'Cena jest wymagana' : ''}
+      />
       <Select label='kategoria' onChange={(e) => setCategory(e.target.value)}>
-        {
-          categories.map((category, index) => (
-            <SelectItem key={index} value={category.id} textValue={category.id}
-                        startContent={<MaterialSymbol icon={category.icon} size={20} color={'#006FEE'}/>}>
-              {category.name}
-            </SelectItem>
-          ))
-        }
+        {categories.map((category, index) => (
+          <SelectItem
+            key={index}
+            value={category.id}
+            textValue={category.id}
+            startContent={<MaterialSymbol icon={category.icon} size={20} color={'#006FEE'} />}
+          >
+            {category.name}
+          </SelectItem>
+        ))}
       </Select>
-      <Input label='Tagi'
-             onKeyDown={(e) => handleTagFieldKeyPress(e)}
-             value={tag} onChange={(e) => setTag(e.target.value)}
-             description='Tagi pomagają kupującym znaleźć ten produkt, którego szukają. wpisz tu cechy produktu, np. "telefon, iPhone, apple"'/>
+      <Input
+        label='Tagi'
+        onKeyDown={(e) => handleTagFieldKeyPress(e)}
+        value={tag}
+        onChange={(e) => setTag(e.target.value)}
+        description='Tagi pomagają kupującym znaleźć ten produkt, którego szukają. wpisz tu cechy produktu, np. "telefon, iPhone, apple"'
+      />
       <div className='w-full p-2 bg-white text-sm rounded-xl bg-opacity-0'>
-        {tags.length > 0 ? tags.map((tagVal, index) => (
-          <Chip key={index} className='m-1' onClose={() => setTags(tags.filter((tag, i) => i !== index))}>
-            {tagVal}
-          </Chip>
-        )) : 'Brak tagów.'}
+        {tags.length > 0
+          ? tags.map((tagVal, index) => (
+              <Chip key={index} className='m-1' onClose={() => setTags(tags.filter((tag, i) => i !== index))}>
+                {tagVal}
+              </Chip>
+            ))
+          : 'Brak tagów.'}
       </div>
-      <Button color='primary' onClick={() => handleSubmit()}>Dodaj wydarzenie</Button>
+      <Button color='primary' onClick={() => handleSubmit()}>
+        Dodaj wydarzenie
+      </Button>
 
-      
-      <Modal hideCloseButton isDismissable={false} isOpen={editDate !== null} onClose={() => setEditDate(null)}
-             backdrop='blur'>
+      <Modal
+        hideCloseButton
+        isDismissable={false}
+        isOpen={editDate !== null}
+        onClose={() => setEditDate(null)}
+        backdrop='blur'
+      >
         <ModalContent>
-          <ModalHeader>
-            Edytuj datę wydarzenia
-          </ModalHeader>
-          <Divider/>
+          <ModalHeader>Edytuj datę wydarzenia</ModalHeader>
+          <Divider />
           <ModalBody>
             <div>
               <DatePicker
-                label='Data' labelPlacement='outside'
+                label='Data'
+                labelPlacement='outside'
                 value={selectedDate ? toCalendarDate(selectedDate!.date) : null}
                 onChange={handleChangeDate}
                 minValue={toCalendarDate(new Date())}
@@ -327,11 +424,21 @@ export default function AddEventPage() {
             </div>
             <div>
               <TimeInput
-                label='Godzina' labelPlacement='outside' hideTimeZone hourCycle={24} onChange={handleTimeChange}
-                value={selectedDate ? parseTime(selectedDate!.date.toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit'
-                })) : undefined}
+                label='Godzina'
+                labelPlacement='outside'
+                hideTimeZone
+                hourCycle={24}
+                onChange={handleTimeChange}
+                value={
+                  selectedDate
+                    ? parseTime(
+                        selectedDate!.date.toLocaleTimeString([], {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })
+                      )
+                    : undefined
+                }
               />
               <div className='text-xs text-[#777] mt-1'>Godzina kiedy wydarzenie sie rozpocznie.</div>
             </div>
@@ -339,74 +446,89 @@ export default function AddEventPage() {
               <div className='flex flex-col gap-2'>
                 <span className='text-sm'>Ilość miejsc</span>
                 <div className='flex flex-row justify-start align-bottom gap-2'>
-                  <Button isIconOnly onClick={() => selectedDate!.seats <= 1 ? null : setSelectedDate({
-                    date: selectedDate!.date,
-                    seats: selectedDate!.seats - 1
-                  })}>
-                    <MaterialSymbol icon='remove' size={24} color='#FFF'/>
+                  <Button
+                    isIconOnly
+                    onClick={() =>
+                      selectedDate!.seats <= 1
+                        ? null
+                        : setSelectedDate({
+                            date: selectedDate!.date,
+                            seats: selectedDate!.seats - 1
+                          })
+                    }
+                  >
+                    <MaterialSymbol icon='remove' size={24} color='#FFF' />
                   </Button>
-                  <Input type='text' value={selectedDate ? selectedDate!.seats.toString() : undefined}
-                         onChange={(e) => handleSeatsChange(e.target.value)}/>
-                  <Button isIconOnly
-                          onClick={() => setSelectedDate({seats: selectedDate!.seats + 1, date: selectedDate!.date})}>
-                    <MaterialSymbol icon='add' size={24} color='#FFF'/>
+                  <Input
+                    type='text'
+                    value={selectedDate ? selectedDate!.seats.toString() : undefined}
+                    onChange={(e) => handleSeatsChange(e.target.value)}
+                  />
+                  <Button
+                    isIconOnly
+                    onClick={() => setSelectedDate({ seats: selectedDate!.seats + 1, date: selectedDate!.date })}
+                  >
+                    <MaterialSymbol icon='add' size={24} color='#FFF' />
                   </Button>
                 </div>
               </div>
               <div className='text-xs text-[#777] mt-1'>Ilość osób które będą mogły kupić to wydarzenie.</div>
             </div>
           </ModalBody>
-          <Divider/>
+          <Divider />
           <ModalBody className='flex flex-row justify-between'>
-            <Button
-              color='danger' className='w-full' variant='flat'
-              onClick={() => setEditDate(null)}>
+            <Button color='danger' className='w-full' variant='flat' onClick={() => setEditDate(null)}>
               Anuluj
             </Button>
-            <Spacer/>
-            <Button onClick={() => handleDateSave()}
-                    color='success' className='w-full' variant='flat'>
+            <Spacer />
+            <Button onClick={() => handleDateSave()} color='success' className='w-full' variant='flat'>
               Zapisz
             </Button>
           </ModalBody>
         </ModalContent>
       </Modal>
-      <Modal isOpen={status !== ''} backdrop='blur' onClose={() => setStatus('')} isDismissable={false} hideCloseButton={false}>
+      <Modal
+        isOpen={status !== ''}
+        backdrop='blur'
+        onClose={() => setStatus('')}
+        isDismissable={false}
+        hideCloseButton={false}
+      >
         <ModalContent>
-          {
-            status === 'loading' ? (
-              <ModalBody>
-                <div className='flex flex-col items-center justify-center gap-4 py-6'>
-                  <Spinner size='lg'/>
-                  <span className='text-xl font-semibold'>Dodawanie przedmiotu...</span>
-                </div>
-              </ModalBody>
-            ) : null
-          }
-          {
-            status === 'success' ? (
-              <ModalBody>
-                <div className='flex flex-col items-center justify-center gap-4'>
-                  <MaterialSymbol icon='done' size={64} color='#006FEE'/>
-                  <span className='text-xl font-semibold'>Przedmiot dodany pomyślnie!</span>
-                  <span className='text-sm'>Twój przedmiot został dodany do bazy danych i jest już dostępny na stronie.</span>
-                  <Button color='success' onClick={() => setStatus('')}>Zamknij</Button>
-                </div>
-              </ModalBody>
-            ) : null
-          }
-          {
-            status === 'error' ? (
-              <ModalBody>
-                <div className='flex flex-col items-center justify-center gap-4'>
-                  <MaterialSymbol icon='error' size={64} color='#FF0000'/>
-                  <span className='text-xl font-semibold'>Wystąpił błąd podczas dodawania przedmiotu!</span>
-                  <span className='text-sm'>Spróbuj ponownie później.</span>
-                  <Button color='danger' onClick={() => setStatus('')}>Zamknij</Button>
-                </div>
-              </ModalBody>
-            ) : null
-          }
+          {status === 'loading' ? (
+            <ModalBody>
+              <div className='flex flex-col items-center justify-center gap-4 py-6'>
+                <Spinner size='lg' />
+                <span className='text-xl font-semibold'>Dodawanie przedmiotu...</span>
+              </div>
+            </ModalBody>
+          ) : null}
+          {status === 'success' ? (
+            <ModalBody>
+              <div className='flex flex-col items-center justify-center gap-4'>
+                <MaterialSymbol icon='done' size={64} color='#006FEE' />
+                <span className='text-xl font-semibold'>Przedmiot dodany pomyślnie!</span>
+                <span className='text-sm'>
+                  Twój przedmiot został dodany do bazy danych i jest już dostępny na stronie.
+                </span>
+                <Button color='success' onClick={() => setStatus('')}>
+                  Zamknij
+                </Button>
+              </div>
+            </ModalBody>
+          ) : null}
+          {status === 'error' ? (
+            <ModalBody>
+              <div className='flex flex-col items-center justify-center gap-4'>
+                <MaterialSymbol icon='error' size={64} color='#FF0000' />
+                <span className='text-xl font-semibold'>Wystąpił błąd podczas dodawania przedmiotu!</span>
+                <span className='text-sm'>Spróbuj ponownie później.</span>
+                <Button color='danger' onClick={() => setStatus('')}>
+                  Zamknij
+                </Button>
+              </div>
+            </ModalBody>
+          ) : null}
         </ModalContent>
       </Modal>
     </div>

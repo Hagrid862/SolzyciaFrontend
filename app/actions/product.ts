@@ -70,11 +70,11 @@ export async function fetchProductById(id: string): Promise<{ isSuccess: boolean
         'Content-Type': 'application/json'
       }
     })
-    console.log('response: ' + (await response.text()))
     if (response.status === 200) {
       const data = await response.json()
-      if (data.productDto) {
-        const productJson = JSON.stringify(data.productDto)
+      console.log(data)
+      if (data.product) {
+        const productJson = JSON.stringify(data.product)
         return { isSuccess: true, productJson: productJson }
       } else {
         return { isSuccess: false, productJson: '' }

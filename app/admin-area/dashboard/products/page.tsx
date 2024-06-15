@@ -71,7 +71,8 @@ export default function ProductsPage() {
                     key={product.Id}
                     className='w-full sm:w-[calc(50%-0.35rem)] md:w-[calc(100%/3-0.35rem)]  min-w-[150px] md:max-w-[200px] bg-white bg-opacity-5 overflow-x-hidden'
                     isPressable
-                    onPress={() => router.push(`products/view?id=${product.Id}&type=product`)}                >
+                    onPress={() => router.push(`products/view?id=${product.Id}&type=product`)}
+                  >
                     <CardBody>
                       {product.Images && product.Images.length > 0 ? (
                         <Image

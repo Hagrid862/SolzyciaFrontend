@@ -67,7 +67,6 @@ export async function getCart(): Promise<ICartItem[]> {
     })
   )
 
-
   return cartItems
 }
 

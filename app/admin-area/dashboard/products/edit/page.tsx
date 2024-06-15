@@ -1,12 +1,25 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import Head from 'next/head'
 import { useSearchParams } from 'next/navigation'
-import { Card, CardBody, Divider, Spinner, Image, Button, Tooltip } from '@nextui-org/react'
+import {
+  Card,
+  CardBody,
+  Divider,
+  Spinner,
+  Image,
+  Button,
+  Tooltip,
+  Input,
+  Textarea,
+  Select,
+  SelectItem
+} from '@nextui-org/react'
 import { useOfferStore } from '@/store/offerStore'
 import { Product } from '@/models/Product'
 import { MaterialSymbol } from 'react-material-symbols'
+import { Category } from '@/models/Category'
+import { Key } from 'react'
 
 export default function ViewProductPage() {
   const searchParams = useSearchParams()
@@ -15,6 +28,13 @@ export default function ViewProductPage() {
 
   const [status, setStatus] = useState<'loading' | 'error' | 'not-found' | 'success'>('loading')
   const [product, setProduct] = useState<Product | null>(null)
+  const [categories, setCategories] = useState<Category[]>([])
+
+  const [newName, setNewName] = useState<string | null>(null)
+  const [newDescription, setNewDescription] = useState<string>('')
+  const [newPrice, setNewPrice] = useState<number | null>(null)
+  const [newCategory, setNewCategory] = useState<Category | null>(null)
+  const [newImages, setNewImages] = useState<File[] | null>(null)
 
   const id = searchParams.get('id')
   const type = searchParams.get('type')
@@ -24,6 +44,7 @@ export default function ViewProductPage() {
       if (type !== 'product' || ('event' && !id)) {
         return
       }
+      await offerStore.fetchCategories()
       if (type === 'product') {
         const response = await offerStore.fetchProductById(id!.toString())
         if (response.isSuccess && response.product) {
@@ -37,6 +58,19 @@ export default function ViewProductPage() {
 
     fetchProduct()
   }, [id, type])
+
+  useEffect(() => {
+    let lcategories = offerStore.categories as Category[]
+    console.log(lcategories)
+    lcategories.push({
+      Id: '1',
+      Name: 'Brak kategorii',
+      Icon: 'category',
+      Description: 'Brak kategorii',
+      CreatedAt: new Date()
+    } as Category)
+    setCategories(lcategories)
+  }, [offerStore.categories])
 
   return (
     <>
@@ -67,8 +101,23 @@ export default function ViewProductPage() {
                 <Divider />
                 <CardBody className='flex flex-row gap-2 overflow-x-auto'>
                   {product.Images.map((image, index) => (
-                    <Image key={index} src={image} alt={product.Name} radius='sm' className='aspect-square max-w-16' />
+                    <div key={index} className='relative'>
+                      <div className='absolute -left-2 -top-2 bg-white aspect-square z-50 w-6 h-6 flex items-center justify-center rounded-full bg-opacity-85 backdrop-blur-md'>
+                        <MaterialSymbol icon='close' size={20} className='text-danger' />
+                      </div>
+                      <Image src={image} alt={product.Name} radius='sm' className='aspect-square max-w-16' />
+                    </div>
                   ))}
+                  {product.Images.length < 6 && (
+                    <Card
+                      isPressable
+                      shadow='none'
+                      className='w-16 aspect-square bg-primary-600 flex items-center justify-center bg-opacity-25'
+                      radius='sm'
+                    >
+                      <MaterialSymbol icon='add' size={48} className='text-primary-500' />
+                    </Card>
+                  )}
                 </CardBody>
               </Card>
             ) : (
@@ -80,7 +129,7 @@ export default function ViewProductPage() {
             )}
             <div className='gap-2 flex flex-col'>
               <div className='flex flex-row justify-between items-center'>
-                <div className='text-xl font-medium'>{product?.Name}</div>
+                <Input label='Nazwa produktu' value={product?.Name} />
               </div>
               <Divider />
               <div className='flex flex-row justify-between'>
@@ -100,11 +149,17 @@ export default function ViewProductPage() {
                 </div>
               </div>
               <Divider />
-              <div className='text-sm text-gray-500'>{product?.Description}</div>
+              <Textarea label='Opis' value={product?.Description} />
             </div>
             <Divider />
             <div className='flex flex-col gap-2'>
-              <div className='text-lg font-medium'>Kategoria: {product?.Category.Name ?? 'Brak'}</div>
+              <Select label='Kategoria' items={categories} selectedKeys={[product?.Category.Id] as Iterable<Key>}>
+                {(category: Category) => (
+                  <SelectItem key={category.Id} value={category.Id}>
+                    {category.Name}
+                  </SelectItem>
+                )}
+              </Select>
               <div className='text-lg font-medium'>Opinie: 4.5 / 5</div>
               <div>
                 <div className='flex flex-row gap-2'></div>

@@ -40,7 +40,7 @@ export default function ViewProductPage() {
 
   useEffect(() => {
     async function fetchProduct() {
-      if (type !== 'product' && type !== 'event' || (type === 'event' && !id)) {
+      if ((type !== 'product' && type !== 'event') || (type === 'event' && !id)) {
         return
       }
       await offerStore.fetchCategories()
@@ -74,13 +74,16 @@ export default function ViewProductPage() {
   }, [id, type])
 
   useEffect(() => {
-    let lcategories = [...offerStore.categories as Category[], {
-      Id: '1',
-      Name: 'Brak kategorii',
-      Icon: 'category',
-      Description: 'Brak kategorii',
-      CreatedAt: new Date()
-    } as Category]
+    let lcategories = [
+      ...(offerStore.categories as Category[]),
+      {
+        Id: '1',
+        Name: 'Brak kategorii',
+        Icon: 'category',
+        Description: 'Brak kategorii',
+        CreatedAt: new Date()
+      } as Category
+    ]
     setCategories(lcategories)
   }, [offerStore.categories])
 
@@ -108,64 +111,71 @@ export default function ViewProductPage() {
             {newImages ? (
               <Card className='flex flex-col gap-2 bg-white bg-opacity-5'>
                 <CardBody className='aspect-square flex items-center justify-center'>
-                  {
-                    newImages.length === 0 ? (
-                      <div>
-                        <MaterialSymbol icon='image' size={100} color='gray' />
-                      </div>
-                    ) : (
-                      <Image src={newImages && newImages.length > 0 ? URL.createObjectURL(newImages[0]) : ''} alt={product?.Name} radius='sm' className='aspect-square' />
-                    )
-                  }
+                  {newImages.length === 0 ? (
+                    <div>
+                      <MaterialSymbol icon='image' size={100} color='gray' />
+                    </div>
+                  ) : (
+                    <Image
+                      src={newImages && newImages.length > 0 ? URL.createObjectURL(newImages[0]) : ''}
+                      alt={product?.Name}
+                      radius='sm'
+                      className='aspect-square'
+                    />
+                  )}
                 </CardBody>
                 <Divider />
                 <CardBody className='flex flex-row gap-2 overflow-x-auto'>
-                  {
-                    newImages.map((image, index) => (
-                      <div key={index} className='relative'>
-                        <div className='absolute -left-2 -top-2 bg-white aspect-square z-50 w-6 h-6 flex items-center justify-center rounded-full bg-opacity-85 backdrop-blur-md' onClick={() => {
+                  {newImages.map((image, index) => (
+                    <div key={index} className='relative'>
+                      <div
+                        className='absolute -left-2 -top-2 bg-white aspect-square z-50 w-6 h-6 flex items-center justify-center rounded-full bg-opacity-85 backdrop-blur-md'
+                        onClick={() => {
                           let images = [...newImages]
                           images.splice(index, 1)
                           setNewImages(images)
-                        }}>
-                          <MaterialSymbol icon='close' size={20} className='text-danger' />
-                        </div>
-                        <Image src={URL.createObjectURL(image)} alt={product?.Name} radius='sm' className='aspect-square max-w-16' />
-                      </div>
-                    ))
-                  }
-                  {
-                    newImages.length < 6 && (
-                      <Card
-                        isPressable
-                        shadow='none'
-                        className='w-16 aspect-square bg-primary-600 flex items-center justify-center bg-opacity-25'
-                        radius='sm'
-                        onClick={() => {
-                          const input = document.createElement('input')
-                          input.type = 'file'
-                          input.accept = 'image/*'
-                          input.multiple = true
-                          document.body.appendChild(input)
-                          input.click()
-                          input.onchange = (e) => {
-                            const files = (e.target as HTMLInputElement).files
-                            if (files) {
-                              let images = [...newImages]
-                              for (let i = 0; i < files.length; i++) {
-                                images.push(files[i])
-                              }
-                              setNewImages(images)
-                              console.log(newImages)
-                            }
-                            document.body.removeChild(input)
-                          }
                         }}
                       >
-                        <MaterialSymbol icon='add' size={48} className='text-primary-500' />
-                      </Card>
-                    )
-                  }
+                        <MaterialSymbol icon='close' size={20} className='text-danger' />
+                      </div>
+                      <Image
+                        src={URL.createObjectURL(image)}
+                        alt={product?.Name}
+                        radius='sm'
+                        className='aspect-square max-w-16'
+                      />
+                    </div>
+                  ))}
+                  {newImages.length < 6 && (
+                    <Card
+                      isPressable
+                      shadow='none'
+                      className='w-16 aspect-square bg-primary-600 flex items-center justify-center bg-opacity-25'
+                      radius='sm'
+                      onClick={() => {
+                        const input = document.createElement('input')
+                        input.type = 'file'
+                        input.accept = 'image/*'
+                        input.multiple = true
+                        document.body.appendChild(input)
+                        input.click()
+                        input.onchange = (e) => {
+                          const files = (e.target as HTMLInputElement).files
+                          if (files) {
+                            let images = [...newImages]
+                            for (let i = 0; i < files.length; i++) {
+                              images.push(files[i])
+                            }
+                            setNewImages(images)
+                            console.log(newImages)
+                          }
+                          document.body.removeChild(input)
+                        }
+                      }}
+                    >
+                      <MaterialSymbol icon='add' size={48} className='text-primary-500' />
+                    </Card>
+                  )}
                 </CardBody>
               </Card>
             ) : (
@@ -177,7 +187,7 @@ export default function ViewProductPage() {
             )}
             <div className='gap-2 flex flex-col'>
               <div className='flex flex-row justify-between items-center'>
-                <Input label='Nazwa produktu' value={newName} onChange={(e) => setNewName(e.target.value)}/>
+                <Input label='Nazwa produktu' value={newName} onChange={(e) => setNewName(e.target.value)} />
               </div>
               <Divider />
               <div className='flex flex-row justify-between items-center'>
@@ -193,12 +203,18 @@ export default function ViewProductPage() {
                   </Tooltip>
                 </div>
                 <div>
-                <Input label='Cena' value={isNaN(newPrice) ? '0' : newPrice.toString()} onChange={(e) => {
-                  const value = parseInt(e.target.value)
-                  if (!isNaN(value)) {
-                    setNewPrice(value)
-                  }
-                }} color='primary' variant='faded' />
+                  <Input
+                    label='Cena'
+                    value={isNaN(newPrice) ? '0' : newPrice.toString()}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value)
+                      if (!isNaN(value)) {
+                        setNewPrice(value)
+                      }
+                    }}
+                    color='primary'
+                    variant='faded'
+                  />
                 </div>
               </div>
               <Divider />
@@ -211,8 +227,8 @@ export default function ViewProductPage() {
                 items={categories}
                 selectedKeys={newCategory?.Id ? [newCategory.Id] : []}
                 onSelectionChange={(s) => {
-                  const selectedCategory = categories.find((c) => c.Id === [...s].toString()) ?? null;
-                  setNewCategory(selectedCategory);
+                  const selectedCategory = categories.find((c) => c.Id === [...s].toString()) ?? null
+                  setNewCategory(selectedCategory)
                 }}
               >
                 {(category: Category) => (
@@ -221,10 +237,6 @@ export default function ViewProductPage() {
                   </SelectItem>
                 )}
               </Select>
-              <div className='text-lg font-medium'>Opinie: 4.5 / 5</div>
-              <div>
-                <div className='flex flex-row gap-2'></div>
-              </div>
             </div>
           </CardBody>
         )}

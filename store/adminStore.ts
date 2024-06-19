@@ -1,9 +1,10 @@
 import { create } from 'zustand'
 import { removeCategory, updateCategory, fetchCategories } from '@/app/actions/category'
 import { image } from '@nextui-org/react'
-import { createProduct, fetchProducts } from '@/app/actions/product'
+import { createProduct, fetchProducts, updateProduct } from '@/app/actions/product'
 import { logout } from '@/app/actions/auth'
 import { createEvent, fetchEvents } from '@/app/actions/event'
+import { Tag } from '@/models/Tag'
 
 export const useAdminStore = create<IState>((set) => ({
   token: undefined,
@@ -96,6 +97,53 @@ export const useAdminStore = create<IState>((set) => ({
     const response = await createProduct(formData)
     return response
   },
+  updateProduct: async (
+    id: string,
+    name?: string,
+    description?: string,
+    images?: File[],
+    price?: number,
+    category?: string,
+    tags?: string[]
+  ) => {
+    try {
+      if (id === 'noid') {
+        return { isSuccess: false, status: 'error' }
+      }
+      const formData = new FormData()
+
+      if (name) {
+        formData.append('Name', name)
+      }
+      if (description) {
+        formData.append('Description', description)
+      }
+      if (price) {
+        formData.append('Price', price.toString())
+      }
+      if (category) {
+        formData.append('CategoryId', category)
+      }
+      if (tags) {
+        formData.append('Tags', tags.join(','))
+      }
+      if (images) {
+        images.forEach((image, index) => {
+          formData.append(`Image${index}`, image, image.name)
+        })
+      }
+      const response = await updateProduct(id, formData)
+      console.log('RESPONSE')
+      console.log(response)
+      if (response.isSuccess) {
+        return { isSuccess: true, status: 'success' }
+      } else {
+        return { isSuccess: false, status: 'error' }
+      }
+    } catch {
+      return { isSuccess: false, status: 'error' }
+    }
+  },
 
   fetchEvents: async () => {
     const response = await fetchEvents()
@@ -181,6 +229,15 @@ interface IState {
     tags?: string[],
     images?: File[]
   ) => Promise<{ isSuccess: boolean }>
+  updateProduct: (
+    id: string,
+    name?: string,
+    description?: string,
+    images?: File[],
+    price?: number,
+    category?: string,
+    tags?: string[]
+  ) => Promise<{ isSuccess: boolean; status: string }>
 
   fetchEvents: () => Promise<{ isSuccess: boolean }>
   addEvent: (

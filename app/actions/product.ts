@@ -117,3 +117,35 @@ export async function createProduct(formData: FormData): Promise<{ isSuccess: bo
     return { isSuccess: false }
   }
 }
+
+export async function updateProduct(id: string, formData: FormData): Promise<{ isSuccess: boolean }> {
+  try {
+    const cookieStorage = cookies()
+    const token = cookieStorage.get('access')
+
+    if (token == null) {
+      return { isSuccess: false }
+    }
+
+    console.log('Token: ' + id)
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product/${id}`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token?.value}`
+      },
+      body: formData
+    })
+
+    console.log(await response.json())
+    console.log(response.status)
+
+    if (response.status === 200) {
+      return { isSuccess: true }
+    } else {
+      return { isSuccess: false }
+    }
+  } catch {
+    return { isSuccess: false }
+  }
+}

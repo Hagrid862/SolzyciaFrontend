@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Head from 'next/head'
 import { useSearchParams } from 'next/navigation'
-import { Card, CardBody, Divider, Spinner, Image, Button, Tooltip } from '@nextui-org/react'
+import { Card, CardBody, Divider, Spinner, Image, Button, Tooltip, Chip } from '@nextui-org/react'
 import { useOfferStore } from '@/store/offerStore'
 import { Product } from '@/models/Product'
 import { MaterialSymbol } from 'react-material-symbols'
@@ -59,8 +59,8 @@ export default function ViewProductPage() {
         )}
         {status === 'success' && (
           <CardBody className='gap-2'>
-            {product?.Images ? (
-              <Card className='flex flex-col gap-2 bg-white bg-opacity-5'>
+            {product?.Images && product.Images.length > 0 ? (
+              <Card className='flex flex-col gap-2 bg-white bg-opacity-5' radius='sm'>
                 <CardBody className='aspect-square'>
                   <Image src={product.Images[0]} alt={product.Name} radius='sm' />
                 </CardBody>
@@ -73,14 +73,21 @@ export default function ViewProductPage() {
               </Card>
             ) : (
               <Card>
-                <CardBody className='aspect-square bg-white bg-opacity-5'>
-                  <MaterialSymbol icon='image' size={64} color='gray' />
+                <CardBody className='aspect-square bg-white bg-opacity-5 w-full h-full flex items-center justify-center'>
+                  <MaterialSymbol icon='image' size={96} color='gray' />
                 </CardBody>
               </Card>
             )}
             <div className='gap-2 flex flex-col'>
               <div className='flex flex-row justify-between items-center'>
-                <div className='text-xl font-medium'>{product?.Name}</div>
+                <div className='text-xl font-medium text-wrap max-w-full'>{product?.Name}</div>
+              </div>
+              <div className='flex flex-row gap-1'>
+                {product?.Tags?.map((tag, index) => (
+                  <Chip key={index} color='primary' className='text-sm'>
+                    {tag.Name}
+                  </Chip>
+                ))}
               </div>
               <Divider />
               <div className='flex flex-row justify-between'>
@@ -104,7 +111,7 @@ export default function ViewProductPage() {
             </div>
             <Divider />
             <div className='flex flex-col gap-2'>
-              <div className='text-lg font-medium'>Kategoria: {product?.Category.Name ?? 'Brak'}</div>
+              <div className='text-lg font-medium'>Kategoria: {product?.Category?.Name ?? 'Brak'}</div>
               <div className='text-lg font-medium'>Opinie: 4.5 / 5</div>
               <div>
                 <div className='flex flex-row gap-2'></div>

@@ -102,6 +102,7 @@ export const useAdminStore = create<IState>((set) => ({
     name?: string,
     description?: string,
     images?: File[],
+    removedImages?: string[],
     price?: number,
     category?: string,
     tags?: string[]
@@ -129,8 +130,11 @@ export const useAdminStore = create<IState>((set) => ({
       }
       if (images) {
         images.forEach((image, index) => {
-          formData.append(`Image${index}`, image, image.name)
+          formData.append(`image${index}`, image, image.name)
         })
+      }
+      if (removedImages && removedImages.length > 0) {
+        formData.append(`RemovedImages`, removedImages.join(','))
       }
       const response = await updateProduct(id, formData)
       console.log('RESPONSE')
@@ -234,6 +238,7 @@ interface IState {
     name?: string,
     description?: string,
     images?: File[],
+    removedImages?: string[],
     price?: number,
     category?: string,
     tags?: string[]

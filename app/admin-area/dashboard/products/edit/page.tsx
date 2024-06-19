@@ -44,6 +44,8 @@ export default function ViewProductPage() {
   const [newPrice, setNewPrice] = useState<number>(0)
   const [newCategory, setNewCategory] = useState<Category | null>(null)
   const [newImages, setNewImages] = useState<File[] | undefined>([])
+  const [newAddedImages, setNewAddedImages] = useState<File[]>([])
+  const [newRemovedImages, setNewRemovedImages] = useState<string[]>([])
   const [newTags, setNewTags] = useState<string[]>([])
 
   const [changedImages, setChangedImages] = useState<boolean>(false)
@@ -121,7 +123,8 @@ export default function ViewProductPage() {
       product?.Id ?? 'noid',
       product?.Name === newName ? undefined : newName,
       product?.Description === newDescription ? undefined : newDescription,
-      changedImages ? newImages : undefined,
+      newAddedImages ? newAddedImages : undefined,
+      newRemovedImages,
       product?.Price === newPrice ? undefined : newPrice,
       product?.Category?.Id === newCategory?.Id ? undefined : newCategory?.Id,
       product?.Tags?.map((tag) => tag.Name).join(',') === newTags.join(',') ? undefined : newTags
@@ -191,6 +194,7 @@ export default function ViewProductPage() {
                           onClick={() => {
                             let images = [...newImages]
                             images.splice(index, 1)
+                            setNewRemovedImages(newRemovedImages.includes(index.toString()) ? newRemovedImages : [...newRemovedImages, index.toString()])
                             setNewImages(images)
                             setChangedImages(true)
                           }}
@@ -225,6 +229,7 @@ export default function ViewProductPage() {
                               for (let i = 0; i < files.length; i++) {
                                 images.push(files[i])
                               }
+                              setNewAddedImages([...newAddedImages, ...Array.from(files)])
                               setNewImages(images)
                               setChangedImages(true)
                             }

@@ -194,7 +194,11 @@ export default function ViewProductPage() {
                           onClick={() => {
                             let images = [...newImages]
                             images.splice(index, 1)
-                            setNewRemovedImages(newRemovedImages.includes(index.toString()) ? newRemovedImages : [...newRemovedImages, index.toString()])
+                            setNewRemovedImages(
+                              newRemovedImages.includes(index.toString())
+                                ? newRemovedImages
+                                : [...newRemovedImages, index.toString()]
+                            )
                             setNewImages(images)
                             setChangedImages(true)
                           }}

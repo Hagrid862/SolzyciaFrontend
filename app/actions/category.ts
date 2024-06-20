@@ -70,18 +70,19 @@ export async function createCategory(state: CreateCategoryFormState, action: For
 
 export async function fetchCategories() {
   try {
-    const cookiesStorage = cookies()
-
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${cookiesStorage.get('access')?.value}`
       }
     })
 
+    console.log(response.status)
+
     if (response.status == 200) {
-      return await response.json()
+      const data = await response.json()
+      console.log(data)
+      return data
     } else {
       return 'ERROR'
     }

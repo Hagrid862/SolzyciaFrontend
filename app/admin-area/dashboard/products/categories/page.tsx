@@ -57,17 +57,17 @@ export default function Categories() {
           ? categories.map((category, index) => (
               <Card
                 isPressable
-                onClick={() => router.push(`categories/${category.id}`)}
+                onClick={() => router.push(`categories/${category.Id}`)}
                 key={index}
                 className='w-[calc(100%/3-0.35rem)] min-w-[100px] max-w-[200px] bg-white bg-opacity-5 overflow-x-hidden'
               >
                 <CardBody className='overflow-x-hidden bg-primary bg-opacity-15 text-center'>
-                  <MaterialSymbol icon={category.icon} size={40} color='#006FEE' />
+                  <MaterialSymbol icon={category.Icon} size={40} color='#006FEE' />
                 </CardBody>
                 <Divider />
                 <CardBody>
-                  <div className='text-xl font-medium'>{category.name}</div>
-                  <div className='text-sm'>{category.description}</div>
+                  <div className='text-xl font-medium'>{category.Name}</div>
+                  <div className='text-sm'>{category.Description}</div>
                 </CardBody>
               </Card>
             ))

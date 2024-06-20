@@ -19,17 +19,17 @@ export async function fetchEvents(
         }
       }
     )
+    console.log((await response.text()) + ', ' + response.status)
     if (response.status === 200) {
       const data = await response.json()
-      console.log(data)
-      if (data.events) {
-        const eventsJson = JSON.stringify(data.events)
-        return { isSuccess: true, eventsJson: eventsJson }
-      } else {
-        return { isSuccess: true, eventsJson: '[]' }
-      }
+      const eventsJson = JSON.stringify(data.events)
+      return { isSuccess: true, eventsJson: eventsJson }
     } else {
-      return { isSuccess: false, eventsJson: '' }
+      if (response.status === 404) {
+        return { isSuccess: true, eventsJson: '[]' }
+      } else {
+        return { isSuccess: false, eventsJson: '' }
+      }
     }
   } catch (e) {
     return { isSuccess: false, eventsJson: '' }

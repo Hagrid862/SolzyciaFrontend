@@ -151,8 +151,12 @@ export const useAdminStore = create<IState>((set) => ({
 
   fetchEvents: async () => {
     const response = await fetchEvents()
+    console.log('RESPONSE')
+    console.log(response)
     if (response.isSuccess) {
       const events = JSON.parse(response.eventsJson)
+      console.log('EVENTS')
+      console.log(events)
       if (events && events.length > 0) {
         set({ events: events })
         return { isSuccess: true }

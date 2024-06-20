@@ -21,9 +21,9 @@ export default function ProductsPage() {
     fetchEvents()
   }, [])
 
-  useEffect(() => {}, [events])
-
-  useEffect(() => {}, [tab])
+  useEffect(() => {
+    console.log(events)
+  }, [events])
 
   return (
     <div className='flex flex-col gap-4'>

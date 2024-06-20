@@ -141,7 +141,7 @@ export const useOfferStore = create<IState>((set, get) => ({
   ) => {
     set({ events: ['loading'] })
     const response = await fetchEvents()
-    console.log("response")
+    console.log('response')
     console.log(response)
     if (response.isSuccess) {
       const events = JSON.parse(response.eventsJson)

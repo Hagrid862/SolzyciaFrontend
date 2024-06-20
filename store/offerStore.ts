@@ -118,15 +118,12 @@ export const useOfferStore = create<IState>((set, get) => ({
     }
   },
   fetchProductById: async (id: string): Promise<{ isSuccess: boolean; product: Product | null }> => {
-    set({ products: ['loading'] })
     const response = await fetchProductById(id)
     if (response.isSuccess) {
       const products = JSON.parse(response.productJson)
-      if (products && products.length > 0) {
-        set({ products: products })
-        return { isSuccess: true, product: products[0] } // Assuming you want to return the first product
+      if (products) {
+        return { isSuccess: true, product: products } // Assuming you want to return the first product
       } else {
-        set({ products: ['none'] })
         return { isSuccess: false, product: null }
       }
     } else {
@@ -144,6 +141,8 @@ export const useOfferStore = create<IState>((set, get) => ({
   ) => {
     set({ events: ['loading'] })
     const response = await fetchEvents()
+    console.log('response')
+    console.log(response)
     if (response.isSuccess) {
       const events = JSON.parse(response.eventsJson)
       if (events && events.length > 0) {

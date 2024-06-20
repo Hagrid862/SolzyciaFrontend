@@ -112,7 +112,7 @@ export default function Home() {
               <Card className='md:hidden' isPressable onPress={() => router.push(`oferta/wydarzenie/${event.Id}`)}>
                 <CardBody className='w-full'>
                   {event.Images && event.Images[0] ? (
-                    <Image src={event.Images[0]} alt={event.Name} className='min-w-full w-full cover' />
+                    <Image src={event.Images[0].Base64} alt={event.Name} className='min-w-full w-full cover' />
                   ) : (
                     <div className='bg-primary w-full aspect-square bg-opacity-25 flex items-center justify-center rounded-xl'>
                       <MaterialSymbol icon='no_photography' size={72} className='text-white' />
@@ -140,11 +140,15 @@ export default function Home() {
                     </Button>
                     <Button
                       color='primary'
-                      isDisabled={cartStore.rawCart.find((item: ICartItemCookie) => item.Id === event.Id) ? true : false}
+                      isDisabled={
+                        cartStore.rawCart.find((item: ICartItemCookie) => item.Id === event.Id) ? true : false
+                      }
                       onClick={() => addToCart(event.Id, true)}
                     >
                       <span>
-                        {cartStore.rawCart.find((item: ICartItemCookie) => item.Id === event.Id) ? 'Dodano do koszyka' : 'Dodaj do koszyka'}
+                        {cartStore.rawCart.find((item: ICartItemCookie) => item.Id === event.Id)
+                          ? 'Dodano do koszyka'
+                          : 'Dodaj do koszyka'}
                       </span>
                       <MaterialSymbol icon='add_shopping_cart' size={22} />
                     </Button>
@@ -159,7 +163,11 @@ export default function Home() {
                 <CardBody className='min-w-[13.25rem] w-[12rem] overflow-hidden'>
                   {event.Images && event.Images[0] ? (
                     <div className='w-[11.5rem] h-[11.5rem] overflow-hidden flex flex-row items-center justify-center'>
-                      <Image src={event.Images[0]} alt={event.Name} className='max-h-[11.5rem] max-w-[11.5rem]' />
+                      <Image
+                        src={event.Images[0].Base64}
+                        alt={event.Name}
+                        className='max-h-[11.5rem] max-w-[11.5rem]'
+                      />
                     </div>
                   ) : (
                     <div className='bg-primary h-[11.5rem] w-[11.5rem] bg-opacity-25 flex items-center justify-center rounded-xl'>
@@ -185,7 +193,7 @@ export default function Home() {
                   <div className='text-xs text-white text-opacity-35 w-3/4'>
                     {event.Description ? event.Description.substring(0, 200) : ''}
                   </div>
-          
+
                   <div className='flex flex-col absolute right-3 bottom-3 gap-2'>
                     <Button isIconOnly color='secondary' radius='sm'>
                       <MaterialSymbol icon='share' size={22} />
@@ -220,7 +228,7 @@ export default function Home() {
               <Card className='md:hidden' isPressable onPress={() => router.push(`oferta/produkt/${product.Id}`)}>
                 <CardBody>
                   {product.Images?.[0] ? (
-                    <Image src={product.Images[0]} alt={product.Name} className='w-full aspect-square cover' />
+                    <Image src={product.Images[0].Base64} alt={product.Name} className='w-full aspect-square cover' />
                   ) : (
                     <div className='bg-primary w-full aspect-square bg-opacity-25 flex items-center justify-center rounded-xl'>
                       <MaterialSymbol icon='no_photography' size={72} className='text-white' />
@@ -248,7 +256,9 @@ export default function Home() {
                       color='primary'
                       radius='sm'
                       onClick={() => addToCart(product.Id, false)}
-                      isDisabled={cartStore.rawCart.find((item: ICartItemCookie) => item.Id === product.Id) ? true : false}
+                      isDisabled={
+                        cartStore.rawCart.find((item: ICartItemCookie) => item.Id === product.Id) ? true : false
+                      }
                     >
                       <span>Dodaj do koszyka</span>
                       <MaterialSymbol
@@ -271,7 +281,11 @@ export default function Home() {
                 <CardBody className='min-w-[13.25rem] w-[12rem] overflow-hidden'>
                   {product.Images?.[0] ? (
                     <div className='w-[11.5rem] h-[11.5rem] overflow-hidden flex flex-row items-center justify-center'>
-                      <Image src={product.Images[0]} alt={product.Name} className='max-h-[11.5rem] max-w-[11.5rem]' />
+                      <Image
+                        src={product.Images[0].Base64}
+                        alt={product.Name}
+                        className='max-h-[11.5rem] max-w-[11.5rem]'
+                      />
                     </div>
                   ) : (
                     <div className='bg-primary h-[11.5rem] w-[11.5rem] bg-opacity-25 flex items-center justify-center rounded-xl'>
@@ -307,7 +321,9 @@ export default function Home() {
                       color='primary'
                       radius='sm'
                       onClick={() => addToCart(product.Id, false)}
-                      isDisabled={cartStore.rawCart.find((item: ICartItemCookie) => item.Id === product.Id) ? true : false}
+                      isDisabled={
+                        cartStore.rawCart.find((item: ICartItemCookie) => item.Id === product.Id) ? true : false
+                      }
                     >
                       <MaterialSymbol
                         icon={
@@ -316,7 +332,8 @@ export default function Home() {
                             : 'add_shopping_cart'
                         }
                         size={22}
-                      />                    </Button>
+                      />{' '}
+                    </Button>
                   </div>
                 </CardBody>
               </Card>

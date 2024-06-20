@@ -200,11 +200,11 @@ export default function AddProductObjectPage() {
         <Select label='kategoria' onChange={(e) => setCategory(e.target.value)}>
           {categories.map((category, index) => (
             <SelectItem
-              key={category.id}
-              value={category.id}
-              startContent={<MaterialSymbol icon={category.icon} size={20} color={'#006FEE'} />}
+              key={category.Id}
+              value={category.Id}
+              startContent={<MaterialSymbol icon={category.Icon} size={20} color={'#006FEE'} />}
             >
-              {category.name}
+              {category.Name}
             </SelectItem>
           ))}
         </Select>

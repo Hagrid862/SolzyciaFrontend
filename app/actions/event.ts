@@ -22,14 +22,14 @@ export async function fetchEvents(
     if (response.status === 200) {
       const data = await response.json()
       console.log(data)
-      if (data.events) {
-        const eventsJson = JSON.stringify(data.events)
-        return { isSuccess: true, eventsJson: eventsJson }
-      } else {
-        return { isSuccess: true, eventsJson: '[]' }
-      }
+      const eventsJson = JSON.stringify(data.events)
+      return { isSuccess: true, eventsJson: eventsJson }
     } else {
-      return { isSuccess: false, eventsJson: '' }
+      if (response.status === 404) {
+        return { isSuccess: true, eventsJson: '[]' }
+      } else {
+        return { isSuccess: false, eventsJson: '' }
+      }
     }
   } catch (e) {
     return { isSuccess: false, eventsJson: '' }
@@ -87,6 +87,7 @@ export async function fetchEventById(id: string): Promise<{ isSuccess: boolean; 
 
     if (response.status === 200) {
       const data = await response.json()
+      console.log(data)
       if (data.eventDto) {
         const eventJson = JSON.stringify(data.eventDto)
         return { isSuccess: true, eventJson: eventJson }

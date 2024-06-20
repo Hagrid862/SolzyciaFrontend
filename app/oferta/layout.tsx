@@ -78,12 +78,12 @@ export default function OfertaLayout({ children }: Readonly<{ children: React.Re
                 </SelectItem>
                 {store.categories.map((category: any, index: any) => (
                   <SelectItem
-                    key={category.id}
-                    value={category.id}
-                    startContent={<MaterialSymbol icon={category.icon} size={20} color={'#006FEE'} />}
-                    textValue={category.name}
+                    key={category.Id}
+                    value={category.Id}
+                    startContent={<MaterialSymbol icon={category.Icon} size={20} color={'#006FEE'} />}
+                    textValue={category.Name}
                   >
-                    {category.name}
+                    {category.Name}
                   </SelectItem>
                 ))}
               </Select>

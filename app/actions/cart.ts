@@ -67,6 +67,7 @@ export async function getCart(): Promise<ICartItem[]> {
     })
   )
 
+  console.log('cartItems', cartItems)
 
   return cartItems
 }

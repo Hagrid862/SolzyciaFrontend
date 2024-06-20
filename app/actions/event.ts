@@ -19,9 +19,9 @@ export async function fetchEvents(
         }
       }
     )
-    console.log((await response.text()) + ', ' + response.status)
     if (response.status === 200) {
       const data = await response.json()
+      console.log(data)
       const eventsJson = JSON.stringify(data.events)
       return { isSuccess: true, eventsJson: eventsJson }
     } else {
@@ -87,6 +87,7 @@ export async function fetchEventById(id: string): Promise<{ isSuccess: boolean; 
 
     if (response.status === 200) {
       const data = await response.json()
+      console.log(data)
       if (data.eventDto) {
         const eventJson = JSON.stringify(data.eventDto)
         return { isSuccess: true, eventJson: eventJson }

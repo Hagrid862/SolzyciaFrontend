@@ -14,8 +14,11 @@ export async function fetchProducts(
       `${process.env.NEXT_PUBLIC_API_URL}/api/product${reviews || orderBy || order || page || limit ? '?' : ''}${reviews ? 'reviews=true' : ''}${orderBy ? `&orderBy=${orderBy}` : ''}${order ? `&order=${order}` : ''}${page ? `&page=${page}` : ''}${limit ? `&limit=${limit}` : ''}`
     )
 
+    console.log(response.status)
+
     if (response.status === 200) {
       const data = await response.json()
+      console.log(data)
       if (data.products) {
         const productsJson = JSON.stringify(data.products)
         return { isSuccess: true, productsJson: productsJson }
@@ -23,6 +26,7 @@ export async function fetchProducts(
         return { isSuccess: false, productsJson: '' }
       }
     } else {
+      console.log(await response.json())
       return { isSuccess: false, productsJson: '' }
     }
   } catch (e) {

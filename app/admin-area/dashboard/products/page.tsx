@@ -77,9 +77,9 @@ export default function ProductsPage() {
                       {product.Images && product.Images.length > 0 ? (
                         <Image
                           radius='sm'
-                          src={product.Images[0]}
+                          src={product.Images[0].Base64}
                           height={200}
-                          alt={product.Images[0]}
+                          alt={product.Images[0].Id}
                           className='w-full aspect-square object-cover'
                         />
                       ) : (
@@ -123,9 +123,9 @@ export default function ProductsPage() {
                       {event.Images && event.Images.length > 0 ? (
                         <Image
                           radius='sm'
-                          src={event.Images[0]}
+                          src={event.Images[0].Base64}
                           height={200}
-                          alt={event.Images[0]}
+                          alt={event.Images[0].Id}
                           className='w-full aspect-square object-cover'
                         />
                       ) : (

@@ -112,7 +112,7 @@ export default function Home() {
               <Card className='md:hidden' isPressable onPress={() => router.push(`oferta/wydarzenie/${event.Id}`)}>
                 <CardBody className='w-full'>
                   {event.Images && event.Images[0] ? (
-                    <Image src={event.Images[0]} alt={event.Name} className='min-w-full w-full cover' />
+                    <Image src={event.Images[0].Base64} alt={event.Name} className='min-w-full w-full cover' />
                   ) : (
                     <div className='bg-primary w-full aspect-square bg-opacity-25 flex items-center justify-center rounded-xl'>
                       <MaterialSymbol icon='no_photography' size={72} className='text-white' />
@@ -163,7 +163,11 @@ export default function Home() {
                 <CardBody className='min-w-[13.25rem] w-[12rem] overflow-hidden'>
                   {event.Images && event.Images[0] ? (
                     <div className='w-[11.5rem] h-[11.5rem] overflow-hidden flex flex-row items-center justify-center'>
-                      <Image src={event.Images[0]} alt={event.Name} className='max-h-[11.5rem] max-w-[11.5rem]' />
+                      <Image
+                        src={event.Images[0].Base64}
+                        alt={event.Name}
+                        className='max-h-[11.5rem] max-w-[11.5rem]'
+                      />
                     </div>
                   ) : (
                     <div className='bg-primary h-[11.5rem] w-[11.5rem] bg-opacity-25 flex items-center justify-center rounded-xl'>
@@ -224,7 +228,7 @@ export default function Home() {
               <Card className='md:hidden' isPressable onPress={() => router.push(`oferta/produkt/${product.Id}`)}>
                 <CardBody>
                   {product.Images?.[0] ? (
-                    <Image src={product.Images[0]} alt={product.Name} className='w-full aspect-square cover' />
+                    <Image src={product.Images[0].Base64} alt={product.Name} className='w-full aspect-square cover' />
                   ) : (
                     <div className='bg-primary w-full aspect-square bg-opacity-25 flex items-center justify-center rounded-xl'>
                       <MaterialSymbol icon='no_photography' size={72} className='text-white' />
@@ -277,7 +281,11 @@ export default function Home() {
                 <CardBody className='min-w-[13.25rem] w-[12rem] overflow-hidden'>
                   {product.Images?.[0] ? (
                     <div className='w-[11.5rem] h-[11.5rem] overflow-hidden flex flex-row items-center justify-center'>
-                      <Image src={product.Images[0]} alt={product.Name} className='max-h-[11.5rem] max-w-[11.5rem]' />
+                      <Image
+                        src={product.Images[0].Base64}
+                        alt={product.Name}
+                        className='max-h-[11.5rem] max-w-[11.5rem]'
+                      />
                     </div>
                   ) : (
                     <div className='bg-primary h-[11.5rem] w-[11.5rem] bg-opacity-25 flex items-center justify-center rounded-xl'>

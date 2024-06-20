@@ -38,6 +38,10 @@ export default function ViewProductPage() {
     fetchProduct()
   }, [id, type])
 
+  useEffect(() => {
+    console.log(product)
+  }, [product])
+
   return (
     <>
       <Card shadow='none' className='border border-opacity-15 border-white border-2'>
@@ -62,7 +66,7 @@ export default function ViewProductPage() {
             {product?.Images && product.Images.length > 0 ? (
               <Card className='flex flex-col gap-2 bg-white bg-opacity-5' radius='sm'>
                 <CardBody className='aspect-square'>
-                  <Image src={product.Images[0]} alt={product.Name} radius='sm' />
+                  <Image src={product.Images[0].Base64} alt={product.Name} radius='sm' />
                 </CardBody>
                 <Divider />
                 <CardBody className='flex flex-row gap-2 overflow-x-auto'>

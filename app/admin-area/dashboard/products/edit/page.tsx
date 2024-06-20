@@ -72,8 +72,8 @@ export default function ViewProductPage() {
           setNewDescription(response.product.Description)
           setNewPrice(response.product.Price)
           setNewCategory(response.product.Category)
-          let imagesFile = response.product.Images?.map((image) => {
-            const byteCharacters = atob(image.split(',')[1])
+          let imagesFile = response.product.Images?.map((imageObj) => {
+            const byteCharacters = atob(imageObj.Base64.split(',')[1])
             const byteNumbers = new Array(byteCharacters.length)
             for (let i = 0; i < byteCharacters.length; i++) {
               byteNumbers[i] = byteCharacters.charCodeAt(i)

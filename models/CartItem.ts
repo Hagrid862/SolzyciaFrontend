@@ -1,9 +1,11 @@
+import { Image } from './Image'
+
 export interface ICartItem {
   ItemId: string
   Name: string
   Price: number
   Quantity: number
-  Image: string
+  Image: Image
   IsEvent: boolean
   IsOnSale: boolean
   SalePrice?: number

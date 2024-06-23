@@ -1,7 +1,5 @@
 'use server'
 
-import { LoginFormState, LoginFormSchema, VerifyOtpState, VerifyOtpSchema } from '@/app/lib/definitions'
-import axios from 'axios'
 import { cookies } from 'next/headers'
 
 export async function login(formData: FormData): Promise<{ isSuccess: boolean; status: string }> {

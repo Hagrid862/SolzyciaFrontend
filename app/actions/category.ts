@@ -73,7 +73,7 @@ export async function fetchCategories() {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category`, {
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       }
     })
 

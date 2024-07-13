@@ -6,9 +6,7 @@ import { Product } from '@/models/Product'
 import { Event } from '@/models/Event'
 import { Tag } from '@/models/Tag'
 
-export async function createOrder(
-  products: { id: string; quantity: number; isEvent: boolean }[]
-): Promise<{ isSuccess: boolean; status: string; orderId: number }> {
+export async function createOrder(products: { id: string; quantity: number; isEvent: boolean }[]): Promise<{ isSuccess: boolean; status: string; orderId: number }> {
   if (!products.length) {
     return { isSuccess: false, status: 'NOPRODUCTS', orderId: 0 }
   }
@@ -36,14 +34,10 @@ export async function createOrder(
   }
 }
 
-export async function getOrder(
-  orderId: string
-): Promise<{ isSuccess: boolean; status: string; order: Order | string }> {
+export async function getOrder(orderId: string): Promise<{ isSuccess: boolean; status: string; order: Order | string }> {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/order/${orderId}`)
-  console.log(orderId)
   if (response.ok) {
     const data = await response.json()
-    console.log(data)
     var order: Order = {
       Id: data.Id,
       Products: data.Products,
@@ -69,21 +63,13 @@ export async function getOrder(
   }
 }
 
-export async function getOrderProducts(
-  orderId: string
-): Promise<{ isSuccess: boolean; status: string; products: Product[]; events: Event[] }> {
+export async function getOrderProducts(orderId: string): Promise<{ isSuccess: boolean; status: string; products: Product[]; events: Event[] }> {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/order/${orderId}/products`)
   if (response.ok) {
     const data = await response.json()
     if (data.products && data.events) {
       let products: Product[] = []
       let events: Event[] = []
-
-      console.log(
-        'events!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-      )
-      console.log(data.events)
-      console.log(data.products)
 
       if (data.products) {
         const productsObj = data.products
@@ -100,9 +86,6 @@ export async function getOrderProducts(
       if (data.events) {
         events.push(...data.events)
       }
-      console.log('psikutas???????????????????????????????')
-      console.log(events)
-      console.log(products)
       return { isSuccess: true, status: 'SUCCESS', products: products, events: events }
     }
   }

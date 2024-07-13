@@ -2,67 +2,51 @@
 
 import { cookies } from 'next/headers'
 
-export async function fetchProducts(
-  reviews?: boolean,
-  orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity',
-  order?: 'desc' | 'asc',
-  page?: number,
-  limit?: number
-): Promise<{ isSuccess: boolean; productsJson: string }> {
+export async function fetchProducts(reviews?: boolean, orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity', order?: 'desc' | 'asc', page?: number, limit?: number): Promise<{ isSuccess: boolean; status: string, productsJson: string }> {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/product${reviews || orderBy || order || page || limit ? '?' : ''}${reviews ? 'reviews=true' : ''}${orderBy ? `&orderBy=${orderBy}` : ''}${order ? `&order=${order}` : ''}${page ? `&page=${page}` : ''}${limit ? `&limit=${limit}` : ''}`
     )
-
-    console.log(response.status)
 
     if (response.status === 200) {
       const data = await response.json()
       console.log(data)
       if (data.products) {
         const productsJson = JSON.stringify(data.products)
-        return { isSuccess: true, productsJson: productsJson }
+        return { isSuccess: true, status: "success", productsJson: productsJson }
       } else {
-        return { isSuccess: false, productsJson: '' }
+        return { isSuccess: false, status: "error", productsJson: '[]' }
       }
     } else {
       console.log(await response.json())
-      return { isSuccess: false, productsJson: '' }
+      return { isSuccess: false, status: "error", productsJson: '' }
     }
   } catch (e) {
     console.log('error: ' + e)
-    return { isSuccess: false, productsJson: '' }
+    return { isSuccess: false, status: "error", productsJson: '' }
   }
 }
 
-export async function fetchProductsByCategory(
-  category: string,
-  reviews?: boolean,
-  orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity',
-  order?: 'desc' | 'asc',
-  page?: number,
-  limit?: number
-): Promise<{ isSuccess: boolean; productsJson: string }> {
+export async function fetchProductsByCategory(category: string, reviews?: boolean, orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity', order?: 'desc' | 'asc', page?: number, limit?: number): Promise<{ isSuccess: boolean; status: string, productsJson: string }> {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/product/category/${category}${reviews || orderBy || order || page || limit ? '?' : ''}${reviews ? 'reviews=true' : ''}${orderBy ? `&orderBy=${orderBy}` : ''}${order ? `&order=${order}` : ''}${page ? `&page=${page}` : ''}${limit ? `&limit=${limit}` : ''}`
     )
-    console.log(response.status)
 
     if (response.status === 200) {
       const data = await response.json()
       if (data.products) {
         const productsJson = JSON.stringify(data.products)
-        return { isSuccess: true, productsJson: productsJson }
+        return { isSuccess: true, status: "success", productsJson: productsJson }
       } else {
-        return { isSuccess: true, productsJson: '[]' }
+        return { isSuccess: false, status: "error", productsJson: '[]' }
       }
     } else {
-      return { isSuccess: false, productsJson: '' }
+      return { isSuccess: false, status: "error", productsJson: '' }
     }
   } catch (e) {
     console.log('error: ' + e)
-    return { isSuccess: false, productsJson: '' }
+    return { isSuccess: false, status: "error", productsJson: '' }
   }
 }
 

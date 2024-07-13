@@ -2,13 +2,7 @@
 
 import { cookies } from 'next/headers'
 
-export async function fetchEvents(
-  reviews?: boolean,
-  orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity',
-  order?: 'desc' | 'asc',
-  page?: number,
-  limit?: number
-): Promise<{ isSuccess: boolean; eventsJson: string }> {
+export async function fetchEvents(reviews?: boolean, orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity', order?: 'desc' | 'asc', page?: number, limit?: number): Promise<{ isSuccess: boolean; status: string; eventsJson: string }> {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/event${reviews || orderBy || order || page || limit ? '?' : ''}${reviews ? 'reviews=true' : ''}${orderBy ? `&orderBy=${orderBy}` : ''}${order ? `&order=${order}` : ''}${page ? `&page=${page}` : ''}${limit ? `&limit=${limit}` : ''}`,
@@ -19,31 +13,37 @@ export async function fetchEvents(
         }
       }
     )
+
     if (response.status === 200) {
       const data = await response.json()
-      console.log(data)
       const eventsJson = JSON.stringify(data.events)
-      return { isSuccess: true, eventsJson: eventsJson }
+      return { isSuccess: true, status: 'SUCCESS', eventsJson: eventsJson }
     } else {
-      if (response.status === 404) {
-        return { isSuccess: true, eventsJson: '[]' }
+      if (response.status === 400) {
+        const data = await response.json()
+        if (data.Status === 'INVALIDORDERBY') {
+          return { isSuccess: false, status: 'INVALIDORDERBY', eventsJson: '[]' }
+        } else if (data.Status === 'INVALIDORDER') {
+          return { isSuccess: false, status: 'INVALIDORDER', eventsJson: '[]' }
+        } else if (data.Status === 'INVALIDPAGE') {
+          return { isSuccess: false, status: 'INVALIDPAGE', eventsJson: '[]' }
+        } else if (data.Status === 'INVALIDLIMIT') {
+          return { isSuccess: false, status: 'INVALIDLIMIT', eventsJson: '[]' }
+        } else {
+          return { isSuccess: false, status: 'ERROR', eventsJson: '' }
+        }
+      } else if (response.status === 404) {
+        return { isSuccess: true, status: 'NOTFOUND', eventsJson: '[]' }
       } else {
-        return { isSuccess: false, eventsJson: '' }
+        return { isSuccess: false, status: 'ERROR', eventsJson: '' }
       }
     }
   } catch (e) {
-    return { isSuccess: false, eventsJson: '' }
+    return { isSuccess: false, status: 'ERROR', eventsJson: '' }
   }
 }
 
-export async function fetchEventsByCategory(
-  category: string,
-  reviews?: boolean,
-  orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity',
-  order?: 'desc' | 'asc',
-  page?: number,
-  limit?: number
-): Promise<{ isSuccess: boolean; eventsJson: string }> {
+export async function fetchEventsByCategory(category: string, reviews?: boolean, orderBy?: 'created_at' | 'price' | 'name' | 'rating' | 'popularity', order?: 'desc' | 'asc', page?: number, limit?: number): Promise<{ isSuccess: boolean; status: string; eventsJson: string }> {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/event/category/${category}${reviews || orderBy || order || page || limit ? '?' : ''}${reviews ? 'reviews=true' : ''}${orderBy ? `&orderBy=${orderBy}` : ''}${order ? `&order=${order}` : ''}${page ? `&page=${page}` : ''}${limit ? `&limit=${limit}` : ''}`,
@@ -54,28 +54,36 @@ export async function fetchEventsByCategory(
         }
       }
     )
-    console.log((await response.text()) + ', ' + response.status)
+
     if (response.status === 200) {
       const data = await response.json()
-      if (data.events) {
-        const eventsJson = JSON.stringify(data.events)
-        return { isSuccess: true, eventsJson: eventsJson }
-      } else {
-        return { isSuccess: false, eventsJson: '' }
-      }
+      return { isSuccess: true, status: 'SUCCESS', eventsJson: data.Events }
     } else {
-      if (response.status === 404) {
-        return { isSuccess: true, eventsJson: '[]' }
+      if (response.status === 400) {
+        const data = await response.json()
+        if (data.Status === 'INVALIDORDERBY') {
+          return { isSuccess: false, status: 'INVALIDORDERBY', eventsJson: '[]' }
+        } else if (data.Status === 'INVALIDORDER') {
+          return { isSuccess: false, status: 'INVALIDORDER', eventsJson: '[]' }
+        } else if (data.Status === 'INVALIDPAGE') {
+          return { isSuccess: false, status: 'INVALIDPAGE', eventsJson: '[]' }
+        } else if (data.Status === 'INVALIDLIMIT') {
+          return { isSuccess: false, status: 'INVALIDLIMIT', eventsJson: '[]' }
+        } else {
+          return { isSuccess: false, status: 'ERROR', eventsJson: '' }
+        }
+      } else if (response.status === 404) {
+        return { isSuccess: true, status: 'NOTFOUND', eventsJson: '[]' }
       } else {
-        return { isSuccess: false, eventsJson: '' }
+        return { isSuccess: false, status: 'ERROR', eventsJson: '' }
       }
     }
   } catch (e) {
-    return { isSuccess: false, eventsJson: '' }
+    return { isSuccess: false, status: "ERROR", eventsJson: '' }
   }
 }
 
-export async function fetchEventById(id: string): Promise<{ isSuccess: boolean; eventJson: string }> {
+export async function fetchEventById(id: string): Promise<{ isSuccess: boolean; status: string, eventJson: string }> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/event/${id}`, {
       method: 'GET',
@@ -83,25 +91,19 @@ export async function fetchEventById(id: string): Promise<{ isSuccess: boolean; 
         'Content-Type': 'application/json'
       }
     })
-    console.log(response.status)
 
     if (response.status === 200) {
       const data = await response.json()
-      console.log(data)
-      if (data.eventDto) {
-        const eventJson = JSON.stringify(data.eventDto)
-        return { isSuccess: true, eventJson: eventJson }
-      } else {
-        return { isSuccess: false, eventJson: '' }
-      }
+      return { isSuccess: true, status: 'SUCCESS', eventJson: JSON.stringify(data.Event) }
     } else {
       if (response.status === 404) {
-        return { isSuccess: true, eventJson: '[]' }
+        return { isSuccess: true, status: 'NOTFOUND', eventJson: '' }
+      } else {
+        return { isSuccess: false, status: 'ERROR', eventJson: '' }
       }
-      return { isSuccess: false, eventJson: '' }
     }
   } catch {
-    return { isSuccess: false, eventJson: '' }
+    return { isSuccess: false, status: 'ERROR', eventJson: '' }
   }
 }
 
@@ -123,7 +125,7 @@ export async function createEvent(fromData: FormData): Promise<{ isSuccess: bool
 
     console.log(await response.text())
 
-    if (response.ok) {
+    if (response.status === 201) {
       return { isSuccess: true, status: 'SUCCESS' }
     } else {
       return { isSuccess: false, status: 'ERROR' }

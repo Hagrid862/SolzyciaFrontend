@@ -1,74 +1,57 @@
 'use server'
 
-import { CreateCategoryFormSchema, CreateCategoryFormState } from '@/app/lib/definitions'
+import { Category } from '@/models/Category';
 import { cookies } from 'next/headers'
 
-export async function createCategory(state: CreateCategoryFormState, action: FormData) {
-  const validatedFields = CreateCategoryFormSchema.safeParse({
-    name: action.get('name'),
-    description: action.get('description'),
-    icon: action.get('icon')
-  })
-
-  if (!validatedFields.success) {
-    return {
-      errors: {
-        name: validatedFields.error.errors.filter((e) => e.path[0] == 'name').map((e) => e.message),
-        description: validatedFields.error.errors.filter((e) => e.path[0] == 'description').map((e) => e.message),
-        icon: validatedFields.error.errors.filter((e) => e.path[0] == 'icon').map((e) => e.message)
-      },
-      message: undefined
-    }
-  }
-
+export async function createCategory(formData: FormData): Promise<{ isSuccess: boolean; message: string }> {
   try {
-    const cookieStorage = cookies()
+    const cookiesStorage = cookies()
 
-    const token = cookieStorage.get('access')
+    const token = cookiesStorage.get('access')
 
     if (token === null) {
       return {
-        errors: undefined,
-        message: 'NO_TOKEN'
+        isSuccess: false,
+        message: 'NOTOKEN'
       }
     }
 
     let object: {} = {
-      name: action.get('name'),
-      description: action.get('description'),
-      icon: action.get('icon')
+      name: formData.get('name'),
+      description: formData.get('description'),
+      icon: formData.get('icon')
     }
     const json = JSON.stringify(object)
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category`, {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${token?.value}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token!.value}`
       },
       body: json
     })
 
     if (response.status == 200) {
       return {
-        errors: undefined,
+        isSuccess: true,
         message: 'SUCCESS'
       }
     } else {
       return {
-        errors: undefined,
+        isSuccess: false,
         message: 'ERROR'
       }
     }
   } catch (e: any) {
     return {
-      errors: undefined,
+      isSuccess: false,
       message: 'ERROR'
     }
   }
 }
 
-export async function fetchCategories() {
+export async function fetchCategories(): Promise<{isSuccess: boolean, status: string, data: Category[]}> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category`, {
       method: 'GET',
@@ -77,21 +60,30 @@ export async function fetchCategories() {
       }
     })
 
-    console.log(response.status)
-
     if (response.status == 200) {
       const data = await response.json()
-      console.log(data)
-      return data
+      return {
+        isSuccess: true,
+        status: 'SUCCESS',
+        data: data.Categories
+      }
     } else {
-      return 'ERROR'
+      return {
+        isSuccess: false,
+        status: 'ERROR',
+        data: []
+      }
     }
   } catch (e: any) {
-    return 'ERROR'
+    return {
+      isSuccess: false,
+      status: 'ERROR',
+      data: []
+    }
   }
 }
 
-export async function updateCategory(categoryId: string, formData: FormData) {
+export async function updateCategory(categoryId: string, formData: FormData): Promise<{ isSuccess: boolean; status: string }> {
   try {
     const cookiesStorage = cookies()
 
@@ -99,7 +91,8 @@ export async function updateCategory(categoryId: string, formData: FormData) {
 
     if (token === null) {
       return {
-        message: 'NO_TOKEN'
+        isSuccess: false,
+        status: 'NOTOKEN'
       }
     }
 
@@ -120,26 +113,27 @@ export async function updateCategory(categoryId: string, formData: FormData) {
       body: json
     })
 
-    console.log(response.status)
-    console.log(await response.text())
-
     if (response.status == 200) {
       return {
-        message: 'SUCCESS'
+        isSuccess: true,
+        status: 'SUCCESS'
       }
     } else {
       return {
-        message: 'ERROR'
+        isSuccess: false,
+        status: 'ERROR'
       }
     }
-  } catch (e: any) {
+  }
+  catch (e: any) {
     return {
-      message: 'ERROR'
+      isSuccess: false,
+      status: 'ERROR'
     }
   }
 }
 
-export async function removeCategory(categoryId: string) {
+export async function removeCategory(categoryId: string): Promise<{ isSuccess: boolean, status: string }> {
   try {
     const cookiesStorage = cookies()
 
@@ -147,7 +141,8 @@ export async function removeCategory(categoryId: string) {
 
     if (token === null) {
       return {
-        message: 'NO_TOKEN'
+        isSuccess: false,
+        status: 'NOTOKEN'
       }
     }
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category/${categoryId}`, {
@@ -160,16 +155,19 @@ export async function removeCategory(categoryId: string) {
 
     if (response.status == 200) {
       return {
-        message: 'SUCCESS'
+        isSuccess: true,
+        status: 'SUCCESS'
       }
     } else {
       return {
-        message: 'ERROR'
+        isSuccess: false,
+        status: 'ERROR'
       }
     }
   } catch (e: any) {
     return {
-      message: 'ERROR'
+      isSuccess: false,
+      status: 'ERROR'
     }
   }
 }

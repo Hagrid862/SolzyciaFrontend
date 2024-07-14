@@ -23,7 +23,8 @@ export default function ProductsPage() {
 
   useEffect(() => {
     console.log(events)
-  }, [events])
+    console.log(products)
+  }, [events, products])
 
   return (
     <div className='flex flex-col gap-4'>

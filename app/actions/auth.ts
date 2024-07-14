@@ -1,20 +1,24 @@
 'use server'
 
 import { cookies } from 'next/headers'
-import { json } from 'stream/consumers';
+import { json } from 'stream/consumers'
 
-export async function login(username: string, password: string, remember: boolean): Promise<{ isSuccess: boolean; status: string }> {
+export async function login(
+  username: string,
+  password: string,
+  remember: boolean
+): Promise<{ isSuccess: boolean; status: string }> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/login`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json', 
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         username: username,
         password: password,
         remember: remember
-      }),
+      })
     })
 
     const data = await response.json()
@@ -36,18 +40,17 @@ export async function login(username: string, password: string, remember: boolea
   }
 }
 
-export async function verifyOtp(code: string): Promise<{ isSuccess: boolean; status: string, token?: string }> {
+export async function verifyOtp(code: string): Promise<{ isSuccess: boolean; status: string; token?: string }> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/admin/verify-otp`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json', 
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({ code: code })
     })
 
     const data = await response.json()
-    console.log(data)
     if (response.ok && data.Access) {
       const cookieStore = cookies()
 
@@ -67,7 +70,7 @@ export async function verifyOtp(code: string): Promise<{ isSuccess: boolean; sta
         })
       }
 
-      return { isSuccess: true, status: 'LOGGEDIN', token: data.Access}
+      return { isSuccess: true, status: 'LOGGEDIN', token: data.Access }
     } else {
       if (data.Status == 'INVALID' || data.Status == 'NOTFOUND') {
         return { isSuccess: false, status: 'INVALID' }

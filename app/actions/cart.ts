@@ -4,7 +4,11 @@ import { ICartItem } from '@/models/CartItem'
 import { ICartItemCookie } from '@/models/CartItemCookie'
 import { cookies } from 'next/headers'
 
-export async function addToCart( itemId: string, quantity: number, isEvent: boolean ): Promise<{ isSuccess: boolean; status: string }> {
+export async function addToCart(
+  itemId: string,
+  quantity: number,
+  isEvent: boolean
+): Promise<{ isSuccess: boolean; status: string }> {
   try {
     const cookiesStorage = cookies()
     const cart = cookiesStorage.get('cart')?.value || '[]'

@@ -1,6 +1,6 @@
 'use server'
 
-import { Category } from '@/models/Category';
+import { Category } from '@/models/Category'
 import { cookies } from 'next/headers'
 
 export async function createCategory(formData: FormData): Promise<{ isSuccess: boolean; message: string }> {
@@ -51,7 +51,7 @@ export async function createCategory(formData: FormData): Promise<{ isSuccess: b
   }
 }
 
-export async function fetchCategories(): Promise<{isSuccess: boolean, status: string, data: Category[]}> {
+export async function fetchCategories(): Promise<{ isSuccess: boolean; status: string; data: Category[] }> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/category`, {
       method: 'GET',
@@ -83,7 +83,10 @@ export async function fetchCategories(): Promise<{isSuccess: boolean, status: st
   }
 }
 
-export async function updateCategory(categoryId: string, formData: FormData): Promise<{ isSuccess: boolean; status: string }> {
+export async function updateCategory(
+  categoryId: string,
+  formData: FormData
+): Promise<{ isSuccess: boolean; status: string }> {
   try {
     const cookiesStorage = cookies()
 
@@ -124,8 +127,7 @@ export async function updateCategory(categoryId: string, formData: FormData): Pr
         status: 'ERROR'
       }
     }
-  }
-  catch (e: any) {
+  } catch (e: any) {
     return {
       isSuccess: false,
       status: 'ERROR'
@@ -133,7 +135,7 @@ export async function updateCategory(categoryId: string, formData: FormData): Pr
   }
 }
 
-export async function removeCategory(categoryId: string): Promise<{ isSuccess: boolean, status: string }> {
+export async function removeCategory(categoryId: string): Promise<{ isSuccess: boolean; status: string }> {
   try {
     const cookiesStorage = cookies()
 

@@ -42,14 +42,7 @@ export default function Home() {
     fetchEvents()
   }, [])
 
-  useEffect(() => {
-    console.log('products')
-    console.log(products)
-    console.log('events')
-    console.log(events)
-    console.log('cartItems')
-    console.log(cartStore.rawCart)
-  }, [products, events, cartStore.rawCart, cartStore.cartItems])
+  useEffect(() => {}, [products, events, cartStore.rawCart, cartStore.cartItems])
 
   return (
     <main className='p-2 flex items-center justify-start flex-col'>

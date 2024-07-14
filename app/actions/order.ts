@@ -6,7 +6,9 @@ import { Product } from '@/models/Product'
 import { Event } from '@/models/Event'
 import { Tag } from '@/models/Tag'
 
-export async function createOrder(products: { id: string; quantity: number; isEvent: boolean }[]): Promise<{ isSuccess: boolean; status: string; orderId: number }> {
+export async function createOrder(
+  products: { id: string; quantity: number; isEvent: boolean }[]
+): Promise<{ isSuccess: boolean; status: string; orderId: number }> {
   if (!products.length) {
     return { isSuccess: false, status: 'NOPRODUCTS', orderId: 0 }
   }
@@ -25,37 +27,23 @@ export async function createOrder(products: { id: string; quantity: number; isEv
     const localOrdersStr = cookiesStorage.get('localOrders')?.value
     if (localOrdersStr) {
       const localOrders = JSON.parse(localOrdersStr)
-      localOrders.parse.push(data.orderId)
+      localOrders.parse.push(data.OrderId)
       cookiesStorage.set('localOrders', JSON.stringify(localOrders))
     }
-    return { isSuccess: true, status: 'SUCCESS', orderId: data.orderId }
+    return { isSuccess: true, status: 'SUCCESS', orderId: data.OrderId }
   } else {
     return { isSuccess: false, status: 'ERROR', orderId: 0 }
   }
 }
 
-export async function getOrder(orderId: string): Promise<{ isSuccess: boolean; status: string; order: Order | string }> {
+export async function getOrder(
+  orderId: string
+): Promise<{ isSuccess: boolean; status: string; order: Order | string }> {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/order/${orderId}`)
   if (response.ok) {
     const data = await response.json()
-    var order: Order = {
-      Id: data.Id,
-      Products: data.Products,
-      Address: data.Address,
-      Address2: data.Address2,
-      City: data.City,
-      State: data.State,
-      Zip: data.Zip,
-      Country: data.Country,
-      Phone: data.Phone,
-      Email: data.Email,
-      Name: data.Name,
-      LastName: data.LastName,
-      Status: data.Status,
-      PaymentMethod: data.PaymentMethod,
-      CreatedAt: new Date(data.CreatedAt)
-    }
-    return { isSuccess: true, status: 'SUCCESS', order: order }
+    console.log(data)
+    return { isSuccess: true, status: 'SUCCESS', order: data.Order }
   } else if (response.status === 404) {
     return { isSuccess: false, status: 'NOTFOUND', order: '' }
   } else {
@@ -63,28 +51,39 @@ export async function getOrder(orderId: string): Promise<{ isSuccess: boolean; s
   }
 }
 
-export async function getOrderProducts(orderId: string): Promise<{ isSuccess: boolean; status: string; products: Product[]; events: Event[] }> {
+export async function getOrderProducts(
+  orderId: string
+): Promise<{ isSuccess: boolean; status: string; products: Product[]; events: Event[] }> {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/order/${orderId}/products`)
-  if (response.ok) {
-    const data = await response.json()
-    if (data.products && data.events) {
+  const data = await response.json()
+  console.log(data)
+  if (data.Status === 'SUCCESS') {
+    if (data.Products || data.Events) {
       let products: Product[] = []
       let events: Event[] = []
 
-      if (data.products) {
-        const productsObj = data.products
+      if (data.Products) {
+        const productsObj = data.Products
         if (productsObj.length > 0) {
-          productsObj.foreach((product: any) => {
+          productsObj.foreach((product: Product) => {
             let tags: Tag[] = []
             if (product.Tags && product.Tags.length > 0) {
-              product.Tags.foreach((tag: any) => {})
+              product.Tags?.forEach((tag: any) => {})
             }
           })
         }
       }
 
       if (data.events) {
-        events.push(...data.events)
+        const eventsObj = data.Events
+        if (eventsObj.length > 0) {
+          eventsObj.foreach((event: Event) => {
+            let tags: Tag[] = []
+            if (event.Tags && event.Tags.length > 0) {
+              event.Tags?.forEach((tag: any) => {})
+            }
+          })
+        }
       }
       return { isSuccess: true, status: 'SUCCESS', products: products, events: events }
     }

@@ -214,9 +214,8 @@ export const useAdminStore = create<IState>((set) => ({
         formData.append(`image${index}`, image, image.name);
       });
     }
-    console.log('FORMDATA');
-    console.log(formData.get('dates'));
     const response = await createEvent(formData);
+    console.log(response);
     return { isSuccess: response.isSuccess };
   }
 }))
@@ -226,7 +225,6 @@ interface IState {
   categories: any[]
   products: any[]
   events: any[]
-
 
   login: (username: string, password: string, remember: boolean) => Promise<{isSuccess: boolean, status: string}>
   verifyOtp: (code: string) => Promise<{ isSuccess: boolean; status: string }>

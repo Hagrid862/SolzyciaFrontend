@@ -311,6 +311,33 @@ function OrderStep1({
     return `${formattedDate} | ${formattedTime}`
   }
 
+  function formatDateNoTime(dateString: string): string {
+    const date = new Date(dateString)
+
+    const options: Intl.DateTimeFormatOptions = {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    }
+
+    const formattedDate = date.toLocaleDateString('pl-PL', options)
+
+    return `${formattedDate}`
+  }
+
+  function formatTime(dateString: string): string {
+    const date = new Date(dateString)
+
+    const optionsTime: Intl.DateTimeFormatOptions = {
+      hour: '2-digit',
+      minute: '2-digit'
+    }
+
+    const formattedTime = date.toLocaleTimeString('pl-PL', optionsTime)
+
+    return `${formattedTime}`
+  }
+
   const setDate = (eventId: string, dateId: string) => {
     changeEventDate(eventId, dateId)
   }
@@ -341,7 +368,14 @@ function OrderStep1({
                 <Divider />
                 <div className='text-xl font-semibold'>Data i lokalizacja</div>
                 <Select placeholder='Wybierz date' onChange={(e) => setDate(event.Id, e.target.value)} variant='faded'>
-                  <SelectItem key={2137}>asd</SelectItem>
+                  {event.Dates?.map((date, index) => (
+                    <SelectItem key={date.Id}>
+                      <div className='flex flex-row gap-4'>
+                        <span className='font-semibold'>{formatDateNoTime(date.Date.toString())}</span>
+                        <span className='opacity-70'>{formatTime(date.Date.toString())}</span>
+                      </div>
+                    </SelectItem>
+                  ))}
                 </Select>
               </CardBody>
             </Card>

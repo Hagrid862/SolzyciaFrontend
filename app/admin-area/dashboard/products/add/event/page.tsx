@@ -32,13 +32,14 @@ import { useAdminStore } from '@/store/adminStore'
 import { Simulate } from 'react-dom/test-utils'
 import error = Simulate.error
 import { EventLocation } from '@/models/EventLocation'
+import { EventLocationWithoutId } from '@/models/EventLocationWithoutId'
 
 export default function AddEventPage() {
   const [photos, setPhotos] = useState<File[]>([])
   const [name, setName] = useState<string>('')
   const [duration, setDuration] = useState<number>(0)
   const [customDuration, setCustomDuration] = useState<number>(0)
-  const [dates, setDates] = useState<{ date: Date; seats: number; location: EventLocation }[]>([])
+  const [dates, setDates] = useState<{ date: Date; seats: number; location: EventLocationWithoutId }[]>([])
   const [price, setPrice] = useState<number>(0)
   const [description, setDescription] = useState<string>('')
   const [category, setCategory] = useState<string>('')
@@ -46,7 +47,11 @@ export default function AddEventPage() {
   const [tag, setTag] = useState<string>('')
 
   const [editDate, setEditDate] = useState<number | null>(null)
-  const [selectedDate, setSelectedDate] = useState<{ date: Date; seats: number; location: EventLocation } | null>(null)
+  const [selectedDate, setSelectedDate] = useState<{
+    date: Date
+    seats: number
+    location: EventLocationWithoutId
+  } | null>(null)
 
   const [status, setStatus] = useState<string>('')
   const [err, setErr] = useState<number>(0)
@@ -103,7 +108,6 @@ export default function AddEventPage() {
         date,
         seats: 1,
         location: {
-          Id: '', // Provide appropriate default value
           Street: '', // Provide appropriate default value
           HouseNumber: '', // Provide appropriate default value
           PostalCode: '', // Provide appropriate default value
@@ -509,7 +513,6 @@ export default function AddEventPage() {
                             ...prev.location,
                             City: e.target.value,
                             // Ensure all other properties are provided
-                            Id: prev.location.Id ?? '', // Provide fallback values as needed
                             Street: prev.location.Street ?? '',
                             HouseNumber: prev.location.HouseNumber ?? '',
                             PostalCode: prev.location.PostalCode ?? '',
@@ -535,7 +538,6 @@ export default function AddEventPage() {
                             ...prev.location,
                             Street: e.target.value,
                             // Ensure all other properties are provided
-                            Id: prev.location.Id ?? '', // Provide fallback values as needed
                             HouseNumber: prev.location.HouseNumber ?? '',
                             PostalCode: prev.location.PostalCode ?? '',
                             City: prev.location.City ?? '',
@@ -561,7 +563,6 @@ export default function AddEventPage() {
                             ...prev.location,
                             PostalCode: e.target.value,
                             // Ensure all other properties are provided
-                            Id: prev.location.Id ?? '',
                             Street: prev.location.Street ?? '',
                             HouseNumber: prev.location.HouseNumber ?? '',
                             City: prev.location.City ?? '',
@@ -587,7 +588,6 @@ export default function AddEventPage() {
                             ...prev.location,
                             HouseNumber: e.target.value,
                             // Ensure all other properties are provided
-                            Id: prev.location.Id ?? '',
                             Street: prev.location.Street ?? '',
                             PostalCode: prev.location.PostalCode ?? '',
                             City: prev.location.City ?? '',
@@ -612,7 +612,6 @@ export default function AddEventPage() {
                             ...prev.location,
                             AdditionalInfo: e.target.value,
                             // Ensure all other properties are provided
-                            Id: prev.location.Id ?? '',
                             Street: prev.location.Street ?? '',
                             HouseNumber: prev.location.HouseNumber ?? '',
                             PostalCode: prev.location.PostalCode ?? '',

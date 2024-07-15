@@ -4,6 +4,7 @@ import { createProduct, fetchProducts, updateProduct } from '@/app/actions/produ
 import { login, logout, verifyOtp } from '@/app/actions/auth'
 import { createEvent, fetchEvents } from '@/app/actions/event'
 import ProductsLayout from '@/app/admin-area/dashboard/products/layout'
+import {EventLocation} from "@/models/EventLocation";
 
 export const useAdminStore = create<IState>((set) => ({
   token: undefined,
@@ -186,40 +187,37 @@ export const useAdminStore = create<IState>((set) => ({
       return { isSuccess: false }
     }
   },
-  addEvent: async (name: string, price: number, description: string, time?: number, dates?: { date: Date; seats: number }[], category?: string, tags?: string[], images?: File[]) => {
-    const formData = new FormData()
-    formData.append('name', name)
-    formData.append('price', price.toString())
-    formData.append('description', description)
+  addEvent: async (name: string, price: number, description: string, time?: number, dates?: { date: Date; seats: number, location: EventLocation }[], category?: string, tags?: string[], images?: File[]) => {
+    const formData = new FormData();
+    formData.append('name', name);
+    formData.append('price', price.toString());
+    formData.append('description', description);
     if (time) {
-      formData.append('time', time.toString())
+      formData.append('time', time.toString());
     }
     if (dates) {
-      let datesObj: { dateIso: string; seats: number }[] = []
-      dates.map((date, index) => {
-        const dateString = date.date.toISOString()
-        datesObj.push({ dateIso: dateString, seats: date.seats })
-      })
-      console.log(datesObj)
-      formData.append(`dates`, JSON.stringify(datesObj))
+      const datesString = JSON.stringify(dates.map(date => ({
+        dateIso: date.date.toISOString(),
+        seats: date.seats,
+        location: date.location
+      })));
+      formData.append('dates', datesString);
     }
     if (category) {
-      formData.append('categoryId', category)
+      formData.append('categoryId', category);
     }
     if (tags) {
-      formData.append('tags', tags.join(','))
+      formData.append('tags', tags.join(','));
     }
     if (images) {
       images.forEach((image, index) => {
-        formData.append(`image${index}`, image, image.name)
-      })
+        formData.append(`image${index}`, image, image.name);
+      });
     }
-    const response = await createEvent(formData)
-    if (response.isSuccess) {
-      return { isSuccess: true }
-    } else {
-      return { isSuccess: false }
-    }
+    console.log('FORMDATA');
+    console.log(formData.get('dates'));
+    const response = await createEvent(formData);
+    return { isSuccess: response.isSuccess };
   }
 }))
 
@@ -243,5 +241,5 @@ interface IState {
   updateProduct: ( id: string, name?: string, description?: string, images?: File[], removedImages?: string[], price?: number, category?: string, tags?: string[]) => Promise<{ isSuccess: boolean; status: string }>
 
   fetchEvents: () => Promise<{ isSuccess: boolean }>
-  addEvent: (name: string, price: number, description: string, time?: number, dates?: { date: Date; seats: number }[], category?: string, tags?: string[], images?: File[]) => Promise<{ isSuccess: boolean }>
+  addEvent: (name: string, price: number, description: string, time?: number, dates?: { date: Date; seats: number, location: EventLocation }[], category?: string, tags?: string[], images?: File[]) => Promise<{ isSuccess: boolean }>
 }

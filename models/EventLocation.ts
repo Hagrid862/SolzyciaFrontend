@@ -4,4 +4,5 @@ export interface EventLocation {
   HouseNumber: string
   PostalCode: string
   City: string
+  AdditionalInfo: string
 }

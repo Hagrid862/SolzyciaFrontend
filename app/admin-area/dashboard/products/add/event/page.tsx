@@ -1,6 +1,8 @@
 'use client'
 
 import {
+  Accordion,
+  AccordionItem,
   CalendarDate,
   Card,
   CardBody,
@@ -29,13 +31,14 @@ import { Textarea } from '@nextui-org/input'
 import { useAdminStore } from '@/store/adminStore'
 import { Simulate } from 'react-dom/test-utils'
 import error = Simulate.error
+import { EventLocation } from '@/models/EventLocation'
 
 export default function AddEventPage() {
   const [photos, setPhotos] = useState<File[]>([])
   const [name, setName] = useState<string>('')
   const [duration, setDuration] = useState<number>(0)
   const [customDuration, setCustomDuration] = useState<number>(0)
-  const [dates, setDates] = useState<{ date: Date; seats: number }[]>([])
+  const [dates, setDates] = useState<{ date: Date; seats: number; location: EventLocation }[]>([])
   const [price, setPrice] = useState<number>(0)
   const [description, setDescription] = useState<string>('')
   const [category, setCategory] = useState<string>('')
@@ -43,7 +46,7 @@ export default function AddEventPage() {
   const [tag, setTag] = useState<string>('')
 
   const [editDate, setEditDate] = useState<number | null>(null)
-  const [selectedDate, setSelectedDate] = useState<{ date: Date; seats: number } | null>(null)
+  const [selectedDate, setSelectedDate] = useState<{ date: Date; seats: number; location: EventLocation } | null>(null)
 
   const [status, setStatus] = useState<string>('')
   const [err, setErr] = useState<number>(0)
@@ -94,46 +97,42 @@ export default function AddEventPage() {
     date.setMilliseconds(0)
     date.setSeconds(0)
 
-    setDates([...dates, { date, seats: 1 }])
+    setDates([
+      ...dates,
+      {
+        date,
+        seats: 1,
+        location: {
+          Id: '', // Provide appropriate default value
+          Street: '', // Provide appropriate default value
+          HouseNumber: '', // Provide appropriate default value
+          PostalCode: '', // Provide appropriate default value
+          City: '', // Provide appropriate default value
+          AdditionalInfo: '' // Provide appropriate default value
+        }
+      }
+    ])
   }
 
   const handleChangeDate = (date: CalendarDate) => {
     const dateObj = new Date(date.toString())
-
-    if (dateObj < new Date()) {
-      setSelectedDate({ seats: selectedDate!.seats, date: new Date() })
-    }
-
-    setSelectedDate({ seats: selectedDate!.seats, date: dateObj })
+    setSelectedDate((prev) => (prev ? { ...prev, date: dateObj } : null))
   }
 
   const handleTimeChange = (time: Time) => {
-    const date = selectedDate!.date
-
-    date.setHours(time.hour)
-    date.setMinutes(time.minute)
-
-    setSelectedDate({ seats: selectedDate!.seats, date })
+    setSelectedDate((prev) => {
+      if (!prev) return null
+      const updatedDate = new Date(prev.date)
+      updatedDate.setHours(time.hour, time.minute)
+      return { ...prev, date: updatedDate }
+    })
   }
 
   const handleSeatsChange = (value: string) => {
-    console.log(value)
-    if (value == '') {
-      setSelectedDate({ seats: 1, date: selectedDate!.date })
-      return
-    }
-
-    if (Number.isNaN(Number.parseInt(value))) {
-      return
-    }
-
     const seats = Number.parseInt(value)
-
-    if (seats < 0) {
-      setSelectedDate({ seats: 1, date: selectedDate!.date })
+    if (!Number.isNaN(seats) && seats > 0) {
+      setSelectedDate((prev) => (prev ? { ...prev, seats } : null))
     }
-
-    setSelectedDate({ seats: seats, date: selectedDate!.date })
   }
 
   const handleDateSave = () => {
@@ -145,7 +144,7 @@ export default function AddEventPage() {
     }
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     var images: File[] = []
 
     photos.map((val, index) => {
@@ -180,9 +179,18 @@ export default function AddEventPage() {
       return
     }
 
-    addEvent(name, price, description, duration === -1 ? customDuration : duration, dates, category, tags, images)
     setErr(0)
     setStatus('loading')
+    const response = await addEvent(
+      name,
+      price,
+      description,
+      duration === -1 ? customDuration : duration,
+      dates,
+      category,
+      tags,
+      images
+    )
   }
 
   return (
@@ -432,9 +440,10 @@ export default function AddEventPage() {
                 value={
                   selectedDate
                     ? parseTime(
-                        selectedDate!.date.toLocaleTimeString([], {
+                        selectedDate?.date.toLocaleTimeString([], {
                           hour: '2-digit',
-                          minute: '2-digit'
+                          minute: '2-digit',
+                          hour12: false
                         })
                       )
                     : undefined
@@ -449,12 +458,12 @@ export default function AddEventPage() {
                   <Button
                     isIconOnly
                     onClick={() =>
-                      selectedDate!.seats <= 1
-                        ? null
-                        : setSelectedDate({
-                            date: selectedDate!.date,
-                            seats: selectedDate!.seats - 1
+                      selectedDate && selectedDate.seats > 1
+                        ? setSelectedDate({
+                            ...selectedDate,
+                            seats: selectedDate.seats - 1
                           })
+                        : null
                     }
                   >
                     <MaterialSymbol icon='remove' size={24} color='#FFF' />
@@ -466,7 +475,14 @@ export default function AddEventPage() {
                   />
                   <Button
                     isIconOnly
-                    onClick={() => setSelectedDate({ seats: selectedDate!.seats + 1, date: selectedDate!.date })}
+                    onClick={() =>
+                      selectedDate
+                        ? setSelectedDate({
+                            ...selectedDate,
+                            seats: selectedDate.seats + 1
+                          })
+                        : null
+                    }
                   >
                     <MaterialSymbol icon='add' size={24} color='#FFF' />
                   </Button>
@@ -474,6 +490,143 @@ export default function AddEventPage() {
               </div>
               <div className='text-xs text-[#777] mt-1'>Ilość osób które będą mogły kupić to wydarzenie.</div>
             </div>
+            <Accordion variant='shadow' className='bg-opacity-5 bg-white'>
+              <AccordionItem key='1' aria-label='location' title='Lokalizacja wydarzenia'>
+                <div>Dodaj lokalizacje wydarzenia aby kupujący odrazu wiedział gdzie się stawić</div>
+                <Divider className='my-2' />
+                <div className='flex flex-col gap-2'>
+                  <Input
+                    label='Miasto'
+                    variant='faded'
+                    isRequired
+                    value={selectedDate?.location?.City ?? ''}
+                    onChange={(e) =>
+                      setSelectedDate((prev) => {
+                        if (!prev) return null // Handle the case where prev is null
+                        return {
+                          ...prev,
+                          location: {
+                            ...prev.location,
+                            City: e.target.value,
+                            // Ensure all other properties are provided
+                            Id: prev.location.Id ?? '', // Provide fallback values as needed
+                            Street: prev.location.Street ?? '',
+                            HouseNumber: prev.location.HouseNumber ?? '',
+                            PostalCode: prev.location.PostalCode ?? '',
+                            AdditionalInfo: prev.location.AdditionalInfo ?? ''
+                          },
+                          date: prev.date, // Ensure date is always provided
+                          seats: prev.seats // Ensure seats is always provided
+                        }
+                      })
+                    }
+                  />
+                  <Input
+                    label='Ulica'
+                    variant='faded'
+                    isRequired
+                    value={selectedDate?.location?.Street ?? ''}
+                    onChange={(e) =>
+                      setSelectedDate((prev) => {
+                        if (!prev) return null // Handle the case where prev is null
+                        return {
+                          ...prev,
+                          location: {
+                            ...prev.location,
+                            Street: e.target.value,
+                            // Ensure all other properties are provided
+                            Id: prev.location.Id ?? '', // Provide fallback values as needed
+                            HouseNumber: prev.location.HouseNumber ?? '',
+                            PostalCode: prev.location.PostalCode ?? '',
+                            City: prev.location.City ?? '',
+                            AdditionalInfo: prev.location.AdditionalInfo ?? ''
+                          },
+                          date: prev.date, // Ensure date is always provided
+                          seats: prev.seats // Ensure seats is always provided
+                        }
+                      })
+                    }
+                  />
+                  <Input
+                    label='Kod pocztowy'
+                    variant='faded'
+                    isRequired
+                    value={selectedDate?.location?.PostalCode ?? ''}
+                    onChange={(e) =>
+                      setSelectedDate((prev) => {
+                        if (!prev) return null // Handle the case where prev is null
+                        return {
+                          ...prev,
+                          location: {
+                            ...prev.location,
+                            PostalCode: e.target.value,
+                            // Ensure all other properties are provided
+                            Id: prev.location.Id ?? '',
+                            Street: prev.location.Street ?? '',
+                            HouseNumber: prev.location.HouseNumber ?? '',
+                            City: prev.location.City ?? '',
+                            AdditionalInfo: prev.location.AdditionalInfo ?? ''
+                          },
+                          date: prev.date, // Ensure date is always provided
+                          seats: prev.seats // Ensure seats is always provided
+                        }
+                      })
+                    }
+                  />
+                  <Input
+                    label='Numer budynku'
+                    variant='faded'
+                    isRequired
+                    value={selectedDate?.location?.HouseNumber ?? ''}
+                    onChange={(e) =>
+                      setSelectedDate((prev) => {
+                        if (!prev) return null // Handle the case where prev is null
+                        return {
+                          ...prev,
+                          location: {
+                            ...prev.location,
+                            HouseNumber: e.target.value,
+                            // Ensure all other properties are provided
+                            Id: prev.location.Id ?? '',
+                            Street: prev.location.Street ?? '',
+                            PostalCode: prev.location.PostalCode ?? '',
+                            City: prev.location.City ?? '',
+                            AdditionalInfo: prev.location.AdditionalInfo ?? ''
+                          },
+                          date: prev.date, // Ensure date is always provided
+                          seats: prev.seats // Ensure seats is always provided
+                        }
+                      })
+                    }
+                  />
+                  <Textarea
+                    label='Dodatkowe informacje'
+                    variant='faded'
+                    value={selectedDate?.location?.AdditionalInfo ?? ''}
+                    onChange={(e) =>
+                      setSelectedDate((prev) => {
+                        if (!prev) return null // Handle the case where prev is null
+                        return {
+                          ...prev,
+                          location: {
+                            ...prev.location,
+                            AdditionalInfo: e.target.value,
+                            // Ensure all other properties are provided
+                            Id: prev.location.Id ?? '',
+                            Street: prev.location.Street ?? '',
+                            HouseNumber: prev.location.HouseNumber ?? '',
+                            PostalCode: prev.location.PostalCode ?? '',
+                            City: prev.location.City ?? ''
+                          },
+                          date: prev.date, // Ensure date is always provided
+                          seats: prev.seats // Ensure seats is always provided
+                        }
+                      })
+                    }
+                  />
+                </div>
+              </AccordionItem>
+            </Accordion>
           </ModalBody>
           <Divider />
           <ModalBody className='flex flex-row justify-between'>

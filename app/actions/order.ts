@@ -65,7 +65,7 @@ export async function getOrderProducts(
       if (data.Products) {
         const productsObj = data.Products
         if (productsObj.length > 0) {
-          productsObj.foreach((product: Product) => {
+          productsObj.forEach((product: Product) => {
             let tags: Tag[] = []
             if (product.Tags && product.Tags.length > 0) {
               product.Tags?.forEach((tag: any) => {})
@@ -74,17 +74,19 @@ export async function getOrderProducts(
         }
       }
 
-      if (data.events) {
+      if (data.Events) {
         const eventsObj = data.Events
         if (eventsObj.length > 0) {
-          eventsObj.foreach((event: Event) => {
+          eventsObj.forEach((event: Event) => {
             let tags: Tag[] = []
             if (event.Tags && event.Tags.length > 0) {
               event.Tags?.forEach((tag: any) => {})
             }
           })
         }
+        events = eventsObj
       }
+      console.log(events)
       return { isSuccess: true, status: 'SUCCESS', products: products, events: events }
     }
   }

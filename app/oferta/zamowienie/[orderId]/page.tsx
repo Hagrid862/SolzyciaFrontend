@@ -4,10 +4,12 @@ import { Order } from '@/models/Order'
 import { Product } from '@/models/Product'
 import { Event } from '@/models/Event'
 import { useOrderStore } from '@/store/orderStore'
-import { Button, Card, CardBody, CardHeader, Divider, Input, Select, SelectItem } from '@nextui-org/react'
+import { Button, Card, CardBody, CardHeader, Divider, Input, Select, SelectItem, Image } from '@nextui-org/react'
 import { useEffect, useState } from 'react'
 import { MaterialSymbol } from 'react-material-symbols'
 import { setegid } from 'process'
+import { util } from 'zod'
+import jsonStringifyReplacer = util.jsonStringifyReplacer
 
 export default function Page({ params }: { params: { orderId: string } }) {
   const [order, setOrder] = useState<Order | null>(null)
@@ -50,6 +52,12 @@ export default function Page({ params }: { params: { orderId: string } }) {
       return
     })
   }, [])
+
+  useEffect(() => {
+    console.log('psi chuj')
+    console.log(events)
+    console.log(products)
+  })
 
   return (
     <div className='mx-2'>
@@ -309,72 +317,37 @@ function OrderStep1({
 
   return (
     <Card className='flex flex-col h-[calc(100vh-346px)]'>
-      <CardBody className='w-full flex flex-col gap-2'>
-        {productsProp !== undefined && productsProp !== null && productsProp.length > 0 && (
-          <div key='products-container' className='flex flex-col gap-4'>
-            <div className='text-xl font-semibold'>Produkty:</div>
-            {productsProp.map((product, index) => (
-              <div className='flex flex-row justify-between items-center text-sm' key={index}>
-                <div className='text-lg'>{product.Name}</div>
-                <div className='text-md text-primary'>{product.Price} zł</div>
-              </div>
-            ))}
-          </div>
-        )}
-        {eventsProp !== undefined && eventsProp !== null && eventsProp.length > 0 && (
-          <div key='events-container' className='flex flex-col gap-4'>
-            <div className='text-xl font-semibold'>Wydarzenia:</div>
-            {eventsProp.map((event, index) => (
-              <div key={`event-card-${index}`}>
-                <Card>
-                  <CardHeader className='bg-white bg-opacity-5 font-semibold'>{event.Name}</CardHeader>
-                  <Divider />
-                  <CardBody className='bg-white bg-opacity-5 flex flex-col gap-2'>
-                    <div>Termin rezerwacji:</div>
-                    <div className='flex flex-row flex-nowrap max-w-[100%] overflow-x-auto gap-4'>
-                      {event.Dates.map((date, index) => (
-                        <Card
-                          key={`date-${date.Date}`}
-                          className={`min-w-[300px] max-w-[300px] ${eventDates.find((eventDate) => eventDate.eventId === event.Id && eventDate.dateId === date.Id) ? 'bg-white bg-opacity-15' : ''}`}
-                          isPressable
-                          isHoverable={
-                            eventDates.find(
-                              (eventDate) => eventDate.eventId === event.Id && eventDate.dateId === date.Id
-                            ) == null
-                          }
-                          onPress={() => {
-                            setDate(event.Id, date.Id)
-                            console.log(eventDates)
-                          }}
-                        >
-                          <CardHeader>{formatDate(date.Date.toString())}</CardHeader>
-                          <Divider />
-                          <CardBody>
-                            lokalizacja:
-                            {date.Location?.City &&
-                            date.Location.HouseNumber &&
-                            date.Location.Street &&
-                            date.Location.PostalCode ? (
-                              <div>
-                                {date.Location?.Street}/{date.Location?.HouseNumber}, {date.Location?.City}
-                              </div>
-                            ) : (
-                              <>
-                                <div>Brak informacji.</div>
-                                <div className='text-xs'>Skontaktuj sie z nami po wiecej informacji</div>
-                              </>
-                            )}
-                          </CardBody>
-                        </Card>
-                      ))}
-                    </div>
-                  </CardBody>
-                </Card>
-              </div>
-            ))}
-          </div>
-        )}
-      </CardBody>
+      <div className='w-full flex flex-col gap-2 h-full'>
+        <CardHeader className='text-xl font-semibold'>
+          Sprecyzuj sposób dostawy lub odbioru poszczególnych produktów
+        </CardHeader>
+        <Divider />
+        <CardBody>
+          {eventsProp?.map((event, index) => (
+            <Card className='flex flex-col gap-2 bg-white bg-opacity-5'>
+              <CardHeader className='flex flex-row gap-4'>
+                {(event.Images && event.Images.length > 0 && (
+                  <Image width={64} height={64} src={event.Images?.[0].Base64} radius='sm' />
+                )) || <div className='w-16 h-16 bg-gray-300' />}
+                <div>
+                  <div className='text-lg font-medium'> {event.Name} </div>
+                  <div className='opacity-65'> {event.Price} zł</div>
+                </div>
+              </CardHeader>
+              <Divider />
+              <CardBody className='flex flex-col gap-2'>
+                <div className='text-2xl font-semibold'>Odbiór</div>
+                <div>Wybierz odpowiednie miejsce oraz date wydarzenia - taką jaka ci odpowiada</div>
+                <Divider />
+                <div className='text-xl font-semibold'>Data i lokalizacja</div>
+                <Select placeholder='Wybierz date' onChange={(e) => setDate(event.Id, e.target.value)} variant='faded'>
+                  <SelectItem key={2137}>asd</SelectItem>
+                </Select>
+              </CardBody>
+            </Card>
+          ))}
+        </CardBody>
+      </div>
       <Divider />
       <CardBody className='flex flex-row gap-2 overflow-hidden'>
         <Button isIconOnly onPress={() => setCurrentStep(0)}>

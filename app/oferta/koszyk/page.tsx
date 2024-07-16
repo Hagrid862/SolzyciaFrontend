@@ -64,7 +64,7 @@ export default function CartPage() {
               className={`flex flex-row w-full h-32 ${unselected.includes(index) ? 'opacity-75 scale-[97%]' : 'opacity-100 scale-100'}`}
             >
               <CardBody className='min-w-32 max-w-32 aspect-square'>
-                {item.Image?.Base64 === 'noimage' ? (
+                {!item.Image || item.Image?.Base64 === 'noimage' ? (
                   <div className='w-full aspect-square flex items-center justify-center bg-primary bg-opacity-50 rounded-lg'>
                     <MaterialSymbol icon='no_photography' size={48} />
                   </div>

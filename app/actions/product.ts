@@ -1,5 +1,6 @@
 'use server'
 
+import { Product } from '@/models/Product'
 import { cookies } from 'next/headers'
 
 export async function fetchProducts(
@@ -8,30 +9,31 @@ export async function fetchProducts(
   order?: 'desc' | 'asc',
   page?: number,
   limit?: number
-): Promise<{ isSuccess: boolean; productsJson: string }> {
+): Promise<{ isSuccess: boolean; status: string; products: Product[] | null }> {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/product${reviews || orderBy || order || page || limit ? '?' : ''}${reviews ? 'reviews=true' : ''}${orderBy ? `&orderBy=${orderBy}` : ''}${order ? `&order=${order}` : ''}${page ? `&page=${page}` : ''}${limit ? `&limit=${limit}` : ''}`
     )
 
-    console.log(response.status)
+    const data = await response.json()
 
     if (response.status === 200) {
-      const data = await response.json()
       console.log(data)
-      if (data.products) {
-        const productsJson = JSON.stringify(data.products)
-        return { isSuccess: true, productsJson: productsJson }
+      if (data.Products) {
+        return { isSuccess: true, status: 'SUCCESS', products: data.Products as Product[] }
       } else {
-        return { isSuccess: false, productsJson: '' }
+        return { isSuccess: false, status: 'ERROR', products: null }
       }
     } else {
-      console.log(await response.json())
-      return { isSuccess: false, productsJson: '' }
+      if (data.Status === 'NOTFOUND') {
+        return { isSuccess: false, status: 'NOTFOUND', products: null }
+      } else {
+        return { isSuccess: false, status: 'ERROR', products: null }
+      }
     }
   } catch (e) {
-    console.log('error: ' + e)
-    return { isSuccess: false, productsJson: '' }
+    console.log('ERROR: ' + e)
+    return { isSuccess: false, status: 'ERROR', products: null }
   }
 }
 
@@ -42,31 +44,31 @@ export async function fetchProductsByCategory(
   order?: 'desc' | 'asc',
   page?: number,
   limit?: number
-): Promise<{ isSuccess: boolean; productsJson: string }> {
+): Promise<{ isSuccess: boolean; status: string; products: Product[] | null }> {
   try {
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/api/product/category/${category}${reviews || orderBy || order || page || limit ? '?' : ''}${reviews ? 'reviews=true' : ''}${orderBy ? `&orderBy=${orderBy}` : ''}${order ? `&order=${order}` : ''}${page ? `&page=${page}` : ''}${limit ? `&limit=${limit}` : ''}`
     )
-    console.log(response.status)
 
     if (response.status === 200) {
       const data = await response.json()
       if (data.products) {
-        const productsJson = JSON.stringify(data.products)
-        return { isSuccess: true, productsJson: productsJson }
+        return { isSuccess: true, status: 'SUCCESS', products: data.products as Product[] }
       } else {
-        return { isSuccess: true, productsJson: '[]' }
+        return { isSuccess: false, status: 'ERROR', products: null }
       }
     } else {
-      return { isSuccess: false, productsJson: '' }
+      return { isSuccess: false, status: 'ERROR', products: null }
     }
   } catch (e) {
     console.log('error: ' + e)
-    return { isSuccess: false, productsJson: '' }
+    return { isSuccess: false, status: 'ERROR', products: null }
   }
 }
 
-export async function fetchProductById(id: string): Promise<{ isSuccess: boolean; productJson: string }> {
+export async function fetchProductById(
+  id: string
+): Promise<{ isSuccess: boolean; status: string; product: Product[] | null }> {
   try {
     const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/product/${id}`, {
       method: 'GET',
@@ -74,23 +76,23 @@ export async function fetchProductById(id: string): Promise<{ isSuccess: boolean
         'Content-Type': 'application/json'
       }
     })
-    if (response.status === 200) {
-      const data = await response.json()
+    const data = await response.json()
+    console.log(data)
+    if (data.Status === 'SUCCESS') {
       console.log(data)
-      if (data.product) {
-        const productJson = JSON.stringify(data.product)
-        return { isSuccess: true, productJson: productJson }
+      if (data.Product) {
+        return { isSuccess: true, status: 'SUCCESS', product: data.Product as Product[] }
       } else {
-        return { isSuccess: false, productJson: '' }
+        return { isSuccess: false, status: 'ERROR', product: null }
       }
     } else {
-      if (response.status === 404) {
-        return { isSuccess: true, productJson: '[]' }
+      if (data.Status === 'NOTFOUND') {
+        return { isSuccess: true, status: 'NOTFOUND', product: null }
       }
-      return { isSuccess: false, productJson: '' }
+      return { isSuccess: false, status: 'ERROR', product: null }
     }
   } catch {
-    return { isSuccess: false, productJson: '' }
+    return { isSuccess: false, status: 'ERROR', product: null }
   }
 }
 

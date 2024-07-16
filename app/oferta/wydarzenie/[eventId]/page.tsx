@@ -1,18 +1,24 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, {Key, useEffect, useState} from 'react'
 import { useOfferStore } from '@/store/offerStore'
-import { Button, Card, CardBody, CardHeader, Divider, Image, Tooltip } from '@nextui-org/react'
+import {Button, Card, CardBody, CardHeader, Divider, Image, ScrollShadow, Tab, Tabs, Tooltip} from '@nextui-org/react'
 import { MaterialSymbol } from 'react-material-symbols'
 import { DateTimeFormat } from '@formatjs/ecma402-abstract'
 import { useCartStore } from '@/store/cartStore'
+import { Event } from '@/models/Event'
+import { EventDate } from '@/models/EventDate'
+import { Image as ImageModel } from '@/models/Image'
+import {Tag} from "@/models/Tag";
 
 export default function OfferProductPage({ params }: { params: { eventId: string } }) {
-  const [event, setEvent] = useState<any>(null)
+  const [event, setEvent] = useState<Event | null>(null)
   const [currentPhoto, setCurrentPhoto] = useState<number>(0)
 
   const store = useOfferStore()
   const cartStore = useCartStore()
+
+  const [currentTab, setCurrentTab] = useState(0)
 
   const formatDate = (date: string) => {
     const newDate = new Date(date) // use the date passed to the function
@@ -47,10 +53,10 @@ export default function OfferProductPage({ params }: { params: { eventId: string
 
   return (
     <div className='max-w-[1300px] mx-auto mt-2'>
-      <div className='flex flex-row gap-8'>
+      <div className='flex flex-row gap-8 max-h-[650px]'>
         <Card className='relative w-[550px] max-w-[50vw] aspect-square overflow-visible ml-6'>
           <CardBody className='overflow-visible w-full'>
-            {event?.images == undefined || event?.images?.length < 1 ? (
+            {event?.Images == undefined || event?.Images?.length < 1 ? (
               <div className='bg-white max-w-[50vw] max-h-[50vw] w-[525px] h-[525px] flex items-center justify-center flex-row bg-opacity-10 rounded-lg'>
                 <MaterialSymbol icon='no_photography' size={72} color='primary' />
               </div>
@@ -70,13 +76,13 @@ export default function OfferProductPage({ params }: { params: { eventId: string
                   className='z-50 absolute right-0 top-1/2 h-16 transform translate-x-1/2 -translate-y-1/2'
                   color='primary'
                   variant='shadow'
-                  isDisabled={currentPhoto >= event?.images?.length - 1}
+                  isDisabled={currentPhoto >= (event?.Images?.length ?? 0) - 1}
                 >
                   <MaterialSymbol icon={'arrow_forward_ios'} />
                 </Button>
                 <Image
-                  src={event?.images ? event?.images[0] : ''}
-                  alt={event?.name}
+                  src={event?.Images ? event?.Images[0].Base64 : ''}
+                  alt={event?.Name}
                   className='max-h-[min(525px, 50vw)] max-w-[min(525px, 50vw)]'
                 />
               </div>
@@ -85,12 +91,12 @@ export default function OfferProductPage({ params }: { params: { eventId: string
           <Divider />
           <CardBody>
             <div className='flex flex-row overflow-x-auto'>
-              {event?.images && event.images.length > 0 ? (
-                event.images.map((image: string, index: number) => (
+              {event?.Images && event?.Images?.length > 0 ? (
+                event?.Images?.map((image: ImageModel, index: number) => (
                   <div className='relative h-[75px] flex flex-col items-center justify-center' key='event-photo'>
                     <Image
-                      src={image}
-                      alt={event.name}
+                      src={image.Base64}
+                      alt={event.Name}
                       className={`max-w-[75px] max-h-[75px] rounded-lg scale-${currentPhoto === index ? '100' : '80'}`}
                     />
                   </div>
@@ -104,84 +110,109 @@ export default function OfferProductPage({ params }: { params: { eventId: string
         <Card className='w-full mr-6 flex flex-col items-start justify-start'>
           <CardBody className='min-h-16 h-16 overflow-hidden'>
             <div className='flex flex-row justify-between relative'>
-              <div className='text-3xl font-semibold'>{event?.name}</div>
+              <div className='text-3xl font-semibold'>{event?.Name}</div>
               <div className='text-3xl font-bold text-white bg-primary bg-opacity-50 p-4 absolute -right-4 -top-4 flex flex-row'>
-                {event?.price} zł
+                {event?.Price} zł
               </div>
             </div>
           </CardBody>
           <Divider />
-          <CardBody className='h-64'>
-            <div className='text-2xl font-medium'>Dostępne terminy:</div>
-            {event?.dates?.map((date: any, index: number) => (
-              <>
-                <div key={index} className='flex flex-row justify-between m-2'>
-                  <div className='text-lg'>{formatDate(date.date)}</div>
-                  <div className='text-lg'>
-                    {date.seats}{' '}
-                    {date.seats === 0
-                      ? 'dostępnych miejsc'
-                      : date.seats === 1
-                        ? 'dostępne miejsce'
-                        : date.seats > 1 && date.seats < 5
-                          ? 'dostępne miejsca'
-                          : 'dostępnych miejsc'}
+          <CardBody className='h-full'>
+            <Tabs fullWidth onSelectionChange={(key) => setCurrentTab(Number(key))}>
+              <Tab title='Opis' key={0}/>
+              <Tab title='Terminy' key={1}/>
+              <Tab title='Kontakt' key={2}/>
+            </Tabs>
+            <>
+              {
+                currentTab === 0 && (
+                  <div className='max-h-full overflow-y-auto'>
+                    <CardBody className='overflow-y-auto'>
+                      <div className='text-lg font-semibold'>Opis</div>
+                      {event?.Description}
+                    </CardBody>
+                    <CardBody>
+                      <div className='text-lg font-semibold'>Kategoria</div>
+                      {event?.Category?.Name ?? 'Brak'}
+                    </CardBody>
+                    <CardBody>
+                      <div className='text-lg font-semibold'>Tagi</div>
+                      {
+                        event?.Tags?.map((tag: Tag, index: number) => (
+                          <div key={index} className='bg-white bg-opacity-10 rounded-lg p-2 m-1 inline-block'>
+                            {tag.Name}
+                          </div>
+                        ))??'Brak'
+                      }
+                    </CardBody>
                   </div>
-                </div>
-                <Divider />
-              </>
-            ))}
+                )
+              }
+              {
+                currentTab === 1 && (
+                  <div className='overflow-y-auto p-2 pt-2 py-4 gap-2 scrollbar-hide'>
+                    <ScrollShadow hideScrollBar className='max-h-[456px]'>
+                      <div>
+                        {
+                          event?.Dates?.map((date: EventDate, index: number) => (
+                            <Card className='my-4'>
+                              <CardBody className='bg-white bg-opacity-5'>
+                                <div className='font-semibold text-large'>Data:</div>
+                                {
+                                  formatDate(date.Date.toString())
+                                }
+                              </CardBody>
+                              <Divider/>
+                              <CardBody className='bg-white bg-opacity-5'>
+                                <div className='font-semibold text-large'>Liczba miejsc:</div>
+                                {date.Seats} wolne z {date.Seats}
+                              </CardBody>
+                              <Divider/>
+                              <CardBody className='bg-white bg-opacity-5'>
+                                <div className='font-semibold text-large'>Lokalizacja:</div>
+                                {
+                                  date.Location?.City && date.Location?.Street && date.Location?.HouseNumber && date.Location?.PostalCode ? (
+                                    <div>{date.Location?.City}, {date.Location?.Street} {date.Location?.HouseNumber} - {date.Location?.PostalCode}</div>) : (
+                                    <div>Nie podano - skontaktuj sie z nami</div>)
+                                }
+                              </CardBody>
+                            </Card>
+                          ))
+                        }
+                      </div>
+                    </ScrollShadow>
+                  </div>
+                )
+              }
+            </>
           </CardBody>
-          <Divider />
-          <CardBody className='h-full gap-2'>
-            <Card>
-              <CardBody className='bg-white bg-opacity-5'>
-                <div className='text-2xl font-medium'>
-                  Czas trwania:{' '}
-                  {event?.time >= 60
-                    ? event?.time / 60 == 1
-                      ? '1 godzina'
-                      : event?.time > 1 && event?.time < 5
-                        ? `${event?.time / 60} godziny`
-                        : `${event?.time / 60} godzin`
-                    : `${event?.time} minut`}
-                </div>
-              </CardBody>
-            </Card>
-            <Card>
-              <CardBody className='bg-white bg-opacity-5'>
-                <div className='text-2xl font-medium'>Opis:</div>
-                <div className='text-lg'>{event?.description}</div>
-              </CardBody>
-            </Card>
-          </CardBody>
-          <Divider />
+          <Divider/>
           <CardBody className='flex flex-row min-h-16 justify-between gap-2'>
             <div className='flex flex-row gap-2'>
               <Tooltip content='Kontakt' placement='bottom'>
                 <Button color='primary' variant='flat' isIconOnly>
-                  <MaterialSymbol icon='call' size={24} color='white' />
+                  <MaterialSymbol icon='call' size={24} color='white'/>
                 </Button>
               </Tooltip>
               <Tooltip content='Polub' placement='bottom'>
                 <Button color='success' variant='flat' isIconOnly>
-                  <MaterialSymbol icon='favorite' size={24} color='white' />
+                  <MaterialSymbol icon='favorite' size={24} color='white'/>
                 </Button>
               </Tooltip>
               <Tooltip content='Udostępnij' placement='bottom'>
                 <Button color='secondary' variant='flat' isIconOnly>
-                  <MaterialSymbol icon='share' size={24} color='white' />
+                  <MaterialSymbol icon='share' size={24} color='white'/>
                 </Button>
               </Tooltip>
             </div>
             <div className='gap-2 flex flex-row'>
               <Tooltip content='Dodaj do koszyka' placement='bottom'>
                 <Button color='secondary' variant='solid' isIconOnly onClick={() => addToCart()}>
-                  <MaterialSymbol icon='add_shopping_cart' size={24} color='white' />
+                  <MaterialSymbol icon='add_shopping_cart' size={24} color='white'/>
                 </Button>
               </Tooltip>
               <Button color='primary' variant='solid'>
-                <MaterialSymbol icon='event_available' size={24} color='white' />
+                <MaterialSymbol icon='event_available' size={24} color='white'/>
                 Zarezerwuj
               </Button>
             </div>
@@ -255,3 +286,4 @@ export default function OfferProductPage({ params }: { params: { eventId: string
     </div>
   )
 }
+

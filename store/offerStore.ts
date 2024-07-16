@@ -4,6 +4,7 @@ import { fetchProductById, fetchProducts, fetchProductsByCategory } from '@/app/
 import { fetchEventById, fetchEvents, fetchEventsByCategory } from '@/app/actions/event'
 import { Product } from '@/models/Product'
 import { Category } from '@/models/Category'
+import { Event } from '@/models/Event'
 
 export const useOfferStore = create<IState>((set, get) => ({
   filterCategory: 'all-categories',
@@ -53,9 +54,9 @@ export const useOfferStore = create<IState>((set, get) => ({
   fetchCategories: async (): Promise<{ isSuccess: boolean }> => {
     set({ categories: ['loading'] })
     const response = await fetchCategories()
-    if (response !== 'ERROR') {
-      if (response.length > 0) {
-        set({ categories: response })
+    if (response.status !== 'ERROR') {
+      if (response.data.length> 0) {
+        set({ categories: response.data })
         return { isSuccess: true }
       } else {
         set({ categories: ['none'] })
@@ -77,11 +78,11 @@ export const useOfferStore = create<IState>((set, get) => ({
     set({ products: ['loading'] })
     const response = await fetchProducts(reviews, orderBy, order, page, limit)
     if (response.isSuccess) {
-      if (response.productsJson === '[]') {
+      if (response.products?.length === 0) {
         set({ products: ['none'] })
         return { isSuccess: false }
       }
-      const products = JSON.parse(response.productsJson)
+      const products = response.products
       if (products && products.length > 0) {
         set({ products: products })
         return { isSuccess: true }
@@ -104,7 +105,7 @@ export const useOfferStore = create<IState>((set, get) => ({
     set({ products: ['loading'] })
     const response = await fetchProductsByCategory(get().filterCategory, reviews, orderBy, order, page, limit)
     if (response.isSuccess) {
-      const products = JSON.parse(response.productsJson)
+      const products = response.products
       if (products && products.length > 0) {
         set({ products: products })
         return { isSuccess: true }
@@ -119,12 +120,13 @@ export const useOfferStore = create<IState>((set, get) => ({
   },
   fetchProductById: async (id: string): Promise<{ isSuccess: boolean; product: Product | null }> => {
     const response = await fetchProductById(id)
+    console.log(response)
     if (response.isSuccess) {
-      const products = JSON.parse(response.productJson)
-      if (products) {
-        return { isSuccess: true, product: products } // Assuming you want to return the first product
-      } else {
+      const product = response.product
+      if (Array.isArray(product)) {
         return { isSuccess: false, product: null }
+      } else {
+        return { isSuccess: true, product: product }
       }
     } else {
       set({ products: ['error'] })
@@ -141,10 +143,8 @@ export const useOfferStore = create<IState>((set, get) => ({
   ) => {
     set({ events: ['loading'] })
     const response = await fetchEvents()
-    console.log('response')
-    console.log(response)
     if (response.isSuccess) {
-      const events = JSON.parse(response.eventsJson)
+      const events = response.events
       if (events && events.length > 0) {
         set({ events: events })
         return { isSuccess: true }
@@ -163,42 +163,44 @@ export const useOfferStore = create<IState>((set, get) => ({
     order?: 'desc' | 'asc',
     page?: number,
     limit?: number
-  ) => {
+  ): Promise<{isSuccess: boolean, status: string}> => {
     set({ events: ['loading'] })
     const response = await fetchEventsByCategory(get().filterCategory, reviews, orderBy, order, page, limit)
     if (response.isSuccess) {
-      if (response.eventsJson === '[]') {
-        set({ events: ['none'] })
-        return { isSuccess: false }
-      }
-      const events = JSON.parse(response.eventsJson)
-      if (events && events.length > 0) {
-        set({ events: events })
-        return { isSuccess: true }
+      if (response.status === 'SUCCESS' && (response.events?.length ?? 0) > 0) {
+        set({ events: response.events as Event[] })
+        return { isSuccess: true, status: 'SUCCESS' }
       } else {
-        set({ events: ['none'] })
-        return { isSuccess: false }
+        set({ events: ['error'] })
+        return { isSuccess: false, status: 'ERROR' }
       }
     } else {
-      set({ events: ['error'] })
-      return { isSuccess: false }
+      if (response.status === 'NOTFOUND') {
+        set({ events: ['none'] })
+        return { isSuccess: false, status: 'NOTFOUND' }
+      } else {
+        set({ events: ['error'] })
+        return { isSuccess: false, status: 'ERROR' }
+      }
     }
   },
-  fetchEventById: async (id: string) => {
+  fetchEventById: async (id: string): Promise<{isSuccess: boolean; status: string; event: Event | null }> => {
     const response = await fetchEventById(id)
     if (response.isSuccess) {
-      const event = JSON.parse(response.eventJson)
-      if (event) {
-        return { isSuccess: true, event: event }
+      if (response.status === 'SUCCESS') {
+        return { isSuccess: true, status: 'SUCCESS', event: response.event }
       } else {
-        return { isSuccess: true, event: null }
+        return { isSuccess: false, status: "ERROR", event: null}
       }
     } else {
-      return { isSuccess: false, event: {} }
+      if (response.status === 'NOTFOUND') {
+        return { isSuccess: true, status: 'NOTFOUND', event: null }
+      } else {
+        return { isSuccess: false, status: 'ERROR', event: null }
+      }
     }
   }
 }))
-
 export interface IState {
   filterCategory: string
   filterType: string

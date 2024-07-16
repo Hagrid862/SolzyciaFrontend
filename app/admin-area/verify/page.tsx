@@ -3,14 +3,15 @@
 import { Button, Card, CardBody, CardHeader, Divider, Input } from '@nextui-org/react'
 import React, { useState, createRef, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { useFormState } from 'react-dom'
 import { verifyOtp } from '@/app/actions/auth'
+import { useAdminStore } from '@/store/adminStore'
 
 export default function VerifyPage() {
   const router = useRouter()
+  const adminStore = useAdminStore()
 
   const [loading, setLoading] = useState(false)
-  const [state, action] = useFormState(verifyOtp, undefined)
+  const [error, setError] = useState<number>(0)
 
   const [otp, setOtp] = useState(Array(8).fill('')) // Create an array of 8 state variables
   const inputRefs = Array(8)
@@ -31,36 +32,37 @@ export default function VerifyPage() {
       }
     }
   }
-
   const handleKeyDown = (index: number) => (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Backspace' && e.currentTarget.value === '' && index > 0) {
       inputRefs[index - 1].current?.focus()
     }
   }
-
   const handleVerify = async (event: React.FormEvent) => {
+    const otpValue = otp.join('')
+    if (otpValue.length < 8) {
+      setError(1)
+      return
+    }
     setLoading(true)
 
     event.preventDefault()
 
-    const otpValue = otp.join('')
+    const response = await adminStore.verifyOtp(otpValue)
 
-    const formData = new FormData()
-
-    formData.append('otp', otpValue)
-
-    console.log(formData)
-
-    action(formData)
-  }
-
-  useEffect(() => {
-    setLoading(false)
-    console.log(state)
-    if (state?.message === 'SUCCESS') {
-      router.push('/admin-area/dashboard')
+    if (response.isSuccess) {
+      router.push('admin-area/dashboard')
+    } else {
+      if (response.status === 'INVALID') {
+        setLoading(false)
+        setError(2)
+        return
+      } else {
+        setLoading(false)
+        setError(3)
+        return
+      }
     }
-  }, [state])
+  }
 
   return (
     <div className='flex items-center justify-center w-screen h-screen'>
@@ -78,29 +80,20 @@ export default function VerifyPage() {
                 onChange={handleInputChange(index)}
                 onKeyDown={handleKeyDown(index)}
                 maxLength={1}
-                isInvalid={
-                  state?.errors?.otp !== undefined || state?.message == 'ERROR' || state?.message == 'INVALID_CODE'
-                }
+                isInvalid={error !== 0}
                 style={{ width: '30px', marginRight: '5px' }}
                 ref={inputRefs[index]}
               />
             ))}
           </div>
-          <div className='mt-2 text-[#f31260] text-sm'>
-            {state?.errors?.otp !== undefined
-              ? state.errors.otp
-              : state?.message == 'ERROR'
-                ? 'Wystąpił błąd, spróbuj odświeżyć stronę.'
-                : state?.message == 'INVALID_CODE'
+          <div className={`mt-2 text-xs text-opacity-50'} ${error !== 0 ? 'text-danger' : ''}`}>
+            {error === 0
+              ? 'Wpisz kod wysłany na twojego maila.'
+              : error === 1
+                ? 'Wypełnij wszystkie pola!'
+                : error === 2
                   ? 'Wprowadzony kod jest niepoprawny.'
-                  : state?.message === undefined || state.message === 'SUCCESS'
-                    ? null
-                    : 'Wystąpił błąd, spróbuj odświeżyć stronę.'}
-          </div>
-          <div className={`mt-4 text-xs text-opacity-50'}`}>
-            {state?.message !== 'SUCCESS' && state?.message !== undefined
-              ? state.message
-              : 'Wpisz kod wysłany na twojego maila.'}
+                  : 'Wystąpił błąd, spróbuj odświeżyć stronę.'}
           </div>
         </CardBody>
         <Divider />

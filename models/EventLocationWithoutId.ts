@@ -1,5 +1,4 @@
-export interface EventLocation {
-  Id?: string
+export interface EventLocationWithoutId {
   Street: string
   HouseNumber: string
   PostalCode: string

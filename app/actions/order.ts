@@ -27,10 +27,10 @@ export async function createOrder(
     const localOrdersStr = cookiesStorage.get('localOrders')?.value
     if (localOrdersStr) {
       const localOrders = JSON.parse(localOrdersStr)
-      localOrders.parse.push(data.orderId)
+      localOrders.parse.push(data.OrderId)
       cookiesStorage.set('localOrders', JSON.stringify(localOrders))
     }
-    return { isSuccess: true, status: 'SUCCESS', orderId: data.orderId }
+    return { isSuccess: true, status: 'SUCCESS', orderId: data.OrderId }
   } else {
     return { isSuccess: false, status: 'ERROR', orderId: 0 }
   }
@@ -40,28 +40,10 @@ export async function getOrder(
   orderId: string
 ): Promise<{ isSuccess: boolean; status: string; order: Order | string }> {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/order/${orderId}`)
-  console.log(orderId)
   if (response.ok) {
     const data = await response.json()
     console.log(data)
-    var order: Order = {
-      Id: data.Id,
-      Products: data.Products,
-      Address: data.Address,
-      Address2: data.Address2,
-      City: data.City,
-      State: data.State,
-      Zip: data.Zip,
-      Country: data.Country,
-      Phone: data.Phone,
-      Email: data.Email,
-      Name: data.Name,
-      LastName: data.LastName,
-      Status: data.Status,
-      PaymentMethod: data.PaymentMethod,
-      CreatedAt: new Date(data.CreatedAt)
-    }
-    return { isSuccess: true, status: 'SUCCESS', order: order }
+    return { isSuccess: true, status: 'SUCCESS', order: data.Order }
   } else if (response.status === 404) {
     return { isSuccess: false, status: 'NOTFOUND', order: '' }
   } else {
@@ -73,36 +55,38 @@ export async function getOrderProducts(
   orderId: string
 ): Promise<{ isSuccess: boolean; status: string; products: Product[]; events: Event[] }> {
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/order/${orderId}/products`)
-  if (response.ok) {
-    const data = await response.json()
-    if (data.products && data.events) {
+  const data = await response.json()
+  console.log(data)
+  if (data.Status === 'SUCCESS') {
+    if (data.Products || data.Events) {
       let products: Product[] = []
       let events: Event[] = []
 
-      console.log(
-        'events!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-      )
-      console.log(data.events)
-      console.log(data.products)
-
-      if (data.products) {
-        const productsObj = data.products
+      if (data.Products) {
+        const productsObj = data.Products
         if (productsObj.length > 0) {
-          productsObj.foreach((product: any) => {
+          productsObj.forEach((product: Product) => {
             let tags: Tag[] = []
             if (product.Tags && product.Tags.length > 0) {
-              product.Tags.foreach((tag: any) => {})
+              product.Tags?.forEach((tag: any) => {})
             }
           })
         }
       }
 
-      if (data.events) {
-        events.push(...data.events)
+      if (data.Events) {
+        const eventsObj = data.Events
+        if (eventsObj.length > 0) {
+          eventsObj.forEach((event: Event) => {
+            let tags: Tag[] = []
+            if (event.Tags && event.Tags.length > 0) {
+              event.Tags?.forEach((tag: any) => {})
+            }
+          })
+        }
+        events = eventsObj
       }
-      console.log('psikutas???????????????????????????????')
       console.log(events)
-      console.log(products)
       return { isSuccess: true, status: 'SUCCESS', products: products, events: events }
     }
   }

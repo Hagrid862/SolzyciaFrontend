@@ -9,13 +9,13 @@ export const useCartStore = create<IState>((set, get) => ({
 
   getCartItems: async () => {
     const cart = await getCart()
-    set({ cartItems: cart })
+    set({ cartItems: cart.items })
     console.log(cart)
     return { isSuccess: true }
   },
   getRawCartItems: async () => {
     const rawCart = await getRawCart()
-    set({ rawCart: rawCart })
+    set({ rawCart: rawCart.items })
     console.log('rawCart')
     console.log(rawCart)
     return { isSuccess: true }

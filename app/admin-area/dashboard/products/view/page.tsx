@@ -26,6 +26,7 @@ export default function ViewProductPage() {
       }
       if (type === 'product') {
         const response = await offerStore.fetchProductById(id!.toString())
+        console.log(response)
         if (response.isSuccess && response.product) {
           setProduct(response.product)
           setStatus('success')
@@ -71,7 +72,13 @@ export default function ViewProductPage() {
                 <Divider />
                 <CardBody className='flex flex-row gap-2 overflow-x-auto'>
                   {product.Images.map((image, index) => (
-                    <Image key={index} src={image} alt={product.Name} radius='sm' className='aspect-square max-w-16' />
+                    <Image
+                      key={index}
+                      src={image.Base64}
+                      alt={product.Name}
+                      radius='sm'
+                      className='aspect-square max-w-16'
+                    />
                   ))}
                 </CardBody>
               </Card>

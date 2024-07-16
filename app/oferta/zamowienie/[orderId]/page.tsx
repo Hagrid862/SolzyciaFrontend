@@ -355,7 +355,9 @@ function OrderStep1({
               <CardHeader className='flex flex-row gap-4'>
                 {(event.Images && event.Images.length > 0 && (
                   <Image width={64} height={64} src={event.Images?.[0].Base64} radius='sm' />
-                )) || <div className='w-16 h-16 bg-gray-300' />}
+                )) || <div className='w-16 h-16 bg-white bg-opacity-10 flex items-center justify-center rounded-lg'>
+                    <MaterialSymbol icon='no_photography' size={48}/>
+                </div>}
                 <div>
                   <div className='text-lg font-medium'> {event.Name} </div>
                   <div className='opacity-65'> {event.Price} zł</div>

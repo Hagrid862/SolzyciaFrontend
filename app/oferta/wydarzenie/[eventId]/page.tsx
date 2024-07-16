@@ -1,15 +1,15 @@
 'use client'
 
-import React, {Key, useEffect, useState} from 'react'
+import React, { Key, useEffect, useState } from 'react'
 import { useOfferStore } from '@/store/offerStore'
-import {Button, Card, CardBody, CardHeader, Divider, Image, ScrollShadow, Tab, Tabs, Tooltip} from '@nextui-org/react'
+import { Button, Card, CardBody, CardHeader, Divider, Image, ScrollShadow, Tab, Tabs, Tooltip } from '@nextui-org/react'
 import { MaterialSymbol } from 'react-material-symbols'
 import { DateTimeFormat } from '@formatjs/ecma402-abstract'
 import { useCartStore } from '@/store/cartStore'
 import { Event } from '@/models/Event'
 import { EventDate } from '@/models/EventDate'
 import { Image as ImageModel } from '@/models/Image'
-import {Tag} from "@/models/Tag";
+import { Tag } from '@/models/Tag'
 
 export default function OfferProductPage({ params }: { params: { eventId: string } }) {
   const [event, setEvent] = useState<Event | null>(null)
@@ -119,100 +119,96 @@ export default function OfferProductPage({ params }: { params: { eventId: string
           <Divider />
           <CardBody className='h-full'>
             <Tabs fullWidth onSelectionChange={(key) => setCurrentTab(Number(key))}>
-              <Tab title='Opis' key={0}/>
-              <Tab title='Terminy' key={1}/>
-              <Tab title='Kontakt' key={2}/>
+              <Tab title='Opis' key={0} />
+              <Tab title='Terminy' key={1} />
+              <Tab title='Kontakt' key={2} />
             </Tabs>
             <>
-              {
-                currentTab === 0 && (
-                  <div className='max-h-full overflow-y-auto'>
-                    <CardBody className='overflow-y-auto'>
-                      <div className='text-lg font-semibold'>Opis</div>
-                      {event?.Description}
-                    </CardBody>
-                    <CardBody>
-                      <div className='text-lg font-semibold'>Kategoria</div>
-                      {event?.Category?.Name ?? 'Brak'}
-                    </CardBody>
-                    <CardBody>
-                      <div className='text-lg font-semibold'>Tagi</div>
-                      {
-                        event?.Tags?.map((tag: Tag, index: number) => (
-                          <div key={index} className='bg-white bg-opacity-10 rounded-lg p-2 m-1 inline-block'>
-                            {tag.Name}
-                          </div>
-                        ))??'Brak'
-                      }
-                    </CardBody>
-                  </div>
-                )
-              }
-              {
-                currentTab === 1 && (
-                  <div className='overflow-y-auto p-2 pt-2 py-4 gap-2 scrollbar-hide'>
-                    <ScrollShadow hideScrollBar className='max-h-[456px]'>
-                      <div>
-                        {
-                          event?.Dates?.map((date: EventDate, index: number) => (
-                            <Card className='my-4'>
-                              <CardBody className='bg-white bg-opacity-5'>
-                                <div className='font-semibold text-large'>Data:</div>
-                                {
-                                  formatDate(date.Date.toString())
-                                }
-                              </CardBody>
-                              <Divider/>
-                              <CardBody className='bg-white bg-opacity-5'>
-                                <div className='font-semibold text-large'>Liczba miejsc:</div>
-                                {date.Seats} wolne z {date.Seats}
-                              </CardBody>
-                              <Divider/>
-                              <CardBody className='bg-white bg-opacity-5'>
-                                <div className='font-semibold text-large'>Lokalizacja:</div>
-                                {
-                                  date.Location?.City && date.Location?.Street && date.Location?.HouseNumber && date.Location?.PostalCode ? (
-                                    <div>{date.Location?.City}, {date.Location?.Street} {date.Location?.HouseNumber} - {date.Location?.PostalCode}</div>) : (
-                                    <div>Nie podano - skontaktuj sie z nami</div>)
-                                }
-                              </CardBody>
-                            </Card>
-                          ))
-                        }
+              {currentTab === 0 && (
+                <div className='max-h-full overflow-y-auto'>
+                  <CardBody className='overflow-y-auto'>
+                    <div className='text-lg font-semibold'>Opis</div>
+                    {event?.Description}
+                  </CardBody>
+                  <CardBody>
+                    <div className='text-lg font-semibold'>Kategoria</div>
+                    {event?.Category?.Name ?? 'Brak'}
+                  </CardBody>
+                  <CardBody>
+                    <div className='text-lg font-semibold'>Tagi</div>
+                    {event?.Tags?.map((tag: Tag, index: number) => (
+                      <div key={index} className='bg-white bg-opacity-10 rounded-lg p-2 m-1 inline-block'>
+                        {tag.Name}
                       </div>
-                    </ScrollShadow>
-                  </div>
-                )
-              }
+                    )) ?? 'Brak'}
+                  </CardBody>
+                </div>
+              )}
+              {currentTab === 1 && (
+                <div className='overflow-y-auto p-2 pt-2 py-4 gap-2 scrollbar-hide'>
+                  <ScrollShadow hideScrollBar className='max-h-[456px]'>
+                    <div>
+                      {event?.Dates?.map((date: EventDate, index: number) => (
+                        <Card className='my-4'>
+                          <CardBody className='bg-white bg-opacity-5'>
+                            <div className='font-semibold text-large'>Data:</div>
+                            {formatDate(date.Date.toString())}
+                          </CardBody>
+                          <Divider />
+                          <CardBody className='bg-white bg-opacity-5'>
+                            <div className='font-semibold text-large'>Liczba miejsc:</div>
+                            {date.Seats} wolne z {date.Seats}
+                          </CardBody>
+                          <Divider />
+                          <CardBody className='bg-white bg-opacity-5'>
+                            <div className='font-semibold text-large'>Lokalizacja:</div>
+                            {date.Location?.City &&
+                            date.Location?.Street &&
+                            date.Location?.HouseNumber &&
+                            date.Location?.PostalCode ? (
+                              <div>
+                                {date.Location?.City}, {date.Location?.Street} {date.Location?.HouseNumber} -{' '}
+                                {date.Location?.PostalCode}
+                              </div>
+                            ) : (
+                              <div>Nie podano - skontaktuj sie z nami</div>
+                            )}
+                          </CardBody>
+                        </Card>
+                      ))}
+                    </div>
+                  </ScrollShadow>
+                </div>
+              )}
             </>
           </CardBody>
-          <Divider/>
+          <Divider />
           <CardBody className='flex flex-row min-h-16 justify-between gap-2'>
             <div className='flex flex-row gap-2'>
               <Tooltip content='Kontakt' placement='bottom'>
                 <Button color='primary' variant='flat' isIconOnly>
-                  <MaterialSymbol icon='call' size={24} color='white'/>
+                  <MaterialSymbol icon='call' size={24} color='white' />
                 </Button>
               </Tooltip>
               <Tooltip content='Polub' placement='bottom'>
                 <Button color='success' variant='flat' isIconOnly>
-                  <MaterialSymbol icon='favorite' size={24} color='white'/>
+                  <MaterialSymbol icon='favorite' size={24} color='white' />
                 </Button>
               </Tooltip>
               <Tooltip content='Udostępnij' placement='bottom'>
                 <Button color='secondary' variant='flat' isIconOnly>
-                  <MaterialSymbol icon='share' size={24} color='white'/>
+                  <MaterialSymbol icon='share' size={24} color='white' />
                 </Button>
               </Tooltip>
             </div>
             <div className='gap-2 flex flex-row'>
               <Tooltip content='Dodaj do koszyka' placement='bottom'>
                 <Button color='secondary' variant='solid' isIconOnly onClick={() => addToCart()}>
-                  <MaterialSymbol icon='add_shopping_cart' size={24} color='white'/>
+                  <MaterialSymbol icon='add_shopping_cart' size={24} color='white' />
                 </Button>
               </Tooltip>
               <Button color='primary' variant='solid'>
-                <MaterialSymbol icon='event_available' size={24} color='white'/>
+                <MaterialSymbol icon='event_available' size={24} color='white' />
                 Zarezerwuj
               </Button>
             </div>
@@ -286,4 +282,3 @@ export default function OfferProductPage({ params }: { params: { eventId: string
     </div>
   )
 }
-

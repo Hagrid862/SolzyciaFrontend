@@ -355,9 +355,11 @@ function OrderStep1({
               <CardHeader className='flex flex-row gap-4'>
                 {(event.Images && event.Images.length > 0 && (
                   <Image width={64} height={64} src={event.Images?.[0].Base64} radius='sm' />
-                )) || <div className='w-16 h-16 bg-white bg-opacity-10 flex items-center justify-center rounded-lg'>
-                    <MaterialSymbol icon='no_photography' size={48}/>
-                </div>}
+                )) || (
+                  <div className='w-16 h-16 bg-white bg-opacity-10 flex items-center justify-center rounded-lg'>
+                    <MaterialSymbol icon='no_photography' size={48} />
+                  </div>
+                )}
                 <div>
                   <div className='text-lg font-medium'> {event.Name} </div>
                   <div className='opacity-65'> {event.Price} zł</div>
@@ -377,16 +379,20 @@ function OrderStep1({
                         <span className='font-semibold'>{formatDateNoTime(date.Date.toString())}</span>
                         <span className='opacity-70'>{formatTime(date.Date.toString())}</span>
                       </div>
-                      <Divider/>
+                      <Divider />
                       <div className='flex flex-row gap-4 p-2 items-center'>
                         <MaterialSymbol icon={'location_on'} size={24} />
-                        {
-                          date.Location?.Street??'' + date.Location?.City??'' + date.Location?.PostalCode + date.Location?.HouseNumber !== '' ? (
-                            <span className='font-semibold'>{date.Location?.City}, {date.Location?.Street}{date.Location?.HouseNumber ? `/${date.Location.HouseNumber}` : ''} - {date.Location?.PostalCode}</span>
-                          ) : (
-                            <span>adres nie został podany</span>
-                          )
-                        }
+                        {date.Location?.Street ??
+                        '' + date.Location?.City ??
+                        '' + date.Location?.PostalCode + date.Location?.HouseNumber !== '' ? (
+                          <span className='font-semibold'>
+                            {date.Location?.City}, {date.Location?.Street}
+                            {date.Location?.HouseNumber ? `/${date.Location.HouseNumber}` : ''} -{' '}
+                            {date.Location?.PostalCode}
+                          </span>
+                        ) : (
+                          <span>adres nie został podany</span>
+                        )}
                       </div>
                     </SelectItem>
                   ))}

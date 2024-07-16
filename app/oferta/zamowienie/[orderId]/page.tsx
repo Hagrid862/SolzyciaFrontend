@@ -369,10 +369,22 @@ function OrderStep1({
                 <div className='text-xl font-semibold'>Data i lokalizacja</div>
                 <Select placeholder='Wybierz date' onChange={(e) => setDate(event.Id, e.target.value)} variant='faded'>
                   {event.Dates?.map((date, index) => (
-                    <SelectItem key={date.Id}>
-                      <div className='flex flex-row gap-4'>
+                    <SelectItem key={date.Id} textValue={formatDate(date.Date.toString())}>
+                      <div className='flex flex-row gap-4 p-2 items-center'>
+                        <MaterialSymbol icon={'event'} size={24} />
                         <span className='font-semibold'>{formatDateNoTime(date.Date.toString())}</span>
                         <span className='opacity-70'>{formatTime(date.Date.toString())}</span>
+                      </div>
+                      <Divider/>
+                      <div className='flex flex-row gap-4 p-2 items-center'>
+                        <MaterialSymbol icon={'location_on'} size={24} />
+                        {
+                          date.Location?.Street??'' + date.Location?.City??'' + date.Location?.PostalCode + date.Location?.HouseNumber !== '' ? (
+                            <span className='font-semibold'>{date.Location?.City}, {date.Location?.Street}{date.Location?.HouseNumber ? `/${date.Location.HouseNumber}` : ''} - {date.Location?.PostalCode}</span>
+                          ) : (
+                            <span>adres nie został podany</span>
+                          )
+                        }
                       </div>
                     </SelectItem>
                   ))}

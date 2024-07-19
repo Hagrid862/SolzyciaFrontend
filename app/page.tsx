@@ -27,7 +27,7 @@ export default function Home() {
               <p className='text-white text-lg'>Lorem Ipsum dolor Sit amet.</p>
           </div>
         </div>
-        <div className='max-w-[1200px] w-full flex flex-col justify-center items-center my-12'>
+        <div className='max-w-[1200px] w-full flex flex-col justify-center items-center my-12 px-4'>
           <div className='text-3xl font-medium mb-4'>
             Oferta
           </div>
@@ -40,7 +40,7 @@ export default function Home() {
                 <Button className={`absolute w-[calc(100%-2rem)] m-4 ${hoveredCard === 0 ? 'bottom-0' : '-bottom-20'}`}
                         style={{transition: '0.3s ease all'}}>Zobacz więcej</Button>
               </Card>
-              <div className='text-xl text-center mt-2'>
+              <div className='text-xl text-center mt-2 font-semibold'>
                 Off-road
               </div>
             </div>
@@ -52,7 +52,7 @@ export default function Home() {
                 <Button className={`absolute w-[calc(100%-2rem)] m-4 ${hoveredCard === 1 ? 'bottom-0' : '-bottom-20'}`}
                         style={{transition: '0.3s ease all'}}>Zobacz więcej</Button>
               </Card>
-              <div className='text-xl text-center mt-2'>
+              <div className='text-xl text-center mt-2 font-semibold'>
                 Survival
               </div>
             </div>
@@ -64,7 +64,7 @@ export default function Home() {
                 <Button className={`absolute w-[calc(100%-2rem)] m-4 ${hoveredCard === 2 ? 'bottom-0' : '-bottom-20'}`}
                         style={{transition: '0.3s ease all'}}>Zobacz więcej</Button>
               </Card>
-              <div className='text-xl text-center mt-2'>
+              <div className='text-xl text-center mt-2 font-semibold'>
                 Bushcraft
               </div>
             </div>
@@ -75,13 +75,32 @@ export default function Home() {
                        style={{transition: '0.3s ease all'}}/>
                 <Button className={`absolute w-[calc(100%-2rem)] m-4 ${hoveredCard === 3 ? 'bottom-0' : '-bottom-20'}`} style={{transition: '0.3s ease all'}}>Zobacz więcej</Button>
               </Card>
-              <div className='text-xl text-center mt-2'>
+              <div className='text-xl text-center mt-2 font-semibold'>
                 Off-road
               </div>
             </div>
           </div>
+          <div className='flex flex-row mt-12 w-full items-center'>
+            <Image src={logo} alt='logo' className='md:w-1/4 lg:w-1/3 m-12 aspect-square'/>
+            <div className='text-justify'>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur posuere tortor vel mattis placerat. Nulla facilisi. Sed gravida nulla sit amet enim finibus mollis. Duis tempus commodo mauris, tincidunt porttitor lacus commodo sed. Nullam hendrerit vel arcu eu egestas. Ut dapibus ante est, et dapibus dolor tristique vel. Donec ac nisl vel sapien posuere congue. Suspendisse nisi sapien, scelerisque quis orci lacinia, dictum luctus erat. Sed sed lacus fringilla, sollicitudin odio et, mattis tellus. Pellentesque imperdiet odio erat, a aliquet lorem hendrerit non. Vivamus dapibus, lorem vel semper rutrum, libero eros malesuada mi, et finibus sem eros quis tellus. Aenean hendrerit sem eu elementum lacinia. Nullam vitae mi efficitur, congue quam nec, vulputate ante. Integer non aliquam ipsum, non viverra ante.
+            </div>
+          </div>
+          <div className='flex flex-row mt-12 items-center justify-center'>
+            <div>
+              <div className='text-3xl font-semibold text-right'>
+                Off-road
+              </div>
+              <div className='text-justify'>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur posuere tortor vel mattis placerat. Nulla facilisi. Sed gravida nulla sit amet enim finibus mollis. Duis tempus commodo mauris, tincidunt porttitor lacus commodo sed. Nullam hendrerit vel arcu eu egestas. Ut dapibus ante est, et dapibus dolor tristique vel. Donec ac nisl vel sapien posuere congue.
+              </div>
+              <div className='flex flex-row justify-center mt-4'>
+                <Button className='mt-4' color='primary'>Zobacz więcej</Button>
+              </div>
+            </div>
+            <Image src={jeepOffroadImage} alt='off-road-jeep' className='md:w-1/2 lg:w-1/3 m-12'/>
+          </div>
         </div>
-
       </div>
     </>
   );

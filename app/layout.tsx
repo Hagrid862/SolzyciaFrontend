@@ -4,7 +4,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Navbar, NavbarBrand, Link, NavbarContent, NavbarItem, NextUIProvider, Button } from '@nextui-org/react'
 import { usePathname } from 'next/navigation'
-import Head from "next/head";
+import Head from 'next/head'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,9 +14,12 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang='en' className='dark'>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com"/>
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous"/>
-        <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet"/>
+        <link rel='preconnect' href='https://fonts.googleapis.com' />
+        <link rel='preconnect' href='https://fonts.gstatic.com' crossOrigin='anonymous' />
+        <link
+          href='https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap'
+          rel='stylesheet'
+        />
       </head>
       <body className={inter.className}>
         <NextUIProvider>

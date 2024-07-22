@@ -5,6 +5,7 @@ import './globals.css'
 import { Navbar, NavbarBrand, Link, NavbarContent, NavbarItem, NextUIProvider, Button } from '@nextui-org/react'
 import { usePathname } from 'next/navigation'
 import Head from 'next/head'
+import 'react-material-symbols/rounded'
 
 const inter = Inter({ subsets: ['latin'] })
 

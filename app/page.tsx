@@ -2,7 +2,6 @@
 import { useRef, useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import 'react-material-symbols/rounded'
 import cover1 from '@/assets/images/cover-jeep-1.jpg'
 import offroadCard from '@/assets/images/jeep-offroad.jpg'
 import survivalCard from '@/assets/images/survival.jpg'

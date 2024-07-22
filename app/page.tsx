@@ -98,7 +98,7 @@ export default function Home() {
                   Zobacz więcej
                 </Button>
               </Card>
-              <div className='text-xl text-center mt-2 font-semibold'>Off-road</div>
+              <div className='text-xl text-center mt-2 font-semibold'>Gry zespołowe</div>
             </div>
           </div>
           <div className='flex flex-row mt-12 w-full items-center'>
@@ -134,7 +134,7 @@ export default function Home() {
           <div className='flex flex-row gap-4 w-full justify-center items-center'>
             <Image src={knifepng} alt='knife transparent background' className='w-1/4' />
             <div className='h-full flex flex-col items-center justify-center'>
-              <div className='text-3xl font-semibold text-left w-full'>Off-road</div>
+              <div className='text-3xl font-semibold text-left w-full'>Survival</div>
               <div className='text-justify'>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur posuere tortor vel mattis placerat.
                 Nulla facilisi. Sed gravida nulla sit amet enim finibus mollis. Duis tempus commodo mauris, tincidunt

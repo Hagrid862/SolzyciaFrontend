@@ -117,10 +117,8 @@ export default function Home() {
             <div>
               <div className='text-3xl font-semibold text-right'>Off-road</div>
               <div className='text-justify'>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur posuere tortor vel mattis placerat.
-                Nulla facilisi. Sed gravida nulla sit amet enim finibus mollis. Duis tempus commodo mauris, tincidunt
-                porttitor lacus commodo sed. Nullam hendrerit vel arcu eu egestas. Ut dapibus ante est, et dapibus dolor
-                tristique vel. Donec ac nisl vel sapien posuere congue.
+                Od wielu lat bierzemy udział w rajdach i wyprawach. W końcu zaczęliśmy sami takie imprezy organizować.
+                Od samego początku dzieliliśmy naszą pasję z rodziną i znajomymi - towarzyszyli nam wspaniali ludzie podczas imprez, rajdów czy na dalekich wyprawach. Od jakiegoś czasu wprowadzamy w świat offroad'u również osoby spoza kręgu znajomych - zapraszamy do wspólnej zabawy "w błocie"!
               </div>
               <div className='flex flex-row justify-center mt-4'>
                 <Button className='mt-4' color='primary'>
@@ -135,10 +133,7 @@ export default function Home() {
             <div className='h-full flex flex-col items-center justify-center'>
               <div className='text-3xl font-semibold text-left w-full'>Survival</div>
               <div className='text-justify'>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur posuere tortor vel mattis placerat.
-                Nulla facilisi. Sed gravida nulla sit amet enim finibus mollis. Duis tempus commodo mauris, tincidunt
-                porttitor lacus commodo sed. Nullam hendrerit vel arcu eu egestas. Ut dapibus ante est, et dapibus dolor
-                tristique vel. Donec ac nisl vel sapien posuere congue.
+                Od lat młodzieńczych dużo czasu spędzaliśmy poza cywilizacją radząc sobie z minimalnym wyposażeniem za to nadrabiając  wiedzą i doświadczeniem. Najbardziej komfortowym "wyjściem do lasu" była corocznie zdobywana sprawność "Trzy pióra" - można powiedzieć że to wyjście do lasu miało "gdzieś tam" wsparcie logistyczne" chyba że się zgubiliśmy w lesie. Nasze umiejętności nabyte podczas kilku dekad pozwalają nam na zapewnienie kursantom bezpieczeństwa ale również niezwykłych przeżeżyć!
               </div>
               <div className='flex flex-row justify-center mt-4'>
                 <Button className='mt-4' color='primary'>

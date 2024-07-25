@@ -10,7 +10,7 @@ export default function offroadPage() {
   return (
     <div className='w-full flex flex-col items-center justify-center relative'>
       <div className='h-[calc(100vh-64px)] relative w-full mb-12'>
-        <Image src={banner} alt='offroad-jeep' className='w-full h-full' layout='fill' objectFit='cover'/>
+        <Image src={banner} alt='offroad-jeep' className='w-full h-full' layout='fill' objectFit='cover' />
         <div className='absolute top-1/3 left-12'>
           <div className='md:text-6xl lg:text-8xl font-bold '>Off-Road</div>
           <div className='md:text-xl lg:text-3xl font-semibold'>Przygoda zaczyna się tutaj.</div>
@@ -30,10 +30,10 @@ export default function offroadPage() {
               indziej.
             </div>
           </div>
-          <Image src={mountainsOffroad} alt='mountains-offroad' className='w-1/3 rounded-3xl'/>
+          <Image src={mountainsOffroad} alt='mountains-offroad' className='w-1/3 rounded-3xl' />
         </div>
         <div className='w-full flex flex-row gap-12 my-8 items-center'>
-          <Image src={mudOffroad} alt='mountains-offroad' className='w-1/3 rounded-3xl'/>
+          <Image src={mudOffroad} alt='mountains-offroad' className='w-1/3 rounded-3xl' />
           <div className='flex flex-col h-full'>
             <div className='text-4xl font-bold mb-4'>Adrenalina na Maksymalnych Obrotach</div>
             <div className='text-lg mt-4'>
@@ -60,10 +60,10 @@ export default function offroadPage() {
               wzajemne wsparcie.
             </div>
           </div>
-          <Image src={familyOffroad} alt='mountains-offroad' className='w-1/3 rounded-3xl'/>
+          <Image src={familyOffroad} alt='mountains-offroad' className='w-1/3 rounded-3xl' />
         </div>
         <div className='w-full flex flex-col gap-12 my-8 mt-16 items-center'>
-          <Image src={communityOffroad} alt='mountains-offroad' className='w-3/4 rounded-3xl'/>
+          <Image src={communityOffroad} alt='mountains-offroad' className='w-3/4 rounded-3xl' />
           <div className='flex flex-col h-full'>
             <div className='text-4xl font-bold mb-4'>Społeczność Offroad</div>
             <div className='text-lg mt-4'>
@@ -79,7 +79,7 @@ export default function offroadPage() {
         </div>
         <Card className='mb-8'>
           <CardHeader className='text-xl font-semibold'>Zarezerwuj swoją przygodę juz dziś!</CardHeader>
-          <Divider/>
+          <Divider />
           <CardBody className='flex flex-col items-center justify-center gap-2 p-8'>
             <div className='w-64'>
               <div className='font-semibold opacity-60'>telefon</div>

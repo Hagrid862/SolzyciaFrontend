@@ -14,8 +14,11 @@ import forest from '@/assets/images/forest.jpg'
 import knife from '@/assets/images/knife.jpg'
 import { Button, Card, CardBody } from '@nextui-org/react'
 import { MaterialSymbol } from 'react-material-symbols'
+import { useRouter } from 'next/navigation'
 
 export default function Home() {
+  const router = useRouter()
+
   const [hoveredCard, setHoveredCard] = useState<number | null>(null)
 
   return (
@@ -42,6 +45,7 @@ export default function Home() {
                 <Button
                   className={`absolute w-[calc(100%-2rem)] m-4 ${hoveredCard === 0 ? 'bottom-0' : '-bottom-20'}`}
                   style={{ transition: '0.3s ease all' }}
+                  onClick={() => router.push('/off-road')}
                 >
                   Zobacz więcej
                 </Button>
@@ -59,6 +63,7 @@ export default function Home() {
                 <Button
                   className={`absolute w-[calc(100%-2rem)] m-4 ${hoveredCard === 1 ? 'bottom-0' : '-bottom-20'}`}
                   style={{ transition: '0.3s ease all' }}
+                  onClick={() => router.push('/survival')}
                 >
                   Zobacz więcej
                 </Button>

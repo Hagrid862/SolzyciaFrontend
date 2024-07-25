@@ -58,7 +58,8 @@ export default function galleryPage() {
               <Card
                 isPressable
                 key={index}
-                className={`${currentImage === index ? 'outline-2 outline-[#777777]' : 'outline-0'} bg-opacity-15 rounded-lg w-[90%] aspect-square overflow-hidden bg-white flex relative h-full min-h-[150px]`}>
+                className={`${currentImage === index ? 'outline-2 outline-[#777777]' : 'outline-0'} bg-opacity-15 rounded-lg w-[90%] aspect-square overflow-hidden bg-white flex relative h-full min-h-[150px]`}
+              >
                 <Image
                   src={image.image}
                   alt='gallery-image'

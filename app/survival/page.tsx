@@ -9,9 +9,9 @@ import { Card, CardBody, CardHeader, Divider } from '@nextui-org/react'
 export default function SurvivalPage() {
   return (
     <div className='w-full flex flex-col items-center justify-center relative'>
-      <div className='h-[calc(100vh-64px)] relative w-full mb-12 max-w-[1920px]'>
+      <div className='h-[calc(100vh-64px)] relative w-full mb-12'>
         <Image src={banner} alt='offroad-jeep' className='w-full h-full' layout='fill' objectFit='cover' />
-        <div className='relative w-full max-w[1920px] h-full'>
+        <div className='relative w-full max-w-[1920px] h-full left-1/2 transform -translate-x-1/2'>
           <div className='absolute top-1/3 left-12'>
             <div className='md:text-6xl lg:text-8xl font-bold '>Survival</div>
             <div className='md:text-xl lg:text-3xl font-semibold'>Przygotuj się na Wszystko.</div>
@@ -93,6 +93,11 @@ export default function SurvivalPage() {
             </div>
           </CardBody>
         </Card>
+      </div>
+      <div className='w-full bg-white bg-opacity-25 h-16 flex flex-row items-center justify-center'>
+        <div className='w-full max-w-[1400px]'>
+          Solzycia.pl | &#169; all rights reserved | +48 123 123 123 | kontakt@solzycia.pl
+        </div>
       </div>
     </div>
   )

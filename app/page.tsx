@@ -99,6 +99,7 @@ export default function Home() {
                 <Button
                   className={`absolute w-[calc(100%-2rem)] m-4 ${hoveredCard === 3 ? 'bottom-0' : '-bottom-20'}`}
                   style={{ transition: '0.3s ease all' }}
+                  onClick={() => router.push('/games')}
                 >
                   Zobacz więcej
                 </Button>

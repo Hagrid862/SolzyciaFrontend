@@ -13,15 +13,15 @@ export default function SurvivalPage() {
         <Image src={banner} alt='offroad-jeep' className='w-full h-full' layout='fill' objectFit='cover' />
         <div className='relative w-full max-w-[1920px] h-full left-1/2 transform -translate-x-1/2'>
           <div className='absolute top-1/3 left-12'>
-            <div className='md:text-6xl lg:text-8xl font-bold '>Survival</div>
-            <div className='md:text-xl lg:text-3xl font-semibold'>Przygotuj się na Wszystko.</div>
+            <div className='md:text-6xl text-4xl lg:text-8xl font-bold '>Survival</div>
+            <div className='md:text-xl text-lg lg:text-3xl font-semibold'>Przygotuj się na Wszystko.</div>
           </div>
         </div>
       </div>
-      <div className='max-w-[1200px] w-full flex flex-col gap-8'>
-        <div className='w-full flex flex-row gap-12 my-8 items-center'>
-          <Image src={nature} alt='mountains-offroad' className='w-1/3 rounded-3xl' />
-          <div className='flex flex-col h-full'>
+      <div className='max-w-[1200px] w-full flex flex-col gap-8 px-2 md:px-0'>
+        <div className='w-full flex flex-col md:flex-row gap-12 my-8 items-center'>
+          <Image src={nature} alt='mountains-offroad' className='md:w-1/3 rounded-3xl' />
+          <div className='flex flex-col h-full text-center md:text-left'>
             <div className='text-4xl font-bold mb-4'>Przetrwanie w Dzikiej Naturze</div>
             <div className='text-lg mt-4'>
               Naucz się przetrwać w dzikiej naturze i odkryj umiejętności, które pozwolą Ci radzić sobie w trudnych
@@ -34,8 +34,8 @@ export default function SurvivalPage() {
             </div>
           </div>
         </div>
-        <div className='w-full flex flex-row gap-12 my-8 items-center'>
-          <div className='flex flex-col h-full'>
+        <div className='w-full flex flex-col md:flex-row gap-12 my-8 items-center'>
+          <div className='flex flex-col h-full text-center md:text-left'>
             <div className='text-4xl font-bold mb-4'>Adrenalina i Ekstremalne Wyzwania</div>
             <div className='text-lg mt-4'>
               Poczuj dreszcz emocji, stawiając czoła ekstremalnym wyzwaniom w terenie. Survival to nie tylko nauka
@@ -47,11 +47,11 @@ export default function SurvivalPage() {
               i pozwoli Ci poczuć prawdziwą adrenalinę.
             </div>
           </div>
-          <Image src={mountains} alt='mountains-offroad' className='w-1/3 rounded-3xl' />
+          <Image src={mountains} alt='mountains-offroad' className='md:w-1/3 rounded-3xl order-first md:order-last' />
         </div>
-        <div className='w-full flex flex-row gap-12 my-8 items-center'>
-          <Image src={group} alt='mountains-offroad' className='w-1/3 rounded-3xl' />
-          <div className='flex flex-col h-full'>
+        <div className='w-full flex flex-col md:flex-row gap-12 my-8 items-center'>
+          <Image src={group} alt='mountains-offroad' className='md:w-1/3 rounded-3xl' />
+          <div className='flex flex-col h-full text-center md:text-left'>
             <div className='text-4xl font-bold mb-4'>Budowanie Zespołu i Współpraca</div>
             <div className='text-lg mt-4'>
               Naucz się przetrwać w dzikiej naturze i odkryj umiejętności, które pozwolą Ci radzić sobie w trudnych
@@ -65,8 +65,8 @@ export default function SurvivalPage() {
           </div>
         </div>
         <div className='w-full mt-12 flex flex-col gap-12 my-8 items-center'>
-          <Image src={equipment} alt='mountains-offroad' className='w-3/4 rounded-3xl' />
-          <div className='flex flex-col h-full'>
+          <Image src={equipment} alt='mountains-offroad' className='md:w-3/4 rounded-3xl' />
+          <div className='flex flex-col h-full text-center'>
             <div className='text-4xl font-bold mb-4'>Umiejętności i Wiedza</div>
             <div className='text-lg mt-4'>
               Rozwijaj swoje umiejętności przetrwania i zdobywaj wiedzę od ekspertów. Nasze kursy survivalowe są
@@ -85,18 +85,18 @@ export default function SurvivalPage() {
           <CardBody className='flex flex-col items-center justify-center gap-2 p-8'>
             <div className='w-64'>
               <div className='font-semibold opacity-60'>telefon</div>
-              <div className='text-lg'>+48 123 123 123</div>
+              <div className='text-lg'>+48 601 622 442</div>
             </div>
             <div className='w-64'>
               <div className='font-semibold opacity-60'>email</div>
-              <div className='text-lg'>rezerwacja@solzycia.pl</div>
+              <div className='text-lg'>sol.zycia@gmail.com</div>
             </div>
           </CardBody>
         </Card>
       </div>
       <div className='w-full bg-white bg-opacity-25 h-16 flex flex-row items-center justify-center'>
         <div className='w-full max-w-[1400px]'>
-          Solzycia.pl | &#169; all rights reserved | +48 123 123 123 | kontakt@solzycia.pl
+          Solzycia.pl | &#169; all rights reserved | +48 601 622 442 | sol.zycia@gmail.com
         </div>
       </div>
     </div>

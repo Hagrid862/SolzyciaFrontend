@@ -6,22 +6,22 @@ import creativity from '@/assets/images/games/creativity.jpg'
 import map from '@/assets/images/games/map.jpg'
 import { Card, CardBody, CardHeader, Divider } from '@nextui-org/react'
 
-export default function BushcraftPage() {
+export default function TeamGamesPage() {
   return (
     <div className='w-full flex flex-col items-center justify-center relative'>
       <div className='h-[calc(100vh-64px)] relative w-full mb-12'>
-        <Image src={banner} alt='offroad-jeep' className='w-full h-full opacity-70' layout='fill' objectFit='cover' />
+        <Image src={banner} alt='team-games-banner' className='w-full h-full' layout='fill' objectFit='cover' />
         <div className='relative w-full max-w-[1920px] h-full left-1/2 transform -translate-x-1/2'>
           <div className='absolute top-1/3 left-12'>
-            <div className='md:text-6xl lg:text-8xl font-bold '>Gry Zespołowe </div>
-            <div className='md:text-xl lg:text-3xl font-semibold'>Siła Współpracy</div>
+            <div className='md:text-6xl text-4xl lg:text-8xl font-bold '>Gry Zespołowe</div>
+            <div className='md:text-xl text-lg lg:text-3xl font-semibold'>Siła Współpracy</div>
           </div>
         </div>
       </div>
-      <div className='max-w-[1200px] w-full flex flex-col gap-8'>
-        <div className='w-full flex flex-row gap-12 my-8 items-center'>
-          <Image src={map} alt='mountains-offroad' className='w-1/3 rounded-3xl' />
-          <div className='flex flex-col h-full'>
+      <div className='max-w-[1200px] w-full flex flex-col gap-8 px-2 md:px-0'>
+        <div className='w-full flex flex-col md:flex-row gap-12 my-8 items-center'>
+          <Image src={map} alt='team-games-map' className='md:w-1/3 rounded-3xl' />
+          <div className='flex flex-col h-full text-center md:text-left'>
             <div className='text-4xl font-bold mb-4'>Integracja i Współpraca</div>
             <div className='text-lg mt-4'>
               Gry grupowe i terenowe to doskonały sposób na integrację i budowanie współpracy w zespole. Uczestnicy
@@ -33,8 +33,8 @@ export default function BushcraftPage() {
             </div>
           </div>
         </div>
-        <div className='w-full flex flex-row gap-12 my-8 items-center'>
-          <div className='flex flex-col h-full'>
+        <div className='w-full flex flex-col md:flex-row gap-12 my-8 items-center'>
+          <div className='flex flex-col h-full text-center md:text-left'>
             <div className='text-4xl font-bold mb-4'>Adrenalina i Emocje</div>
             <div className='text-lg mt-4'>
               Poczuj dreszcz emocji i adrenalinę podczas dynamicznych gier terenowych. Nasze gry pełne są wyzwań, które
@@ -45,34 +45,31 @@ export default function BushcraftPage() {
               które na długo pozostaną w Twojej pamięci.
             </div>
           </div>
-          <Image src={adrenaline} alt='mountains-offroad' className='w-1/3 rounded-3xl' />
+          <Image src={adrenaline} alt='team-games-adrenaline' className='md:w-1/3 rounded-3xl order-first md:order-last' />
         </div>
-        <div className='w-full flex flex-row gap-12 my-8 items-center'>
-          <Image src={creativity} alt='mountains-offroad' className='w-1/3 rounded-3xl' />
-          <div className='flex flex-col h-full'>
+        <div className='w-full flex flex-col md:flex-row gap-12 my-8 items-center'>
+          <Image src={creativity} alt='team-games-creativity' className='md:w-1/3 rounded-3xl' />
+          <div className='flex flex-col h-full text-center md:text-left'>
             <div className='text-4xl font-bold mb-4'>Kreatywność i Strategia</div>
             <div className='text-lg mt-4'>
-              Kreatywność i Strategia Treść: Gry grupowe i terenowe rozwijają kreatywność i umiejętności strategiczne.
-              Uczestnicy muszą wykazać się pomysłowością i logicznym myśleniem, aby znaleźć najlepsze rozwiązania i
-              pokonać wyzwania. Nasze gry są zaprojektowane tak, aby stymulować twórcze myślenie i zachęcać do
-              innowacyjnych rozwiązań. Planowanie strategii, przewidywanie ruchów przeciwników i efektywne wykorzystanie
-              zasobów to klucz do sukcesu. Przeżyj intelektualną przygodę, która rozwija umiejętności analityczne i
-              uczy, jak podejmować decyzje w dynamicznie zmieniającym się środowisku. Gry terenowe to doskonały trening
-              dla umysłu i ducha.
+              Gry grupowe i terenowe rozwijają kreatywność i umiejętności strategiczne. Uczestnicy muszą wykazać się pomysłowością
+              i logicznym myśleniem, aby znaleźć najlepsze rozwiązania i pokonać wyzwania. Nasze gry są zaprojektowane tak, aby
+              stymulować twórcze myślenie i zachęcać do innowacyjnych rozwiązań. Planowanie strategii, przewidywanie ruchów przeciwników
+              i efektywne wykorzystanie zasobów to klucz do sukcesu. Przeżyj intelektualną przygodę, która rozwija umiejętności analityczne
+              i uczy, jak podejmować decyzje w dynamicznie zmieniającym się środowisku. Gry terenowe to doskonały trening dla umysłu i ducha.
             </div>
           </div>
         </div>
         <div className='w-full mt-12 flex flex-col gap-12 my-8 items-center'>
-          <Image src={celebration} alt='mountains-offroad' className='w-3/4 rounded-3xl' />
-          <div className='flex flex-col h-full'>
+          <Image src={celebration} alt='team-games-celebration' className='md:w-3/4 rounded-3xl' />
+          <div className='flex flex-col h-full text-center'>
             <div className='text-4xl font-bold mb-4'>Społeczność i Przyjaźń</div>
             <div className='text-lg mt-4'>
-              Społeczność i Przyjaźń Treść: Gry grupowe i terenowe to nie tylko rywalizacja, ale przede wszystkim
-              budowanie społeczności i nawiązywanie przyjaźni. Wspólne przeżywanie przygód, dzielenie się
-              doświadczeniami i wzajemne wsparcie tworzą trwałe więzi między uczestnikami. Nasze gry są doskonałą okazją
-              do poznania nowych ludzi i rozwijania relacji w przyjaznej i inspirującej atmosferze. Z nami znajdziesz
-              miejsce, gdzie każdy jest mile widziany, a wspólna zabawa i współpraca tworzą niezapomniane wspomnienia.
-              Dołącz do nas i stań się częścią społeczności, która ceni przyjaźń, integrację i wspólne osiąganie celów.
+              Gry grupowe i terenowe to nie tylko rywalizacja, ale przede wszystkim budowanie społeczności i nawiązywanie przyjaźni.
+              Wspólne przeżywanie przygód, dzielenie się doświadczeniami i wzajemne wsparcie tworzą trwałe więzi między uczestnikami.
+              Nasze gry są doskonałą okazją do poznania nowych ludzi i rozwijania relacji w przyjaznej i inspirującej atmosferze. Z nami
+              znajdziesz miejsce, gdzie każdy jest mile widziany, a wspólna zabawa i współpraca tworzą niezapomniane wspomnienia. Dołącz do nas
+              i stań się częścią społeczności, która ceni przyjaźń, integrację i wspólne osiąganie celów.
             </div>
           </div>
         </div>
@@ -82,18 +79,18 @@ export default function BushcraftPage() {
           <CardBody className='flex flex-col items-center justify-center gap-2 p-8'>
             <div className='w-64'>
               <div className='font-semibold opacity-60'>telefon</div>
-              <div className='text-lg'>+48 123 123 123</div>
+              <div className='text-lg'>+48 601 622 442</div>
             </div>
             <div className='w-64'>
               <div className='font-semibold opacity-60'>email</div>
-              <div className='text-lg'>rezerwacja@solzycia.pl</div>
+              <div className='text-lg'>sol.zycia@gmail.com</div>
             </div>
           </CardBody>
         </Card>
       </div>
       <div className='w-full bg-white bg-opacity-25 h-16 flex flex-row items-center justify-center'>
         <div className='w-full max-w-[1400px]'>
-          Solzycia.pl | &#169; all rights reserved | +48 123 123 123 | kontakt@solzycia.pl
+          Solzycia.pl | &#169; all rights reserved | +48 601 622 442 | sol.zycia@gmail.com
         </div>
       </div>
     </div>

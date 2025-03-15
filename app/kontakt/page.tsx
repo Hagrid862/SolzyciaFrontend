@@ -1,4 +1,4 @@
-import {Card, CardBody, Divider, Link} from '@nextui-org/react'
+import {Card, CardBody, Divider, Link} from '@heroui/react'
 import { MaterialSymbol } from 'react-material-symbols'
 
 export default function contactPage() {

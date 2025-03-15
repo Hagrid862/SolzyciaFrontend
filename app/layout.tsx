@@ -8,10 +8,10 @@ import {
   Link,
   NavbarContent,
   NavbarItem,
-  NextUIProvider,
+  HeroUIProvider  ,
   Button,
   NavbarMenuToggle, NavbarMenu, NavbarMenuItem
-} from '@nextui-org/react'
+} from '@heroui/react'
 import { usePathname } from 'next/navigation'
 import Head from 'next/head'
 import 'react-material-symbols/rounded'
@@ -33,10 +33,10 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body className={inter.className}>
-        <NextUIProvider>
+        <HeroUIProvider>
           {pathName.startsWith('/admin-area') ? null : <LayoutNavbar />}
           {children}
-        </NextUIProvider>
+        </HeroUIProvider>
       </body>
     </html>
   )

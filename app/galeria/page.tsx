@@ -9,7 +9,7 @@ import image6 from '@/assets/images/galeria/6.jpg'
 import image7 from '@/assets/images/galeria/7.jpg'
 
 import Image from 'next/image'
-import { Card, CardBody, Divider } from '@nextui-org/react'
+import { Card, CardBody, Divider } from '@heroui/react'
 import { useState } from 'react'
 
 export default function GalleryPage() {

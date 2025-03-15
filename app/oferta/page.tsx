@@ -1,6 +1,6 @@
 'use client'
 
-import { Card, CardBody } from '@nextui-org/react'
+import { Card, CardBody } from '@heroui/react'
 import { MaterialSymbol } from 'react-material-symbols'
 import 'react-material-symbols/rounded'
 

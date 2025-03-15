@@ -3,7 +3,7 @@ import banner from '@/assets/images/bushcraft/banner.jpg'
 import firecamp from '@/assets/images/bushcraft/firecamp.jpg'
 import tradition from '@/assets/images/bushcraft/tradition.jpg'
 import group from '@/assets/images/bushcraft/group.jpg'
-import { Card, CardBody, CardHeader, Divider } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Divider } from '@heroui/react'
 
 export default function BushcraftPage() {
   return (

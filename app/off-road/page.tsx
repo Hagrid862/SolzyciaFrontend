@@ -4,7 +4,7 @@ import natureOffroad from '../../assets/images/off-road/nature-offroad.png'
 import mudOffroad from '../../assets/images/off-road/mud-offroad.png'
 import familyOffroad from '../../assets/images/off-road/family-offroad.png'
 import communityOffroad from '../../assets/images/off-road/offroad-community.png'
-import { Card, CardBody, CardHeader, Divider } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Divider } from '@heroui/react'
 
 export default function offroadPage() {
   return (

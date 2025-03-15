@@ -1,6 +1,6 @@
 import logo from '@/assets/images/logo.png'
 import Image from 'next/image'
-import { Card, CardBody, CardHeader, Divider } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Divider } from '@heroui/react'
 
 export default function aboutPage() {
   return (

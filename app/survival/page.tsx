@@ -4,7 +4,7 @@ import nature from '@/assets/images/survival/nature.jpg'
 import mountains from '@/assets/images/survival/mountains.jpg'
 import equipment from '@/assets/images/survival/equipment.jpg'
 import group from '@/assets/images/survival/group.jpg'
-import { Card, CardBody, CardHeader, Divider } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Divider } from '@heroui/react'
 
 export default function SurvivalPage() {
   return (

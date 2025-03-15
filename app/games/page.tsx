@@ -4,7 +4,7 @@ import adrenaline from '@/assets/images/games/adrenaline.jpg'
 import celebration from '@/assets/images/games/celebration.jpg'
 import creativity from '@/assets/images/games/creativity.jpg'
 import map from '@/assets/images/games/map.jpg'
-import { Card, CardBody, CardHeader, Divider } from '@nextui-org/react'
+import { Card, CardBody, CardHeader, Divider } from '@heroui/react'
 
 export default function TeamGamesPage() {
   return (

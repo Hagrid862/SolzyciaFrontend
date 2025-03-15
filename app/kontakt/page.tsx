@@ -1,5 +1,4 @@
 import { Card, CardBody, Divider, Link } from "@heroui/react";
-import { MaterialSymbol } from "react-material-symbols";
 
 export default function contactPage() {
   return (
@@ -8,7 +7,7 @@ export default function contactPage() {
         <div className="flex flex-row gap-4 items-center">
           <Card radius="lg" className="min-w-[72px] aspect-square">
             <CardBody>
-              <MaterialSymbol icon="smartphone" size={48} />
+              <span className="material-symbols-rounded" style={{ fontSize: "48px" }}>smartphone</span>
             </CardBody>
           </Card>
           <div>
@@ -19,7 +18,7 @@ export default function contactPage() {
         <div className="flex flex-row gap-4 items-center">
           <Card radius="lg" className="min-w-[72px] aspect-square">
             <CardBody>
-              <MaterialSymbol icon="mail" size={48} />
+              <span className="material-symbols-rounded" style={{ fontSize: "48px" }}>mail</span>
             </CardBody>
           </Card>
           <div>
@@ -30,7 +29,7 @@ export default function contactPage() {
         <div className="flex flex-row gap-4 items-center">
           <Card radius="lg" className="min-w-[72px] aspect-square">
             <CardBody>
-              <MaterialSymbol icon="language" size={48} />
+              <span className="material-symbols-rounded" style={{ fontSize: "48px" }}>language</span>
             </CardBody>
           </Card>
           <div>
@@ -48,7 +47,7 @@ export default function contactPage() {
         <div className="flex flex-row gap-4 items-center">
           <Card radius="lg" className="min-w-[72px] aspect-square">
             <CardBody>
-              <MaterialSymbol icon="location_on" size={48} />
+              <span className="material-symbols-rounded" style={{ fontSize: "48px" }}>location_on</span>
             </CardBody>
           </Card>
           <div>

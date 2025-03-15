@@ -13,7 +13,6 @@ import knifepng from "@/assets/images/knife.png";
 import forest from "@/assets/images/forest.jpg";
 import knife from "@/assets/images/knife.jpg";
 import { Button, Card, CardBody } from "@heroui/react";
-import { MaterialSymbol } from "react-material-symbols";
 import { useRouter } from "next/navigation";
 
 export default function Home() {

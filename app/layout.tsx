@@ -16,8 +16,8 @@ import {
 } from "@heroui/react";
 import { usePathname } from "next/navigation";
 import Head from "next/head";
-import "react-material-symbols/rounded";
 import { useState } from "react";
+import 'material-symbols';
 
 const inter = Inter({ subsets: ["latin"] });
 

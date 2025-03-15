@@ -17,7 +17,7 @@ import {
 import { usePathname } from "next/navigation";
 import Head from "next/head";
 import { useState } from "react";
-import 'material-symbols';
+import "material-symbols";
 
 const inter = Inter({ subsets: ["latin"] });
 

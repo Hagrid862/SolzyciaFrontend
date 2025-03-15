@@ -45,7 +45,7 @@ export default function Home() {
                 <Button
                   className={`absolute w-[calc(100%-2rem)] m-4 ${hoveredCard === 0 ? 'bottom-0' : '-bottom-20'}`}
                   style={{transition: '0.3s ease all'}}
-                  onClick={() => router.push('/off-road')}
+                  onPress={() => router.push('/off-road')}
                 >
                   Zobacz więcej
                 </Button>
@@ -63,7 +63,7 @@ export default function Home() {
                 <Button
                   className={`absolute w-[calc(100%-2rem)] m-4 ${hoveredCard === 1 ? 'bottom-0' : '-bottom-20'}`}
                   style={{transition: '0.3s ease all'}}
-                  onClick={() => router.push('/survival')}
+                  onPress={() => router.push('/survival')}
                 >
                   Zobacz więcej
                 </Button>
@@ -81,7 +81,7 @@ export default function Home() {
                 <Button
                   className={`absolute w-[calc(100%-2rem)] m-4 ${hoveredCard === 2 ? 'bottom-0' : '-bottom-20'}`}
                   style={{transition: '0.3s ease all'}}
-                  onClick={() => router.push('/bushcraft')}
+                  onPress={() => router.push('/bushcraft')}
                 >
                   Zobacz więcej
                 </Button>
